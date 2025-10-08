@@ -1,0 +1,20 @@
+{
+    // 🧹 Formate automatiquement à la sauvegarde
+    "editor.formatOnSave": true,
+  
+    // ⚙️ Corrige automatiquement les erreurs ESLint à chaque sauvegarde
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true,
+      "source.fixAll.eslint": true
+    },
+  
+    // ✨ Utilise Prettier comme formateur principal
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  
+    // 👀 (Optionnel) Active ESLint sur les fichiers TypeScript uniquement
+    "eslint.validate": ["typescript", "javascript"],
+  
+    // (Optionnel) Si tu veux un retour plus rapide dans l'éditeur
+    "eslint.run": "onType"
+  }
+  
