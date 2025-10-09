@@ -1,0 +1,52 @@
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { SignInDto } from "./dto/sign-in.dto";
+import { PrismaClient } from "generated/prisma";
+import bcrypt from "node_modules/bcryptjs";
+import { SignUpDto } from "./dto/sign-up.dto";
+
+@Injectable()
+export class AuthService {
+  constructor(
+    private prisma: PrismaClient,
+    private jwtService: JwtService,
+  ) {}
+
+  async signUp(dto: SignUpDto) {
+    const existing = await this.prisma.users.findUnique({
+      where: { email: dto.email },
+    });
+    if (existing) throw new UnauthorizedException("Email already registered");
+
+    const hashedPassword = await bcrypt.hash(dto.password, 12);
+    const user = await this.prisma.users.create({
+      data: { ...dto, password: hashedPassword },
+    });
+
+    const payload = { sub: user.id, email: user.email };
+    const token = this.jwtService.sign(payload);
+
+    return {
+      user: { id: user.id, email: user.email, name: user.name },
+      access_token: token,
+    };
+  }
+
+  async signIn(dto: SignInDto) {
+    const user = await this.prisma.users.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (!user) throw new UnauthorizedException("No account with this email");
+
+    const passwordMatch = await bcrypt.compare(dto.password, user.password);
+    if (!passwordMatch) throw new UnauthorizedException("Invalid credentials");
+
+    const payload = { sub: user.id, email: user.email };
+    const token = this.jwtService.sign(payload);
+    return {
+      user: { id: user.id, email: user.email, name: user.name },
+      access_token: token,
+    };
+  }
+}
