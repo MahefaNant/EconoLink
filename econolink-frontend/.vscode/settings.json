@@ -4,7 +4,7 @@
 
   // ⚙️ Corrige automatiquement les erreurs ESLint à chaque sauvegarde
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
 
   // ✨ Utilise Prettier comme formateur principal
