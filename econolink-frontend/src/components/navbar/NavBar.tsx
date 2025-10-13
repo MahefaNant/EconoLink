@@ -15,16 +15,26 @@ import LocaleSwitcher from "./switcher/LocaleSwitcher";
 import ToogleTheme from "./ToogleTheme";
 import { HomeSideBar } from "./switcher/HomeSideBar";
 import { useRouter } from "@/i18n/routing";
+import Image from "next/image";
 
 export function NavBar() {
   const router = useRouter();
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container p-4">
+      <div className="container p-1">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="h-6 w-6 rounded-full bg-primary" />
+            <div className="h-16 w-16">
+              <Image
+                src="/images/econolink-logo.png"
+                alt="MAHEFA"
+                className="object-cover"
+                width={100}
+                height={100}
+                priority={true}
+              />
+            </div>
             <span className="hidden md:flex font-bold text-lg">EconoLink</span>
           </Link>
 
