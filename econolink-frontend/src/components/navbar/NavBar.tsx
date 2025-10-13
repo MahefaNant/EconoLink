@@ -10,11 +10,14 @@ import {
 } from "@/components/ui/navigation-menu";
 import { ButtonGroup } from "../ui/button-group";
 import { Button } from "../ui/button";
-import { Menu } from "lucide-react";
+
 import LocaleSwitcher from "./switcher/LocaleSwitcher";
 import ToogleTheme from "./ToogleTheme";
+import { HomeSideBar } from "./switcher/HomeSideBar";
+import { useRouter } from "@/i18n/routing";
 
 export function NavBar() {
+  const router = useRouter();
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container p-4">
@@ -22,7 +25,7 @@ export function NavBar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <div className="h-6 w-6 rounded-full bg-primary" />
-            <span className="font-bold text-lg">EconoLink</span>
+            <span className="hidden md:flex font-bold text-lg">EconoLink</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -45,22 +48,24 @@ export function NavBar() {
             <LocaleSwitcher />
             <ToogleTheme />
             <ButtonGroup>
-              <Button size="sm" variant="link">
+              <Button
+                size="sm"
+                variant="link"
+                onClick={() => router.push("/login")}
+              >
                 Sign In
               </Button>
-              <Button size="sm">Sign Up</Button>
+              <Button size="sm" onClick={() => router.push("/register")}>
+                Sign Up
+              </Button>
             </ButtonGroup>
           </div>
 
           {/* Mobile Right Section */}
           <div className="flex md:hidden items-center gap-2">
+            <LocaleSwitcher />
             <ToogleTheme />
-            <button
-              className="p-2 rounded-md hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
-              aria-label="Open menu"
-            >
-              <Menu className="h-6 w-6" />
-            </button>
+            <HomeSideBar />
           </div>
         </div>
       </div>
