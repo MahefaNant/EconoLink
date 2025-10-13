@@ -4,10 +4,11 @@ export type FetchOptions<T = any> = {
   body?: T;
   headers?: Record<string, string>;
   includeCredentials?: boolean;
+  baseUrl?: string;
 };
 
 export async function fetcher<T = any>(
-  url: string,
+  endpoint: string,
   options: FetchOptions = {}
 ): Promise<T> {
   const {
@@ -15,7 +16,10 @@ export async function fetcher<T = any>(
     body,
     headers = {},
     includeCredentials = true,
+    baseUrl = process.env.NEXT_PUBLIC_API_URL || "",
   } = options;
+
+  const url = endpoint.startsWith("http") ? endpoint : `${baseUrl}${endpoint}`;
 
   const res = await fetch(url, {
     method,
