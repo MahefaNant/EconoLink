@@ -26,7 +26,7 @@ export class AuthService {
       data: { ...dto, password: hashedPassword },
     });
 
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, name: user.name };
     const token = this.jwtService.signAsync(payload);
 
     return {
@@ -45,7 +45,7 @@ export class AuthService {
     const passwordMatch = await bcrypt.compare(dto.password, user.password);
     if (!passwordMatch) throw new UnauthorizedException("Invalid credentials");
 
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, name: user.name };
     const token = await this.jwtService.signAsync(payload);
     return {
       user: { id: user.id, email: user.email, name: user.name },
