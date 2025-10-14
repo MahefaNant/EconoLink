@@ -76,6 +76,13 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+
+  --color-econolink-dark: #11192f;
+  --color-econolink-dark-h: rgb(44, 51, 71);
+  --color-econolink-blue: #00b5ff;
+  --color-econolink-blue-h: #6ec2e4;
+  --color-econolink-light: #e7f3ff;
+  --color-econolink-white: #ffffff;
 }
 
 .dark {
@@ -135,5 +142,42 @@
 
   @variant xl {
     padding-inline: 120px;
+  }
+}
+
+@layer utilities {
+  .text-econolink-blue {
+    color: var(--color-econolink-dark);
+  }
+  .dark .text-econolink-blue {
+    color: var(--color-econolink-blue);
+  }
+  .bg-econolink-blue {
+    background-color: var(--color-econolink-blue);
+  }
+  .text-econolink-dark {
+    color: var(--color-econolink-dark);
+  }
+  .bg-econolink-dark {
+    background-color: var(--color-econolink-dark);
+  }
+
+  /*------------*/
+
+  .btn-econolink {
+    @apply text-white font-medium transition-colors;
+    background-color: var(--color-econolink-dark);
+  }
+
+  .dark .btn-econolink {
+    background-color: var(--color-econolink-blue);
+  }
+
+  .btn-econolink:hover {
+    background-color: var(--color-econolink-dark-h);
+  }
+
+  .dark .btn-econolink:hover {
+    background-color: var(--color-econolink-blue-h);
   }
 }
