@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Res,
   UseGuards,
 } from "@nestjs/common";
@@ -68,5 +69,11 @@ export class AuthController {
   @Get("check")
   check() {
     return { status: "ok" };
+  }
+
+  @Get("me")
+  @UseGuards(JwtAuthGuard)
+  getMe(@Req() req: express.Request) {
+    return { user: req.user };
   }
 }
