@@ -13,6 +13,10 @@ export const routing = defineRouting({
       en: "/register",
       fr: "/inscription",
     },
+    "/dashboard": {
+      en: "/dashboard",
+      fr: "/tableau-de-bord",
+    },
     "/contact": {
       en: "/contact-me",
       fr: "/contactez-nous",
