@@ -5,12 +5,14 @@ import { loginAuth } from "../lib/loginAuth";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export function useLogin() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const setUser = useAuthStore((state) => state.setUser);
   const router = useRouter();
+  const t = useTranslations("Auth.Login");
 
   const login = async (email: string, password: string) => {
     setLoading(true);
@@ -21,9 +23,9 @@ export function useLogin() {
       toast.success(`Welcome back, ${user.name || "User"}!`);
       router.push("/dashboard");
     } catch (error) {
-      setErrorMessage("Login failed");
+      setErrorMessage(t("form.error"));
       toast.error("Login failed", {
-        description: "Check your credentials and try again.",
+        description: t("form.error"),
         duration: 4000,
       });
       throw error;

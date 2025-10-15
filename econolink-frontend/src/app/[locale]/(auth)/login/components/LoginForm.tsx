@@ -13,8 +13,10 @@ import GoogleButton from "./GoogleButton";
 import { FormEvent, useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import { useRouter } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export default function LoginForm() {
+  const t = useTranslations("Auth");
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,17 +53,15 @@ export default function LoginForm() {
           />
         </div>
         <CardTitle className="text-2xl font-bold text-econolink-dark">
-          Welcome back to EconoLink
+          {t("Login.welcome")}
         </CardTitle>
-        <p className="text-sm text-gray-500">
-          Manage your finances smarter — securely and efficiently.
-        </p>
+        <p className="text-sm text-gray-500">{t("common.sub-welcome")}</p>
       </CardHeader>
 
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-600">Email</label>
+            <label className="text-sm font-medium text-gray-600">E-mail</label>
             <div className="relative">
               <Mail className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
               <Input
@@ -80,7 +80,7 @@ export default function LoginForm() {
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-600">
-              Password
+              {t("Login.form.password")}
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
@@ -138,12 +138,12 @@ export default function LoginForm() {
       </CardContent>
 
       <CardFooter className="flex justify-center text-sm text-gray-500">
-        Don’t have an account?{" "}
+        {t("Login.have-account")}
         <button
           onClick={() => router.push("/register")}
           className="text-emerald-600 underline hover:text-emerald-700 cursor-pointer"
         >
-          Sign up
+          {t("common.signup")}
         </button>
       </CardFooter>
 
@@ -152,7 +152,7 @@ export default function LoginForm() {
           onClick={() => router.push("/")}
           className="text-emerald-600 underline hover:text-emerald-700 cursor-pointer"
         >
-          return to home
+          {t("common.back-home")}
         </button>
       </CardFooter>
     </Card>

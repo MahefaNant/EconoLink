@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Eye, EyeOff, Loader2, Mail, Lock, LogIn, User } from "lucide-react";
 import GoogleButton from "../../login/components/GoogleButton";
+import { useTranslations } from "next-intl";
 
 export default function RegisterForm() {
   const [name, setName] = useState("");
@@ -24,6 +25,7 @@ export default function RegisterForm() {
 
   const { register, loading, errorMessage } = useRegister();
   const router = useRouter();
+  const t = useTranslations("Auth");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -54,20 +56,20 @@ export default function RegisterForm() {
           />
         </div>
         <CardTitle className="text-2xl font-bold text-econolink-dark">
-          Welcome to EconoLink
+          {t("Register.welcome")}
         </CardTitle>
         <p className="text-md text-gray-500 font-extrabold">
-          Create your account securely.
+          {t("Register.sub-register")}
         </p>
-        <p className="text-sm text-gray-500">
-          Manage your finances smarter — securely and efficiently.
-        </p>
+        <p className="text-sm text-gray-500">{t("common.sub-welcome")}</p>
       </CardHeader>
 
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-600">Name</label>
+            <label className="text-sm font-medium text-gray-600">
+              {t("Register.form.name")}
+            </label>
             <div className="relative">
               <User className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
               <Input
@@ -85,7 +87,7 @@ export default function RegisterForm() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-600">Email</label>
+            <label className="text-sm font-medium text-gray-600">E-mail</label>
             <div className="relative">
               <Mail className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
               <Input
@@ -104,7 +106,7 @@ export default function RegisterForm() {
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-600">
-              Password
+              {t("Register.form.password")}
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
@@ -135,7 +137,7 @@ export default function RegisterForm() {
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-600">
-              Retape password
+              {t("Register.form.r-password")}
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
@@ -176,7 +178,7 @@ export default function RegisterForm() {
               </>
             ) : (
               <>
-                <LogIn className="h-4 w-4 mr-2" /> Sign In
+                <LogIn className="h-4 w-4 mr-2" /> {t("common.signup")}
               </>
             )}
           </Button>
@@ -193,12 +195,12 @@ export default function RegisterForm() {
       </CardContent>
 
       <CardFooter className="flex justify-center text-sm text-gray-500">
-        Already have an account?{" "}
+        {t("Register.have-account")}
         <button
           onClick={() => router.push("/login")}
           className="text-emerald-600 underline hover:text-emerald-700 cursor-pointer"
         >
-          Sign in
+          {t("common.signin")}
         </button>
       </CardFooter>
 
@@ -207,7 +209,7 @@ export default function RegisterForm() {
           onClick={() => router.push("/")}
           className="text-emerald-600 underline hover:text-emerald-700 cursor-pointer"
         >
-          return to home
+          {t("common.back-home")}
         </button>
       </CardFooter>
     </Card>

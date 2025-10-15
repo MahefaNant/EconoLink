@@ -1,6 +1,8 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 export default function RightSideImage() {
+  const t = useTranslations("Auth.RightSide");
   return (
     <div className="hidden md:flex flex-1 items-center justify-center relative">
       <Image
@@ -12,10 +14,10 @@ export default function RightSideImage() {
       <div className="absolute inset-0 bg-sky-800/20 flex items-center justify-center">
         <div className="text-center text-white max-w-sm">
           <h2 className="text-3xl font-bold mb-2 text-econolink-dark">
-            Your finances, simplified.
+            {t("title")}
           </h2>
           <p className="text-sm text-sky-600 dark:text-white">
-            Track, save, and grow your money effortlessly with EconoLink.
+            {t("sub-title")}
           </p>
         </div>
       </div>

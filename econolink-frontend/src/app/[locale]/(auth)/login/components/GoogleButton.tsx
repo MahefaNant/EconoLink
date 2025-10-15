@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 export default function GoogleButton() {
+  const t = useTranslations("Auth.common");
+
   return (
     <div className="mt-4">
       <Button
@@ -15,7 +18,7 @@ export default function GoogleButton() {
           height={20}
           className="rounded-md"
         />
-        Continue with Google
+        {t("google-continue")}
       </Button>
     </div>
   );
