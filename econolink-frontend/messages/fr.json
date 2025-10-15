@@ -2,5 +2,36 @@
   "HomePage": {
     "title": "EconoLink - Accueil",
     "about": "Bienvenue sur EconoLink, votre passerelle vers les insights et données économiques."
+  },
+  "Auth": {
+    "common": {
+      "signin": "Se connecter",
+      "signup": "S'inscrire",
+      "google-continue": "Continuer avec Google",
+      "back-home": "Retour à l'accueil",
+      "sub-welcome": "Gérez vos finances plus intelligemment, en toute sécurité et efficacité."
+    },
+    "Login": {
+      "welcome": "Bienvenue sur EconoLink",
+      "have-account": "Vous n'avez pas de compte ?",
+      "form": {
+        "password": "Mot de passe",
+        "error": "Vos informations sont incorrectes"
+      }
+    },
+    "Register": {
+      "welcome": "Bienvenue sur EconoLink",
+      "have-account": "Vous avez déjà un compte ?",
+      "sub-register": "Créez votre compte en toute sécurité.",
+      "form": {
+        "password": "Mot de passe",
+        "name": "Nom",
+        "r-password": "Retapez le mot de passe"
+      }
+    },
+    "RightSide": {
+      "title": "Vos finances simplifiées.",
+      "sub-title": "Suivez, économisez et faites fructifier votre argent sans effort avec EconoLink."
+    }
   }
 }

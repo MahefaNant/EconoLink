@@ -7,6 +7,9 @@ import { SignInDto } from "./dto/sign-in.dto";
 
 @Injectable()
 export class AuthService {
+  getHello(): string {
+    throw new Error("Method not implemented.");
+  }
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
@@ -23,8 +26,8 @@ export class AuthService {
       data: { ...dto, password: hashedPassword },
     });
 
-    const payload = { sub: user.id, email: user.email };
-    const token = this.jwtService.sign(payload);
+    const payload = { sub: user.id, email: user.email, name: user.name };
+    const token = await this.jwtService.signAsync(payload);
 
     return {
       user: { id: user.id, email: user.email, name: user.name },
@@ -42,8 +45,8 @@ export class AuthService {
     const passwordMatch = await bcrypt.compare(dto.password, user.password);
     if (!passwordMatch) throw new UnauthorizedException("Invalid credentials");
 
-    const payload = { sub: user.id, email: user.email };
-    const token = this.jwtService.sign(payload);
+    const payload = { sub: user.id, email: user.email, name: user.name };
+    const token = await this.jwtService.signAsync(payload);
     return {
       user: { id: user.id, email: user.email, name: user.name },
       access_token: token,

@@ -2,5 +2,36 @@
   "HomePage": {
     "title": "EconoLink - Home",
     "about": "Welcome to EconoLink, your gateway to economic insights and data."
+  },
+  "Auth": {
+    "common": {
+      "signin": "Sign In",
+      "signup": "Sign Up",
+      "google-continue": "Continue with Google",
+      "back-home": "Return to home",
+      "sub-welcome": "Manage your finances smarter — securely and efficiently."
+    },
+    "Login": {
+      "welcome": "Welcome back to EconoLink",
+      "have-account": "Don't have an account?",
+      "form": {
+        "password": "password",
+        "error": "Your information is incorrect"
+      }
+    },
+    "Register": {
+      "welcome": "Welcome to EconoLink",
+      "have-account": "Already have an account?",
+      "sub-register": "Create your account securely.",
+      "form": {
+        "password": "password",
+        "name": "Name",
+        "r-password": "Retape password"
+      }
+    },
+    "RightSide": {
+      "title": "Your finances, simplified.",
+      "sub-title": "Track, save, and grow your money effortlessly with EconoLink."
+    }
   }
 }
