@@ -1,0 +1,22 @@
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+
+export default function GoogleButton() {
+  return (
+    <div className="mt-4">
+      <Button
+        variant="outline"
+        className="w-full border-gray-300 hover:bg-gray-100 flex items-center justify-center"
+      >
+        <Image
+          src="/images/google-logo.png"
+          alt="EconoLink Logo"
+          width={20}
+          height={20}
+          className="rounded-md"
+        />
+        Continue with Google
+      </Button>
+    </div>
+  );
+}

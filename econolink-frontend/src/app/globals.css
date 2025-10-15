@@ -146,17 +146,26 @@
 }
 
 @layer utilities {
+  .text-econolink-blue-fix {
+    color: var(--color-econolink-blue);
+  }
   .text-econolink-blue {
-    color: var(--color-econolink-dark);
+    color: var(--color-econolink-blue);
   }
   .dark .text-econolink-blue {
-    color: var(--color-econolink-blue);
+    color: var(--color-econolink-dark);
   }
   .bg-econolink-blue {
     background-color: var(--color-econolink-blue);
   }
   .text-econolink-dark {
     color: var(--color-econolink-dark);
+  }
+  .dark .text-econolink-dark {
+    color: var(--color-econolink-blue);
+  }
+  .text-econolink-dark-fix {
+    color: var(--color-econolink-blue);
   }
   .bg-econolink-dark {
     background-color: var(--color-econolink-dark);
@@ -179,5 +188,26 @@
 
   .dark .btn-econolink:hover {
     background-color: var(--color-econolink-blue-h);
+  }
+}
+
+@layer utilities {
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    20%,
+    60% {
+      transform: translateX(-8px);
+    }
+    40%,
+    80% {
+      transform: translateX(8px);
+    }
+  }
+
+  .animate-shake {
+    animation: shake 0.3s ease;
   }
 }
