@@ -14,8 +14,8 @@ import { Button } from "../ui/button";
 import LocaleSwitcher from "./switcher/LocaleSwitcher";
 import ToogleTheme from "./ToogleTheme";
 import { HomeSideBar } from "./switcher/HomeSideBar";
-import { useRouter } from "@/i18n/routing";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export function NavBar() {
   const router = useRouter();

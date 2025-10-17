@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../globals.css";
+import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
-import { Locale, routing } from "@/i18n/routing";
-import { notFound } from "next/navigation";
-import { getMessages } from "next-intl/server";
+import { getLocale } from "next-intl/server";
 import { Toaster } from "@/components/ui/sonner";
+import { ReactNode } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,19 +26,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
-  children,
-  params,
-}: Readonly<{
-  children: React.ReactNode;
-  params: { locale: string };
-}>) {
-  const { locale } = await params;
-  if (!routing.locales.includes(locale as Locale)) {
-    notFound();
-  }
+type Props = {
+  children: ReactNode;
+};
 
-  const messages = await getMessages();
+export default async function RootLayout({ children }: Props) {
+  const locale = await getLocale();
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -52,7 +44,7 @@ export default async function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <NextIntlClientProvider messages={messages}>
+          <NextIntlClientProvider>
             {children}
             <Toaster richColors position="top-center" />
           </NextIntlClientProvider>

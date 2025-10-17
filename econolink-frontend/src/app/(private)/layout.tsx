@@ -4,7 +4,7 @@
 import { useAuthStore } from "@/stores/useAuthStore";
 import React, { useEffect, type ReactNode } from "react";
 import { getMe } from "./dashboard/lib/getMe";
-import { useRouter } from "@/i18n/routing";
+import { useRouter } from "next/navigation";
 
 export default function PrivateLayout({ children }: { children: ReactNode }) {
   const setUser = useAuthStore((s) => s.setUser);

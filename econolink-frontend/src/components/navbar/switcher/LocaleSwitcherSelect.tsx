@@ -7,10 +7,13 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
-import { Locale, routing, usePathname, useRouter } from "@/i18n/routing";
-import { useParams } from "next/navigation";
 import { FR, US } from "country-flag-icons/react/3x2"; // 🇫🇷 🇬🇧
 import { ReactNode } from "react";
+import { Locale } from "next-intl";
+import { locales } from "@/i18n/config";
+import { useTransition } from "react";
+import { setUserLocale } from "@/app/services/locale";
+import clsx from "clsx";
 
 type Props = {
   children?: ReactNode;
@@ -19,16 +22,13 @@ type Props = {
 };
 
 export default function LocaleSwitcherSelect({ defaultValue, label }: Props) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const params = useParams();
+  const [isPending, startTransition] = useTransition();
 
   function onSelectChange(nextLocale: string) {
-    router.replace(
-      // @ts-expect-error: le typage est sûr ici car les params sont valides pour la route
-      { pathname, params },
-      { locale: nextLocale as Locale }
-    );
+    const locale = nextLocale as Locale;
+    startTransition(() => {
+      setUserLocale(locale as "en" | "fr");
+    });
   }
 
   const renderFlag = (locale: string) => {
@@ -45,7 +45,10 @@ export default function LocaleSwitcherSelect({ defaultValue, label }: Props) {
   return (
     <Select defaultValue={defaultValue} onValueChange={onSelectChange}>
       <SelectTrigger
-        className="w-[100px] h-8 border-none bg-transparent focus:ring-0 focus:ring-offset-0"
+        className={clsx(
+          "w-[100px] h-8 border-none bg-transparent focus:ring-0 focus:ring-offset-0",
+          isPending && "pointer-events-none opacity-60"
+        )}
         aria-label={label}
       >
         <div className="flex items-center gap-2">
@@ -55,7 +58,7 @@ export default function LocaleSwitcherSelect({ defaultValue, label }: Props) {
       </SelectTrigger>
 
       <SelectContent>
-        {routing.locales.map((locale) => (
+        {locales.map((locale) => (
           <SelectItem key={locale} value={locale}>
             <div className="flex items-center gap-2">
               {renderFlag(locale)}
