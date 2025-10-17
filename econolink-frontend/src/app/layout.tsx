@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  manifest: "/manifest.webmanifest",
   title: "EconoLink",
   description: "A personal finance manager that works online and offline.",
   icons: {

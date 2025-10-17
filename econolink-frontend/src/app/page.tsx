@@ -1,3 +1,4 @@
+import InstallButton from "@/components/InstallButton";
 import { NavBar } from "@/components/navbar/NavBar";
 import { useTranslations } from "next-intl";
 
@@ -9,6 +10,7 @@ export default function Home() {
       <div className="container p-4">
         <h1>{t("title")}</h1>
         <p className="text-5xl">{t("about")}</p>
+        <InstallButton />
       </div>
     </div>
   );
