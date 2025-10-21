@@ -4,8 +4,8 @@ import { useState } from "react";
 import { loginAuth } from "../lib/loginAuth";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { toast } from "sonner";
-import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 export function useLogin() {
   const [loading, setLoading] = useState(false);

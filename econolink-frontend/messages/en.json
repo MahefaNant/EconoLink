@@ -1,4 +1,12 @@
 {
+  "install": {
+    "description": "Manage your personal finances wherever you are — even without an internet connection.",
+    "head": "Install the app",
+    "desc2": "Install EconoLink for fast, seamless, and offline access to your financial data.",
+    "desc3": "Quickly access your financial manager, even offline.",
+    "text-button": "Install EconoLink",
+    "rights": "All rights reserved."
+  },
   "HomePage": {
     "title": "EconoLink - Home",
     "about": "Welcome to EconoLink, your gateway to economic insights and data."

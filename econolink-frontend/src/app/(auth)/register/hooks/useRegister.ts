@@ -5,7 +5,7 @@ import { useState } from "react";
 import { registerAuth } from "../lib/registerAuth";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { toast } from "sonner";
-import { useRouter } from "@/i18n/routing";
+import { useRouter } from "next/navigation";
 
 export function useRegister() {
   const [loading, setLoading] = useState(false);

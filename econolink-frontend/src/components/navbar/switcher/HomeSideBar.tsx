@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/sheet";
 import { Home, PanelLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "@/i18n/routing";
+import { useRouter } from "next/navigation";
 
 export function HomeSideBar() {
   const menuItems = [{ title: "Home", url: "/", icon: Home }];

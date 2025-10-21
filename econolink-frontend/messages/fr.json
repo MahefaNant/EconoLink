@@ -1,4 +1,12 @@
 {
+  "install": {
+    "description": "Gérez vos finances personnelles où que vous soyez — même sans connexion Internet.",
+    "head": "Installer l’application",
+    "desc2": "Installez EconoLink pour un accès rapide, fluide et sans connexion à vos données financières.",
+    "desc3": "Accédez rapidement à votre gestionnaire de finances, même hors ligne.",
+    "text-button": "Installer EconoLink",
+    "rights": "Tous droits réservés."
+  },
   "HomePage": {
     "title": "EconoLink - Accueil",
     "about": "Bienvenue sur EconoLink, votre passerelle vers les insights et données économiques."

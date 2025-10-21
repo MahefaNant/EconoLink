@@ -14,8 +14,8 @@ import { Button } from "../ui/button";
 import LocaleSwitcher from "./switcher/LocaleSwitcher";
 import ToogleTheme from "./ToogleTheme";
 import { HomeSideBar } from "./switcher/HomeSideBar";
-import { useRouter } from "@/i18n/routing";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export function NavBar() {
   const router = useRouter();
@@ -27,7 +27,7 @@ export function NavBar() {
           <Link href="/" className="flex items-center space-x-2">
             <div className="h-16 w-16">
               <Image
-                src="/images/econolink-logo.png"
+                src="/icons/econolink-logo.png"
                 alt="MAHEFA"
                 className="object-cover"
                 width={100}
