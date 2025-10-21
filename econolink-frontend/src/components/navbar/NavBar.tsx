@@ -27,7 +27,7 @@ export function NavBar() {
           <Link href="/" className="flex items-center space-x-2">
             <div className="h-16 w-16">
               <Image
-                src="/images/app-logo/econolink-logo.png"
+                src="/icons/econolink-logo.png"
                 alt="MAHEFA"
                 className="object-cover"
                 width={100}

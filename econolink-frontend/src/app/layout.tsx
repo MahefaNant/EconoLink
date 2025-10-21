@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   title: "EconoLink",
   description: "A personal finance manager that works online and offline.",
   icons: {
-    icon: "/images/app-logo/favicon.ico",
-    apple: "/images/app-logo/apple-icon.png",
+    icon: "/icons/favicon.ico",
+    apple: "/icons/apple-touch-icon.png",
   },
 };
 

@@ -47,7 +47,7 @@ export default function RegisterForm() {
         {/* Logo */}
         <div className="flex justify-center mb-3">
           <Image
-            src="/images/app-logo/econolink-logo.png"
+            src="/icons/econolink-logo.png"
             alt="EconoLink Logo"
             width={60}
             height={60}
