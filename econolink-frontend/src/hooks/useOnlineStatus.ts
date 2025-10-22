@@ -10,7 +10,10 @@ export default function useOnlineStatus() {
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        const res = await fetch("/api/health-check", { cache: "no-store" });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/app/health-check`,
+          { cache: "no-store" }
+        );
         if (!res.ok) throw new Error("Offline");
         setIsReady(true);
       } catch {
