@@ -13,7 +13,16 @@
     "home": "Return to home"
   },
   "HomePage": {
-    "title": "EconoLink - Home",
+    "NavBar": {
+      "sign-up": "Sign Up",
+      "sign-in": "Sign In",
+      "my-account": "My account",
+      "my-account-long": "Access my account",
+      "routes": {
+        "home": "Home"
+      }
+    },
+    "title": "EconoLink",
     "about": "Welcome to EconoLink, your gateway to economic insights and data."
   },
   "Auth": {

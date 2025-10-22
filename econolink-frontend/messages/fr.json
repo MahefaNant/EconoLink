@@ -13,7 +13,16 @@
     "home": "Retour à l’accueil"
   },
   "HomePage": {
-    "title": "EconoLink - Accueil",
+    "NavBar": {
+      "sign-up": "S'inscrire",
+      "sign-in": "Se connecter",
+      "my-account": "Mon compte",
+      "my-account-long": "Accéder à mon compte",
+      "routes": {
+        "home": "Accueil"
+      }
+    },
+    "title": "EconoLink",
     "about": "Bienvenue sur EconoLink, votre passerelle vers les insights et données économiques."
   },
   "Auth": {

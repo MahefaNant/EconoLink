@@ -12,9 +12,14 @@ import {
 import { Home, PanelLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import useDocumentReadyState from "@/hooks/useDocumentReadyState";
+import { useTranslations } from "next-intl";
 
 export function HomeSideBar() {
-  const menuItems = [{ title: "Home", url: "/", icon: Home }];
+  const t = useTranslations("HomePage");
+  const menuItems = [{ title: t("NavBar.routes.home"), url: "/", icon: Home }];
+
+  const isReady = useDocumentReadyState();
 
   const router = useRouter();
 
@@ -57,21 +62,34 @@ export function HomeSideBar() {
 
         {/* Footer */}
         <div className="border-t p-4 flex flex-col gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full"
-            onClick={() => router.push("/login")}
-          >
-            Sign In
-          </Button>
-          <Button
-            size="sm"
-            className="w-full"
-            onClick={() => router.push("/register")}
-          >
-            Sign Up
-          </Button>
+          {isReady &&
+            (!localStorage.getItem("user_info") ? (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => router.push("/login")}
+                >
+                  {t("NavBar.sign-in")}
+                </Button>
+                <Button
+                  size="sm"
+                  className="w-full"
+                  onClick={() => router.push("/register")}
+                >
+                  {t("NavBar.sign-up")}
+                </Button>
+              </>
+            ) : (
+              <Button
+                size="sm"
+                variant="default"
+                onClick={() => router.push("/dashboard")}
+              >
+                {t("NavBar.my-account")}
+              </Button>
+            ))}
         </div>
       </SheetContent>
     </Sheet>
