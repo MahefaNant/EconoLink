@@ -26,13 +26,7 @@ export class AuthController {
   ) {
     const { user, access_token } = await this.authService.signUp(dto);
 
-    res.cookie("access_token", access_token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/",
-    });
+    this.authService.createCookies({ res, access_token });
 
     return { user };
   }
@@ -44,24 +38,18 @@ export class AuthController {
   ) {
     const { user, access_token } = await this.authService.signIn(dto);
 
-    res.cookie("access_token", access_token, {
-      httpOnly: true,
-      secure: false, // false in HTTP local
-      sameSite: "lax", // or "strict" for the development
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/",
-    });
+    this.authService.createCookies({ res, access_token });
+
     return { user };
   }
 
   @Post("logout")
   @HttpCode(HttpStatus.OK)
   logout(@Res({ passthrough: true }) res: Response) {
-    const isProduction = process.env.NODE_ENV === "production";
     res.clearCookie("access_token", {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: "none",
+      secure: false,
+      sameSite: "lax",
     });
 
     return { message: "Logged out successfully" };

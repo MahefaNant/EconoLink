@@ -4,6 +4,7 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { SignUpDto } from "./dto/sign-up.dto";
 import bcrypt from "node_modules/bcryptjs";
 import { SignInDto } from "./dto/sign-in.dto";
+import { Response } from "express";
 
 @Injectable()
 export class AuthService {
@@ -51,5 +52,21 @@ export class AuthService {
       user: { id: user.id, email: user.email, name: user.name },
       access_token: token,
     };
+  }
+
+  createCookies({
+    res,
+    access_token,
+  }: {
+    res: Response<any, Record<string, any>>;
+    access_token: string;
+  }) {
+    res.cookie("access_token", access_token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7days
+      path: "/",
+    });
   }
 }
