@@ -7,6 +7,11 @@
     "text-button": "Installer EconoLink",
     "rights": "Tous droits réservés."
   },
+  "offline": {
+    "text1": "Vous êtes hors ligne",
+    "text2": "Cette page n’est pas disponible en mode hors ligne. Veuillez vérifier votre connexion Internet ou revenir à l’accueil.",
+    "home": "Retour à l’accueil"
+  },
   "HomePage": {
     "title": "EconoLink - Accueil",
     "about": "Bienvenue sur EconoLink, votre passerelle vers les insights et données économiques."

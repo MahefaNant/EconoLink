@@ -7,6 +7,11 @@
     "text-button": "Install EconoLink",
     "rights": "All rights reserved."
   },
+  "offline": {
+    "text1": "You are offline",
+    "text2": "This page is not available in offline mode. Please check your internet connection or return to the home page.",
+    "home": "Return to home"
+  },
   "HomePage": {
     "title": "EconoLink - Home",
     "about": "Welcome to EconoLink, your gateway to economic insights and data."
