@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Body,
   Controller,
@@ -7,6 +8,7 @@ import {
   Post,
   Req,
   Res,
+  UnauthorizedException,
   UseGuards,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
@@ -63,7 +65,15 @@ export class AuthController {
 
   @Get("me")
   @UseGuards(JwtAuthGuard)
-  getMe(@Req() req: Request) {
-    return { user: req.user };
+  async getMe(@Req() req: Request) {
+    if (!req.user || typeof (req.user as any).id === "undefined") {
+      throw new UnauthorizedException("User not authenticated");
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const user = await this.authService.getUserById((req.user as any).id);
+    if (!user) {
+      throw new UnauthorizedException("User not found");
+    }
+    return { user };
   }
 }
