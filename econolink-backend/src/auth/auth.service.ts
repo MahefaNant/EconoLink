@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { PrismaService } from "src/prisma/prisma.service";
 import { SignUpDto } from "./dto/sign-up.dto";
-import bcrypt from "node_modules/bcryptjs";
 import { SignInDto } from "./dto/sign-in.dto";
 import { Response } from "express";
+import { PrismaService } from "src/prisma/prisma.service";
+import * as bcrypt from "bcryptjs";
 
 @Injectable()
 export class AuthService {
