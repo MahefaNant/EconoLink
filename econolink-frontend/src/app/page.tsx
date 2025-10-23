@@ -1,9 +1,13 @@
+"use client";
+import MyAccountBtn from "@/components/home/MyAccountBtn";
 import InstallAppCard from "@/components/InstallAppCard";
 import { NavBar } from "@/components/navbar/NavBar";
+
 import { useTranslations } from "next-intl";
 
 export default function Home() {
   const t = useTranslations("HomePage");
+
   return (
     <div>
       <NavBar />
@@ -16,6 +20,9 @@ export default function Home() {
         </div>
 
         {/* Section pour rediriger vers l'installation */}
+
+        <MyAccountBtn />
+
         <InstallAppCard />
       </div>
     </div>
