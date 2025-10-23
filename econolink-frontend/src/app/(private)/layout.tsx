@@ -6,6 +6,9 @@ import React, { useEffect, type ReactNode } from "react";
 import { getMe } from "./dashboard/lib/getMe";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { AppSidebar } from "./dashboard/components/app-sidebar";
+import NavBar from "./dashboard/components/nav-bar";
 
 const user_info = "user_info";
 
@@ -42,5 +45,15 @@ export default function PrivateLayout({ children }: { children: ReactNode }) {
     go();
   }, []);
 
-  return <>{children}</>;
+  return (
+    <>
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <NavBar />
+          {children}
+        </SidebarInset>
+      </SidebarProvider>
+    </>
+  );
 }
