@@ -2,8 +2,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from "@nestjs/common";
-import { CategorieDto } from "./dto/categorie.dto";
 import { PrismaService } from "src/prisma/prisma.service";
+import { CategorieUpdateDto } from "./dto/categorieUpdate.dto";
+import { CategorieAddDto } from "./dto/categorieAdd.dto";
 
 @Injectable()
 export class CategorieService {
@@ -23,10 +24,25 @@ export class CategorieService {
     return categories;
   }
 
-  async create(dto: CategorieDto) {
+  async create(dto: CategorieAddDto) {
     const categories = await this.prisma.categories.create({
       data: { ...dto },
     });
     return categories;
+  }
+
+  async update(dto: CategorieUpdateDto) {
+    const categorie = await this.prisma.categories.update({
+      where: { id: dto.id },
+      data: { ...dto },
+    });
+    return categorie;
+  }
+
+  async delete(id: string) {
+    const categorie = await this.prisma.categories.delete({
+      where: { id: id },
+    });
+    return categorie;
   }
 }

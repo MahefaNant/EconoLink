@@ -1,17 +1,19 @@
-import { IsNotEmpty } from "class-validator";
-import { Ttransaction_type } from "../interface/ICategorie";
+import { IsOptional, IsString } from "class-validator";
+import type { Ttransaction_type } from "../interface/ICategorie";
 
 export class CategorieDto {
-  @IsNotEmpty({ message: "User ID is required" })
-  user_id!: string;
-
-  @IsNotEmpty({ message: "Cateforie name is required" })
-  name!: string;
-
+  @IsOptional()
+  @IsString()
   description?: string;
 
+  @IsOptional()
+  @IsString()
   icon?: string;
 
+  @IsOptional()
+  @IsString()
   color?: string;
+
+  @IsOptional()
   type!: Ttransaction_type;
 }
