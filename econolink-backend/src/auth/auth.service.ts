@@ -54,6 +54,14 @@ export class AuthService {
     };
   }
 
+  async getUserById(id: string) {
+    const user = await this.prisma.users.findUnique({
+      where: { id: id },
+    });
+
+    return user;
+  }
+
   createCookies({
     res,
     access_token,
