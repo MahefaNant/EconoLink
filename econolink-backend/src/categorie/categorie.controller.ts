@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Body, Controller, Get, Post, Query, UseGuards } from "@nestjs/common";
 import { CategorieService } from "./categorie.service";
 import { JwtAuthGuard } from "src/auth/jwt/jwt-auth.guard";
