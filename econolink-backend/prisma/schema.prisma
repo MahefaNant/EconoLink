@@ -152,7 +152,7 @@ model users {
   id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar(50)
   email        String         @unique @db.VarChar(255)
   name         String?        @db.VarChar(100)
-  password     String         @db.VarChar(255)
+  password     String?         @db.VarChar(255)
   avatar       String?        @db.VarChar(500)
   currency     String?        @default("AR") @db.VarChar(3)
   language     String?        @default("EN") @db.VarChar(10)
