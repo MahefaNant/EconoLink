@@ -13,7 +13,7 @@ export default function MyAccountBtn() {
 
   return (
     <>
-      {isReady && (
+      {isReady && localStorage.getItem("user_info") && (
         <Button
           size="lg"
           variant="default"
