@@ -7,7 +7,6 @@ export default function ToggleTheme() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Nécessaire pour éviter le "hydration mismatch" côté Next.js
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
 
