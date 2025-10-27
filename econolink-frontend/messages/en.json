@@ -12,6 +12,17 @@
     "text2": "This page is not available in offline mode. Please check your internet connection or return to the home page.",
     "home": "Return to home"
   },
+  "Dialog": {
+    "confirm": "Yes",
+    "cancel": "Cancel",
+    "LogOut": {
+      "text": "LogOut",
+      "title": "Confirm Logout",
+      "description": "Are you sure you want to log out?",
+      "cancel": "No, stay",
+      "confirm": "Yes, log out"
+    }
+  },
   "HomePage": {
     "NavBar": {
       "sign-up": "Sign Up",

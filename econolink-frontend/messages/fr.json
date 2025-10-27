@@ -12,6 +12,17 @@
     "text2": "Cette page n’est pas disponible en mode hors ligne. Veuillez vérifier votre connexion Internet ou revenir à l’accueil.",
     "home": "Retour à l’accueil"
   },
+  "Dialog": {
+    "confirm": "Oui",
+    "cancel": "Annuler",
+    "LogOut": {
+      "text": "Se déconnecter",
+      "title": "Confirmer la déconnexion",
+      "description": "Êtes-vous sûr de vouloir vous déconnecter ?",
+      "cancel": "Non, rester",
+      "confirm": "Oui, se déconnecter"
+    }
+  },
   "HomePage": {
     "NavBar": {
       "sign-up": "S'inscrire",

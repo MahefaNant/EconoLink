@@ -1,10 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { fetcher } from "@/lib/fetcher";
 
 export async function logout() {
-  const res = await fetcher("/auth/logout", {
-    method: "POST",
-    includeCredentials: true,
-  });
+  try {
+    const res = await fetcher("/auth/logout", {
+      method: "POST",
+      includeCredentials: true,
+    });
 
-  return res.user;
+    localStorage.removeItem("user_info");
+    return res.user;
+  } catch (error) {
+    return null;
+  }
 }
