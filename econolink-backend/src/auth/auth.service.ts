@@ -43,6 +43,9 @@ export class AuthService {
 
     if (!user) throw new UnauthorizedException("No account with this email");
 
+    if (!dto.password || !user.password)
+      throw new UnauthorizedException("Invalid credentials");
+
     const passwordMatch = await bcrypt.compare(dto.password, user.password);
     if (!passwordMatch) throw new UnauthorizedException("Invalid credentials");
 
