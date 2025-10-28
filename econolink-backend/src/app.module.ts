@@ -6,9 +6,10 @@ import { PrismaService } from "./prisma/prisma.service";
 import { PrismaModule } from "./prisma/prisma.module";
 import { CategorieModule } from "./categorie/categorie.module";
 import { AccountModule } from './account/account.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, CategorieModule, AccountModule],
+  imports: [AuthModule, PrismaModule, CategorieModule, AccountModule, UserModule],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })
