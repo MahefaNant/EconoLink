@@ -69,7 +69,43 @@
   },
   "Dashboard": {
     "SideBar": {
-      "settings": "Settings"
+      "home": "Return Home",
+      "Route": {
+        "accout-space": {
+          "title": "Account space",
+          "dashboard": "dashboard",
+          "profile": "My profile"
+        }
+      }
+    }
+  },
+  "Settings": {
+    "Profile": {
+      "title": "My Profile",
+      "desc": "Manage your personal information",
+      "loading": "Loading profile...",
+      "Form": {
+        "email": "Email",
+        "name": "Name",
+        "avatar": "Avatar",
+        "currency": "Currency",
+        "create-on": "Created on",
+        "maj": "Updated on",
+        "placeholder": {
+          "avatar": "Choose an avatar",
+          "currency": "Select a currency"
+        },
+        "messages": {
+          "no-update": "No changes detected",
+          "failed-update": "Update failed",
+          "error-maj": "Error during update",
+          "success": "Profile successfully updated"
+        },
+        "button": {
+          "recording": "Recording...",
+          "save": "Save updates"
+        }
+      }
     }
   }
 }

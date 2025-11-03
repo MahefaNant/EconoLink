@@ -3,6 +3,7 @@
 "use client";
 
 import { useAuthStore } from "@/stores/useAuthStore";
+import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useShallow } from "zustand/shallow";
@@ -38,6 +39,7 @@ const avatars = [
 const currencies = ["USD", "EUR", "AR", "GBP", "JPY"];
 
 export default function useUserProfile() {
+  const t = useTranslations("Settings.Profile.Form.messages");
   const [user, setUser] = useState<User | null>(null);
   const [form, setForm] = useState({
     email: "",
@@ -109,7 +111,7 @@ export default function useUserProfile() {
     if (Object.keys(updates).length === 0) {
       setErrorShake(true);
       setTimeout(() => setErrorShake(false), 600);
-      toast.info("Aucune modification détectée");
+      toast.info(t("no-update"));
       return;
     }
 
@@ -126,7 +128,7 @@ export default function useUserProfile() {
       if (!res.ok) {
         setErrorShake(true);
         setTimeout(() => setErrorShake(false), 600);
-        throw new Error("Update failed");
+        throw new Error(t("failed-update"));
       }
 
       const updated = await res.json();
@@ -141,11 +143,11 @@ export default function useUserProfile() {
       localStorage.setItem(user_info, JSON.stringify(userStore));
       setSuccessShake(true);
       setTimeout(() => setSuccessShake(false), 600);
-      toast.success("Profil mis à jour avec succès");
+      toast.success(t("success"));
     } catch {
       setErrorShake(true);
       setTimeout(() => setErrorShake(false), 600);
-      toast.error("Erreur lors de la mise à jour");
+      toast.error(t("error-maj"));
     } finally {
       setLoading(false);
     }

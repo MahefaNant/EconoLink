@@ -1,24 +1,26 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 
 export default function useRouterData() {
   const pathname = usePathname();
+  const t = useTranslations("Dashboard.SideBar.Route");
 
   const data = {
     versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
     navMain: [
       {
-        title: "Account space",
+        title: t("accout-space.title"),
         url: "#",
         items: [
           {
-            title: "Dashboard",
+            title: t("accout-space.dashboard"),
             url: "/dashboard",
             isActive: pathname.startsWith("/dashboard"),
           },
           {
-            title: "My profile",
+            title: t("accout-space.profile"),
             url: "/settings",
             isActive: pathname.startsWith("/settings"),
           },

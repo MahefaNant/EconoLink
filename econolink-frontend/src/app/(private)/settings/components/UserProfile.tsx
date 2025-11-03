@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/select";
 import Image from "next/image";
 import useUserProfile from "../hooks/useUserProfile";
+import { useTranslations } from "next-intl";
+import { Save } from "lucide-react";
 
 export default function UserProfile() {
   const {
@@ -26,10 +28,12 @@ export default function UserProfile() {
     errorShake,
     successShake,
   } = useUserProfile();
+
+  const t = useTranslations("Settings.Profile");
   if (!user)
     return (
       <p className="text-center text-sm text-muted-foreground py-10">
-        Chargement du profil...
+        {t("loading")}
       </p>
     );
 
@@ -42,17 +46,15 @@ export default function UserProfile() {
       >
         <CardHeader className="text-center space-y-2">
           <CardTitle className="text-2xl font-semibold text-primary">
-            Mon profil
+            {t("title")}
           </CardTitle>
-          <p className="text-sm text-muted-foreground">
-            Gérez vos informations personnelles
-          </p>
+          <p className="text-sm text-muted-foreground">{t("desc")}</p>
         </CardHeader>
 
         <CardContent className="grid gap-6 md:grid-cols-2">
           {/* Email */}
           <div className="md:col-span-2">
-            <Label>Email</Label>
+            <Label>{t("Form.email")}</Label>
             <div className="mt-1 rounded-md border px-3 py-2 bg-muted/10 text-sm">
               {form.email}
             </div>
@@ -60,7 +62,7 @@ export default function UserProfile() {
 
           {/* Nom */}
           <div>
-            <Label>Nom</Label>
+            <Label className="mb-1">{t("Form.name")}</Label>
             <Input
               value={form.name}
               onChange={(e) => handleChange("name", e.target.value)}
@@ -69,13 +71,13 @@ export default function UserProfile() {
 
           {/* Avatar */}
           <div>
-            <Label>Avatar</Label>
+            <Label className="mb-1">{t("Form.avatar")}</Label>
             <Select
               value={form.avatar}
               onValueChange={(v) => handleChange("avatar", v)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Choisissez un avatar" />
+                <SelectValue placeholder={t("Form.placeholder.avatar")} />
               </SelectTrigger>
               <SelectContent>
                 {avatars.map((a) => (
@@ -109,13 +111,13 @@ export default function UserProfile() {
 
           {/* Devise */}
           <div>
-            <Label>Devise</Label>
+            <Label className="mb-1">{t("Form.currency")}</Label>
             <Select
               value={form.currency}
               onValueChange={(v) => handleChange("currency", v)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Sélectionner une devise" />
+                <SelectValue placeholder={t("Form.placeholder.currency")} />
               </SelectTrigger>
               <SelectContent>
                 {currencies.map((c) => (
@@ -129,13 +131,13 @@ export default function UserProfile() {
 
           {/* Dates non modifiables */}
           <div>
-            <Label>Créé le</Label>
+            <Label>{t("Form.create-on")}</Label>
             <div className="mt-1 rounded-md border px-3 py-2 bg-muted/10 text-sm">
               {new Date(user.created_at).toLocaleString()}
             </div>
           </div>
           <div>
-            <Label>Mis à jour le</Label>
+            <Label>{t("Form.maj")}</Label>
             <div className="mt-1 rounded-md border px-3 py-2 bg-muted/10 text-sm">
               {new Date(user.updated_at).toLocaleString()}
             </div>
@@ -148,7 +150,8 @@ export default function UserProfile() {
               onClick={handleSave}
               className="bg-green-600 hover:bg-green-700 transition-colors text-white"
             >
-              {loading ? "Enregistrement..." : "Sauvegarder"}
+              <Save />
+              {loading ? t("Form.button.recording") : t("Form.button.save")}
             </Button>
           </div>
         </CardContent>

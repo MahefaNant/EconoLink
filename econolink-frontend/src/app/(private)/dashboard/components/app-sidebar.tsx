@@ -17,7 +17,7 @@ import {
 import { SearchForm } from "./search-form";
 import { VersionSwitcher } from "./version-switcher";
 import { Button } from "@/components/ui/button";
-import { LogOut, Settings } from "lucide-react";
+import { Home, LogOut } from "lucide-react";
 import { logout } from "@/app/(auth)/lib/logOut";
 import { useRouter } from "next/navigation";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
@@ -97,10 +97,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <Button
             variant={"default"}
             className="w-full justify-start"
-            onClick={() => router.push("/settings")}
+            onClick={() => router.push("/")}
           >
-            <Settings className="mr-2 h-4 w-4" />
-            {t("Dashboard.SideBar.settings")}
+            <Home className="mr-2 h-4 w-4" />
+            {t("Dashboard.SideBar.home")}
           </Button>
 
           <Button

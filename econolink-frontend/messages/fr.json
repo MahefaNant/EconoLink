@@ -69,7 +69,43 @@
   },
   "Dashboard": {
     "SideBar": {
-      "settings": "Paramètres"
+      "home": "Retour à l'accueil",
+      "Route": {
+        "accout-space": {
+          "title": "Espace compte",
+          "dashboard": "Tableau de bord",
+          "profile": "Mon profil"
+        }
+      }
+    }
+  },
+  "Settings": {
+    "Profile": {
+      "title": "Mon profil",
+      "desc": "Gérez vos informations personnelles",
+      "loading": "Chargement du profil...",
+      "Form": {
+        "email": "Email",
+        "name": "Nom",
+        "avatar": "Avatar",
+        "currency": "Devise",
+        "create-on": "Créé le",
+        "maj": "Mis à jour le",
+        "placeholder": {
+          "avatar": "Choisissez un avatar",
+          "currency": "Sélectionner une devise"
+        },
+        "messages": {
+          "no-update": "Aucune modification détectée",
+          "failed-update": "Échec de la mise à jour",
+          "error-maj": "Erreur lors de la mise à jour",
+          "success": "Profil mis à jour avec succès"
+        },
+        "button": {
+          "recording": "Enregistrement...",
+          "save": "Enregistrer les mises à jour"
+        }
+      }
     }
   }
 }
