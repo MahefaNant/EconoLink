@@ -10,8 +10,14 @@ import {
 } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
+import useRouterData from "../hooks/useRouterData";
 
 export default function NavBar() {
+  const { data } = useRouterData();
+
+  const activeItem = data.navMain
+    .flatMap((d) => d.items.map((item) => ({ ...item, parentTitle: d.title })))
+    .find((item) => item.isActive);
   return (
     <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
       <div className="flex items-center gap-2">
@@ -22,15 +28,19 @@ export default function NavBar() {
         />
         <Breadcrumb>
           <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="#">
-                Building Your Application
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-            </BreadcrumbItem>
+            {activeItem && (
+              <>
+                <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbLink href="#">
+                    {activeItem.parentTitle}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{activeItem.title}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </>
+            )}
           </BreadcrumbList>
         </Breadcrumb>
       </div>

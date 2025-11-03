@@ -19,41 +19,20 @@ import { VersionSwitcher } from "./version-switcher";
 import { Button } from "@/components/ui/button";
 import { LogOut, Settings } from "lucide-react";
 import { logout } from "@/app/(auth)/lib/logOut";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useTranslations } from "next-intl";
 import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
 import Image from "next/image";
 import { useAuthStore } from "@/stores/useAuthStore";
+import useRouterData from "../hooks/useRouterData";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const t = useTranslations();
   const userStore = useAuthStore((s) => s.user);
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
-  const pathname = usePathname();
-
-  const data = {
-    versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
-    navMain: [
-      {
-        title: "Account space",
-        url: "#",
-        items: [
-          {
-            title: "Dashboard",
-            url: "/dashboard",
-            isActive: pathname.startsWith("/dashboard"),
-          },
-          {
-            title: "My profile",
-            url: "/settings",
-            isActive: pathname.startsWith("/settings"),
-          },
-        ],
-      },
-    ],
-  };
+  const { data } = useRouterData();
 
   const handleLogout = async () => {
     await logout();
