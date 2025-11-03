@@ -31,7 +31,13 @@ export class AuthService {
     const token = await this.jwtService.signAsync(payload);
 
     return {
-      user: { id: user.id, email: user.email, name: user.name },
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        avatar: user.avatar,
+        currency: user.currency,
+      },
       access_token: token,
     };
   }
@@ -52,7 +58,13 @@ export class AuthService {
     const payload = { sub: user.id, email: user.email, name: user.name };
     const token = await this.jwtService.signAsync(payload);
     return {
-      user: { id: user.id, email: user.email, name: user.name },
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        avatar: user.avatar,
+        currency: user.currency,
+      },
       access_token: token,
     };
   }

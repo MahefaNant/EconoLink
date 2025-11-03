@@ -18,13 +18,14 @@ export class UserService {
 
   async updateFields(id: string, updates: Record<string, any>) {
     const nonEditable = [
+      "email",
       "language",
       "timezone",
       "theme",
       "created_at",
       "updated_at",
       "id",
-      "password", // password ignoré aussi
+      "password", // password ignored
     ];
 
     const allowedUpdates: Record<string, any> = {};

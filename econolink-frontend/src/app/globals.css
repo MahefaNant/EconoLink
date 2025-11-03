@@ -206,8 +206,25 @@
       transform: translateX(8px);
     }
   }
-
   .animate-shake {
     animation: shake 0.3s ease;
+  }
+
+  @keyframes success-bounce {
+    0% {
+      transform: scale(1);
+    }
+    30% {
+      transform: scale(1.1);
+    }
+    60% {
+      transform: scale(0.95);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  .animate-success {
+    animation: success-bounce 0.4s ease;
   }
 }

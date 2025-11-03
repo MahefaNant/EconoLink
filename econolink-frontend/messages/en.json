@@ -66,5 +66,10 @@
       "title": "Your finances, simplified.",
       "sub-title": "Track, save, and grow your money effortlessly with EconoLink."
     }
+  },
+  "Dashboard": {
+    "SideBar": {
+      "settings": "Settings"
+    }
   }
 }

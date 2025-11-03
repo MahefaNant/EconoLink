@@ -66,5 +66,10 @@
       "title": "Vos finances simplifiées.",
       "sub-title": "Suivez, économisez et faites fructifier votre argent sans effort avec EconoLink."
     }
+  },
+  "Dashboard": {
+    "SideBar": {
+      "settings": "Paramètres"
+    }
   }
 }
