@@ -4,6 +4,7 @@
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useShallow } from "zustand/shallow";
@@ -39,7 +40,9 @@ const avatars = [
 const currencies = ["USD", "EUR", "AR", "GBP", "JPY"];
 
 export default function useUserProfile() {
+  const router = useRouter();
   const t = useTranslations("Settings.Profile.Form.messages");
+  const tOffline = useTranslations("offline");
   const [user, setUser] = useState<User | null>(null);
   const [form, setForm] = useState({
     email: "",
@@ -73,7 +76,8 @@ export default function useUserProfile() {
         currency: data.currency ?? "",
       });
     } catch {
-      toast.error("Erreur lors du chargement du profil");
+      toast.error(tOffline("text2"));
+      router.replace("/dashboard");
     }
   };
 

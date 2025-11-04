@@ -26,17 +26,27 @@ import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
 import Image from "next/image";
 import { useAuthStore } from "@/stores/useAuthStore";
 import useRouterData from "../hooks/useRouterData";
+import { toast } from "sonner";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const t = useTranslations();
+  const tOffline = useTranslations("offline");
   const userStore = useAuthStore((s) => s.user);
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const { data } = useRouterData();
 
   const handleLogout = async () => {
-    await logout();
-    router.replace("/");
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/${userStore?.id}`
+      );
+      if (!res.ok) throw new Error("Failed to fetch user");
+      await logout();
+      router.replace("/");
+    } catch {
+      toast.error(tOffline("text3"));
+    }
   };
   return (
     <>

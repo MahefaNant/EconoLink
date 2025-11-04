@@ -10,6 +10,7 @@
   "offline": {
     "text1": "You are offline",
     "text2": "This page is not available in offline mode. Please check your internet connection or return to the home page.",
+    "text3": "This feature cannot work offline.",
     "home": "Return to home"
   },
   "Dialog": {
