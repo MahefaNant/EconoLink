@@ -176,6 +176,7 @@ enum account_type {
   SAVINGS
   INVESTMENT
   OTHER
+  MOBILE_MONEY
 }
 
 enum budget_period {
