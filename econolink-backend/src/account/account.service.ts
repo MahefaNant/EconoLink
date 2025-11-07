@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import { AccountAddDto } from "./dto/AccountAdd.dto";
-import { AccountUpdateDto } from "./dto/AccountUpdateDto";
+import { AccountDto } from "./dto/AccountDto";
 
 @Injectable()
 export class AccountService {
@@ -15,16 +14,16 @@ export class AccountService {
     return account;
   }
 
-  async create(dto: AccountAddDto) {
+  async create(dto: AccountDto) {
     const account = await this.prisma.accounts.create({
       data: { ...dto },
     });
     return account;
   }
 
-  async update(dto: AccountUpdateDto) {
+  async update(id: string, dto: AccountDto) {
     const account = await this.prisma.accounts.update({
-      where: { id: dto.id },
+      where: { id: id },
       data: { ...dto },
     });
     return account;
@@ -33,6 +32,16 @@ export class AccountService {
   async delete(id: string) {
     const account = await this.prisma.accounts.delete({
       where: { id: id },
+    });
+    return account;
+  }
+
+  /*----- State----------------*/
+
+  async setState(id: string, state: boolean) {
+    const account = await this.prisma.accounts.update({
+      where: { id: id },
+      data: { is_active: state },
     });
     return account;
   }

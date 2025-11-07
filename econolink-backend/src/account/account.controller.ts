@@ -1,8 +1,17 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from "@nestjs/common";
 import { AccountService } from "./account.service";
 import { JwtAuthGuard } from "src/auth/jwt/jwt-auth.guard";
-import { AccountAddDto } from "./dto/AccountAdd.dto";
-import { AccountUpdateDto } from "./dto/AccountUpdateDto";
+import { AccountDto } from "./dto/AccountDto";
 
 @Controller("account")
 export class AccountController {
@@ -16,19 +25,26 @@ export class AccountController {
 
   @UseGuards(JwtAuthGuard)
   @Post("create")
-  async create(@Body() dto: AccountAddDto) {
+  async create(@Body() dto: AccountDto) {
+    console.log("DTO", dto);
     return await this.accountService.create(dto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post("update")
-  async update(@Body() dto: AccountUpdateDto) {
-    return await this.accountService.update(dto);
+  @Patch(":id")
+  async update(@Param("id") id: string, @Body() dto: AccountDto) {
+    return await this.accountService.update(id, dto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post("delete")
-  async delete(@Query("id") id: string) {
+  @Delete(":id")
+  async delete(@Param("id") id: string) {
     return await this.accountService.delete(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch("state/:id")
+  async setState(@Param("id") id: string, @Query("state") state: boolean) {
+    return await this.accountService.setState(id, state);
   }
 }

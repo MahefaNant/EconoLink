@@ -28,9 +28,9 @@ export class CategorieService {
     return categories;
   }
 
-  async update(dto: CategorieUpdateDto) {
+  async update(id: string, dto: CategorieUpdateDto) {
     const categorie = await this.prisma.categories.update({
-      where: { id: dto.id },
+      where: { id: id },
       data: { ...dto },
     });
     return categorie;
