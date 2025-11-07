@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type FetchOptions<T = any> = {
-  method?: "GET" | "POST" | "PUT" | "DELETE";
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   body?: T;
   headers?: Record<string, string>;
   includeCredentials?: boolean;
+  noStoreCache?: boolean;
   baseUrl?: string;
 };
 
@@ -16,6 +17,7 @@ export async function fetcher<T = any>(
     body,
     headers = {},
     includeCredentials = true,
+    noStoreCache = false,
     baseUrl = process.env.NEXT_PUBLIC_API_URL || "",
   } = options;
 
@@ -29,6 +31,7 @@ export async function fetcher<T = any>(
     },
     body: body ? JSON.stringify(body) : undefined,
     credentials: includeCredentials ? "include" : "same-origin",
+    cache: noStoreCache ? "no-store" : "default",
   });
 
   if (!res.ok) {

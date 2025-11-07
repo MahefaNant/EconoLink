@@ -2,17 +2,13 @@
 
 import * as React from "react";
 import {
-  AlertDialog,
-  AlertDialogPortal,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -55,45 +51,36 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   };
 
   return (
-    <AlertDialog
+    <Dialog
       open={open}
       onOpenChange={(state) => {
-        if (collapsible) {
-          setOpen(state);
-        }
+        if (collapsible) setOpen(state);
       }}
     >
-      <AlertDialogPortal>
-        <AlertDialogOverlay className="fixed inset-0 z-50 bg-black/30 backdrop-blur-[2px]" />
-        <AlertDialogContent className="fixed left-1/2 top-1/2 z-[60] w-[90%] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-lg border bg-background p-6 shadow-lg">
-          <AlertDialogHeader>
-            <AlertDialogTitle>{text.title}</AlertDialogTitle>
-            {text.description && (
-              <AlertDialogDescription>
-                {text.description}
-              </AlertDialogDescription>
-            )}
-          </AlertDialogHeader>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>{text.title}</DialogTitle>
+          {text.description && (
+            <DialogDescription>{text.description}</DialogDescription>
+          )}
+        </DialogHeader>
 
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setOpen(false)}>
-              {text.cancel ?? "Cancel"}
-            </AlertDialogCancel>
+        <DialogFooter className="flex justify-end gap-2 pt-4">
+          <Button variant="secondary" onClick={() => setOpen(false)}>
+            {text.cancel ?? "Cancel"}
+          </Button>
 
-            <AlertDialogAction asChild>
-              <Button
-                onClick={() => {
-                  onConfirm();
-                  setOpen(false);
-                }}
-                className={cn(colorMap[actionColor])}
-              >
-                {text.confirm ?? "Confirm"}
-              </Button>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialogPortal>
-    </AlertDialog>
+          <Button
+            onClick={() => {
+              onConfirm();
+              setOpen(false);
+            }}
+            className={cn(colorMap[actionColor])}
+          >
+            {text.confirm ?? "Confirm"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };

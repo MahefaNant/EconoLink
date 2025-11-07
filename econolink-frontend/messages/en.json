@@ -108,5 +108,32 @@
         }
       }
     }
+  },
+  "Accounts": {
+    "title": "Accounts",
+    "desc": "Manage your financial accounts",
+    "add-account": "Add Account",
+    "table": {
+      "name": "Name",
+      "type": "Type",
+      "actions": "Actions"
+    },
+    "dialog": {
+      "add-title": "Add New Account",
+      "edit-title": "Edit Account",
+      "name-placeholder": "Enter account name",
+      "type-placeholder": "Select account type",
+      "button": {
+        "recording": "Recording...",
+        "save": "Save Account"
+      }
+    },
+    "messages": {
+      "fetch-error": "Error fetching accounts",
+      "add-success": "Account added successfully",
+      "edit-success": "Account updated successfully",
+      "delete-success": "Account deleted successfully",
+      "operation-failed": "Operation failed"
+    }
   }
 }
