@@ -75,7 +75,8 @@
         "accout-space": {
           "title": "Espace compte",
           "dashboard": "Tableau de bord",
-          "profile": "Mon profil"
+          "profile": "Mon profil",
+          "accounts": "Comptes"
         }
       }
     }
@@ -160,7 +161,10 @@
       "name-required": "Le nom est requis",
       "edit-success": "Compte mis à jour avec succès",
       "delete-success": "Compte supprimé avec succès",
-      "operation-failed": "Échec de l'opération"
+      "operation-failed": "Échec de l'opération",
+      "offline-queued": "Vous êtes hors ligne. L'opération a été mise en file d'attente et sera traitée une fois que vous serez de nouveau en ligne.",
+      "offline-fetch": "Vous êtes hors ligne. Affichage des comptes stockés localement.",
+      "foreign-key-error": "Impossible de supprimer ce compte car il est référencé par d'autres données."
     }
   }
 }

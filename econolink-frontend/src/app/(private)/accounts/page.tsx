@@ -97,7 +97,9 @@ export default function AccountsPage() {
 
                 <div>
                   <h2 className="font-semibold text-lg">{a.name}</h2>
-                  <p className="text-sm opacity-70">{a.type}</p>
+                  <p className="text-sm opacity-70">
+                    {accountsTypes.find((type) => type.value === a.type)?.label}
+                  </p>
                 </div>
               </div>
 
@@ -257,7 +259,13 @@ export default function AccountsPage() {
               {tAcc("dialog.button.cancel")}
             </Button>
 
-            <Button className="px-5" onClick={save}>
+            <Button
+              className="px-5"
+              onClick={() => {
+                save();
+                setOpenDialog(false);
+              }}
+            >
               {editing
                 ? tAcc("dialog.button.save")
                 : tAcc("dialog.button.create")}

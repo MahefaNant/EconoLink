@@ -75,7 +75,8 @@
         "accout-space": {
           "title": "Account space",
           "dashboard": "dashboard",
-          "profile": "My profile"
+          "profile": "My profile",
+          "accounts": "Accounts"
         }
       }
     }
@@ -160,7 +161,10 @@
       "name-required": "Name is required",
       "edit-success": "Account updated successfully",
       "delete-success": "Account deleted successfully",
-      "operation-failed": "Operation failed"
+      "operation-failed": "Operation failed",
+      "offline-queued": "You are offline. The operation has been queued and will be processed once you are back online.",
+      "offline-fetch": "You are offline. Displaying locally stored accounts.",
+      "foreign-key-error": "Cannot delete this account as it is referenced by other data."
     }
   }
 }

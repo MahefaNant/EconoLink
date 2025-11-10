@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 
 // --- FILE: app/(dashboard)/accounts/page.tsx
 // Next.js App Router page (client component) - Accounts list + Add / Edit / Delete
 
+import { dexieDb } from "@/lib/dexieDb";
 import { fetcher } from "@/lib/fetcher";
+import { processSyncQueue } from "@/lib/sync";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { TAccount } from "@/types/TAccount";
 import { useTranslations } from "next-intl";
@@ -23,10 +26,10 @@ export default function useAccount() {
     type: "CASH",
     color: "#3B82F6",
     icon: "💰",
-    user_id: userId || "",
   });
 
   async function fetchAccounts() {
+    await processSyncQueue();
     if (!userId) {
       return;
     }
@@ -38,8 +41,16 @@ export default function useAccount() {
         includeCredentials: true,
       });
       setAccounts(data);
+
+      await dexieDb.accounts.clear();
+      await dexieDb.accounts.bulkAdd(data);
     } catch {
-      toast(tAcc("messages.fetch-error"));
+      const offlineData = await dexieDb.accounts
+        .where("user_id")
+        .equals(userId)
+        .toArray();
+      setAccounts(offlineData);
+      toast(tAcc("messages.offline-fetch"));
     } finally {
       setLoading(false);
     }
@@ -56,7 +67,6 @@ export default function useAccount() {
       type: "CASH",
       color: "#3B82F6",
       icon: "💰",
-      user_id: userId || "",
     });
     setOpenDialog(true);
   }
@@ -68,17 +78,15 @@ export default function useAccount() {
       type: a.type,
       color: a.color ?? "#3B82F6",
       icon: a.icon ?? "💰",
-      user_id: userId || "",
     });
     setOpenDialog(true);
   }
 
   async function save() {
-    // client-side validation (simple)
     if (!form.name || form.name.length < 1)
       return toast(tAcc("messages.name-required"));
 
-    const payload = { ...form };
+    const payload = { ...form, user_id: userId };
     const url = editing ? `/account/${editing.id}` : "/account/create";
     const method = editing ? "PATCH" : "POST";
     try {
@@ -94,7 +102,32 @@ export default function useAccount() {
         editing ? tAcc("messages.edit-success") : tAcc("messages.add-success")
       );
     } catch {
-      toast(tAcc("messages.operation-failed"));
+      const tempId = editing ? editing.id : `temp-${crypto.randomUUID()}`;
+
+      // add/update in Dexie.accounts
+      await dexieDb.accounts.put({
+        id: tempId,
+        ...payload,
+        created_at: editing ? editing.created_at : new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        is_active: editing ? editing.is_active : true,
+        balance: editing ? editing.balance : 0,
+        user_id: userId || "",
+      });
+
+      //add the query to the syncQueue
+      await dexieDb.syncQueue.add({
+        url,
+        method,
+        body: { ...payload, user_id: userId },
+        tempId: editing ? undefined : tempId,
+        createdAt: Date.now(),
+      });
+
+      toast(tAcc("messages.offline-queued"));
+
+      // maj UI
+      await fetchAccounts();
     }
   }
 
@@ -105,12 +138,48 @@ export default function useAccount() {
         noStoreCache: true,
         includeCredentials: true,
       });
+
       setAccounts((s) => s.filter((a) => a.id !== id));
+
+      await dexieDb.accounts.delete(id);
+
       toast(tAcc("messages.delete-success"));
-    } catch {
-      toast(tAcc("messages.operation-failed"));
+    } catch (err: any) {
+      // backend error (ex: foreign key)
+      if (err?.status && err.status !== 0) {
+        toast.error(tAcc("messages.foreign-key-error"));
+        return;
+      }
+
+      // delete locally
+      await dexieDb.accounts.delete(id);
+      setAccounts((s) => s.filter((a) => a.id !== id));
+
+      const existingTasks = await dexieDb.syncQueue
+        .filter((task) => task.id === Number(id) || task.tempId === id)
+        .toArray();
+
+      // If there is already a task → remove it AND don't add anything
+      if (existingTasks.length > 0) {
+        await dexieDb.syncQueue
+          .filter((task) => task.id === Number(id) || task.tempId === id)
+          .delete();
+
+        toast(tAcc("messages.offline-queued"));
+        return;
+      }
+
+      // add the DELETE query to the syncQueue
+      await dexieDb.syncQueue.add({
+        url: `/account/${id}`,
+        method: "DELETE",
+        createdAt: Date.now(),
+      });
+
+      toast(tAcc("messages.offline-queued"));
     }
   }
+
   return {
     accounts,
     loading,

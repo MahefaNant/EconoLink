@@ -24,6 +24,11 @@ export default function useRouterData() {
             url: "/settings",
             isActive: pathname.startsWith("/settings"),
           },
+          {
+            title: t("accout-space.accounts"),
+            url: "/accounts",
+            isActive: pathname.startsWith("/accounts"),
+          },
         ],
       },
     ],
