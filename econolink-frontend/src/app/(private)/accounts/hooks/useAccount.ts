@@ -6,10 +6,12 @@
 import { fetcher } from "@/lib/fetcher";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { TAccount } from "@/types/TAccount";
+import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 export default function useAccount() {
+  const tAcc = useTranslations("Accounts");
   const userStore = useAuthStore((s) => s.user);
   const userId = userStore?.id;
   const [accounts, setAccounts] = useState<TAccount[]>([]);
@@ -37,7 +39,7 @@ export default function useAccount() {
       });
       setAccounts(data);
     } catch {
-      toast("Failed to load accounts");
+      toast(tAcc("messages.fetch-error"));
     } finally {
       setLoading(false);
     }
@@ -73,7 +75,8 @@ export default function useAccount() {
 
   async function save() {
     // client-side validation (simple)
-    if (!form.name || form.name.length < 1) return toast("Name is required");
+    if (!form.name || form.name.length < 1)
+      return toast(tAcc("messages.name-required"));
 
     const payload = { ...form };
     const url = editing ? `/account/${editing.id}` : "/account/create";
@@ -87,14 +90,15 @@ export default function useAccount() {
       });
       await fetchAccounts();
       setOpenDialog(false);
-      toast(`Account ${editing ? "updated" : "created"} successfully`);
+      toast(
+        editing ? tAcc("messages.edit-success") : tAcc("messages.add-success")
+      );
     } catch {
-      toast("Save failed");
+      toast(tAcc("messages.operation-failed"));
     }
   }
 
   async function remove(id: string) {
-    if (!confirm("Delete this account? This action cannot be undone.")) return;
     try {
       await fetcher(`/account/${id}`, {
         method: "DELETE",
@@ -102,9 +106,9 @@ export default function useAccount() {
         includeCredentials: true,
       });
       setAccounts((s) => s.filter((a) => a.id !== id));
-      toast("Deleted");
+      toast(tAcc("messages.delete-success"));
     } catch {
-      toast("Delete failed");
+      toast(tAcc("messages.operation-failed"));
     }
   }
   return {

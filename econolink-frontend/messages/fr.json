@@ -108,5 +108,59 @@
         }
       }
     }
+  },
+  "Accounts": {
+    "title": "Comptes",
+    "add-account": "Ajouter un compte",
+    "list": {
+      "balance": "Solde",
+      "active": "Active",
+      "inactive": "Inactive",
+      "name": "Nom",
+      "type": "Type",
+      "color": "Couleur"
+    },
+    "dialog": {
+      "add-title": "Ajouter un nouveau compte",
+      "edit-title": "Modifier le compte",
+      "name-placeholder": "Entrez le nom du compte",
+      "type-placeholder": "Sélectionnez le type de compte",
+      "icon-placeholder": "Choisissez une icône",
+      "color-placeholder": "Choisissez une couleur",
+      "delete-title": "Supprimer ce compte ?",
+      "delete-desc": "Êtes-vous sûr de vouloir supprimer ce compte ? Cette action est irréversible.",
+      "button": {
+        "delete": "Supprimer le compte",
+        "create": "Créer le compte",
+        "save": "Enregistrer les modifications",
+        "cancel": "Annuler"
+      }
+    },
+    "iconLabel": {
+      "bank": "Banque",
+      "cash": "Espèces",
+      "mobile-money": "Mobile Money",
+      "credit-card": "Carte de crédit",
+      "investment": "Investissement",
+      "savings": "Épargne",
+      "other": "Autre"
+    },
+    "colorLabel": {
+      "red": "Rouge",
+      "green": "Vert",
+      "blue": "Bleu",
+      "yellow": "Jaune",
+      "purple": "Violet",
+      "gray": "Gris",
+      "black": "Noir"
+    },
+    "messages": {
+      "fetch-error": "Échec du chargement des comptes",
+      "add-success": "Compte ajouté avec succès",
+      "name-required": "Le nom est requis",
+      "edit-success": "Compte mis à jour avec succès",
+      "delete-success": "Compte supprimé avec succès",
+      "operation-failed": "Échec de l'opération"
+    }
   }
 }

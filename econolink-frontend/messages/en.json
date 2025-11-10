@@ -111,26 +111,53 @@
   },
   "Accounts": {
     "title": "Accounts",
-    "desc": "Manage your financial accounts",
     "add-account": "Add Account",
-    "table": {
+    "list": {
+      "balance": "Balance",
+      "active": "Active",
+      "inactive": "Inactive",
       "name": "Name",
       "type": "Type",
-      "actions": "Actions"
+      "color": "Color"
     },
     "dialog": {
       "add-title": "Add New Account",
       "edit-title": "Edit Account",
       "name-placeholder": "Enter account name",
       "type-placeholder": "Select account type",
+      "icon-placeholder": "Choose an icon",
+      "color-placeholder": "Choose a color",
+      "delete-title": "Delete this Account?",
+      "delete-desc": "Are you sure you want to delete this account? This action cannot be undone.",
       "button": {
-        "recording": "Recording...",
-        "save": "Save Account"
+        "delete": "Delete Account",
+        "create": "Create",
+        "save": "Save Changes",
+        "cancel": "Cancel"
       }
     },
+    "iconLabel": {
+      "bank": "Bank",
+      "cash": "Cash",
+      "mobile-money": "Mobile Money",
+      "credit-card": "Credit Card",
+      "investment": "Investment",
+      "savings": "Savings",
+      "other": "Other"
+    },
+    "colorLabel": {
+      "red": "Red",
+      "green": "Green",
+      "blue": "Blue",
+      "yellow": "Yellow",
+      "purple": "Purple",
+      "gray": "Gray",
+      "black": "Black"
+    },
     "messages": {
-      "fetch-error": "Error fetching accounts",
+      "fetch-error": "Failed to load accounts",
       "add-success": "Account added successfully",
+      "name-required": "Name is required",
       "edit-success": "Account updated successfully",
       "delete-success": "Account deleted successfully",
       "operation-failed": "Operation failed"
