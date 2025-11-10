@@ -1,10 +1,10 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { PrismaService } from "src/prisma/prisma.service";
 import { SignUpDto } from "./dto/sign-up.dto";
-import bcrypt from "node_modules/bcryptjs";
 import { SignInDto } from "./dto/sign-in.dto";
 import { Response } from "express";
+import { PrismaService } from "src/prisma/prisma.service";
+import * as bcrypt from "bcryptjs";
 
 @Injectable()
 export class AuthService {
@@ -31,7 +31,13 @@ export class AuthService {
     const token = await this.jwtService.signAsync(payload);
 
     return {
-      user: { id: user.id, email: user.email, name: user.name },
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        avatar: user.avatar,
+        currency: user.currency,
+      },
       access_token: token,
     };
   }
@@ -43,13 +49,22 @@ export class AuthService {
 
     if (!user) throw new UnauthorizedException("No account with this email");
 
+    if (!dto.password || !user.password)
+      throw new UnauthorizedException("Invalid credentials");
+
     const passwordMatch = await bcrypt.compare(dto.password, user.password);
     if (!passwordMatch) throw new UnauthorizedException("Invalid credentials");
 
     const payload = { sub: user.id, email: user.email, name: user.name };
     const token = await this.jwtService.signAsync(payload);
     return {
-      user: { id: user.id, email: user.email, name: user.name },
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        avatar: user.avatar,
+        currency: user.currency,
+      },
       access_token: token,
     };
   }

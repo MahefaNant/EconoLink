@@ -10,7 +10,19 @@
   "offline": {
     "text1": "Vous êtes hors ligne",
     "text2": "Cette page n’est pas disponible en mode hors ligne. Veuillez vérifier votre connexion Internet ou revenir à l’accueil.",
+    "text3": "Cette fonctionnalité ne fonctionne pas hors ligne.",
     "home": "Retour à l’accueil"
+  },
+  "Dialog": {
+    "confirm": "Oui",
+    "cancel": "Annuler",
+    "LogOut": {
+      "text": "Se déconnecter",
+      "title": "Confirmer la déconnexion",
+      "description": "Êtes-vous sûr de vouloir vous déconnecter ?",
+      "cancel": "Non, rester",
+      "confirm": "Oui, se déconnecter"
+    }
   },
   "HomePage": {
     "NavBar": {
@@ -54,6 +66,105 @@
     "RightSide": {
       "title": "Vos finances simplifiées.",
       "sub-title": "Suivez, économisez et faites fructifier votre argent sans effort avec EconoLink."
+    }
+  },
+  "Dashboard": {
+    "SideBar": {
+      "home": "Retour à l'accueil",
+      "Route": {
+        "accout-space": {
+          "title": "Espace compte",
+          "dashboard": "Tableau de bord",
+          "profile": "Mon profil",
+          "accounts": "Comptes"
+        }
+      }
+    }
+  },
+  "Settings": {
+    "Profile": {
+      "title": "Mon profil",
+      "desc": "Gérez vos informations personnelles",
+      "loading": "Chargement du profil...",
+      "Form": {
+        "email": "Email",
+        "name": "Nom",
+        "avatar": "Avatar",
+        "currency": "Devise",
+        "create-on": "Créé le",
+        "maj": "Mis à jour le",
+        "placeholder": {
+          "avatar": "Choisissez un avatar",
+          "currency": "Sélectionner une devise"
+        },
+        "messages": {
+          "no-update": "Aucune modification détectée",
+          "failed-update": "Échec de la mise à jour",
+          "error-maj": "Erreur lors de la mise à jour",
+          "success": "Profil mis à jour avec succès"
+        },
+        "button": {
+          "recording": "Enregistrement...",
+          "save": "Enregistrer les mises à jour"
+        }
+      }
+    }
+  },
+  "Accounts": {
+    "title": "Comptes",
+    "add-account": "Ajouter un compte",
+    "list": {
+      "balance": "Solde",
+      "active": "Active",
+      "inactive": "Inactive",
+      "name": "Nom",
+      "type": "Type",
+      "color": "Couleur"
+    },
+    "dialog": {
+      "add-title": "Ajouter un nouveau compte",
+      "edit-title": "Modifier le compte",
+      "name-placeholder": "Entrez le nom du compte",
+      "type-placeholder": "Sélectionnez le type de compte",
+      "icon-placeholder": "Choisissez une icône",
+      "color-placeholder": "Choisissez une couleur",
+      "delete-title": "Supprimer ce compte ?",
+      "delete-desc": "Êtes-vous sûr de vouloir supprimer ce compte ? Cette action est irréversible.",
+      "button": {
+        "delete": "Supprimer le compte",
+        "create": "Créer le compte",
+        "save": "Enregistrer les modifications",
+        "cancel": "Annuler"
+      }
+    },
+    "iconLabel": {
+      "bank": "Banque",
+      "cash": "Espèces",
+      "mobile-money": "Mobile Money",
+      "credit-card": "Carte de crédit",
+      "investment": "Investissement",
+      "savings": "Épargne",
+      "other": "Autre"
+    },
+    "colorLabel": {
+      "red": "Rouge",
+      "green": "Vert",
+      "blue": "Bleu",
+      "yellow": "Jaune",
+      "purple": "Violet",
+      "gray": "Gris",
+      "black": "Noir"
+    },
+    "messages": {
+      "fetch-error": "Échec du chargement des comptes",
+      "add-success": "Compte ajouté avec succès",
+      "name-required": "Le nom est requis",
+      "edit-success": "Compte mis à jour avec succès",
+      "delete-success": "Compte supprimé avec succès",
+      "operation-failed": "Échec de l'opération",
+      "offline-queued": "Vous êtes hors ligne. L'opération a été mise en file d'attente et sera traitée une fois que vous serez de nouveau en ligne.",
+      "offline-fetch": "Vous êtes hors ligne. Affichage des comptes stockés localement.",
+      "foreign-key-error": "Impossible de supprimer ce compte car il est référencé par d'autres données."
     }
   }
 }

@@ -19,8 +19,6 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Section pour rediriger vers l'installation */}
-
         <MyAccountBtn />
 
         <InstallAppCard />
