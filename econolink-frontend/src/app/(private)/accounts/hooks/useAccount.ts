@@ -36,7 +36,7 @@ export default function useAccount() {
 
     setLoading(true);
     try {
-      const data = await fetcher(`/account/all?user_id=${userId}`, {
+      const data = await fetcher("/account/all", {
         noStoreCache: true,
         includeCredentials: true,
       });

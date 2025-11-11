@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
   Body,
   Controller,
@@ -7,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
 } from "@nestjs/common";
 import { AccountService } from "./account.service";
@@ -19,31 +22,39 @@ export class AccountController {
 
   @UseGuards(JwtAuthGuard)
   @Get("all")
-  async getAll(@Query("user_id") user_id: string) {
-    return await this.accountService.getAll(user_id);
+  async getAll(@Req() req: any) {
+    return await this.accountService.getAll(req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post("create")
-  async create(@Body() dto: AccountDto) {
-    return await this.accountService.create(dto);
+  async create(@Body() dto: AccountDto, @Req() req: any) {
+    return await this.accountService.create(dto, req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch(":id")
-  async update(@Param("id") id: string, @Body() dto: AccountDto) {
-    return await this.accountService.update(id, dto);
+  async update(
+    @Param("id") id: string,
+    @Body() dto: AccountDto,
+    @Req() req: any,
+  ) {
+    return await this.accountService.update(id, req.user.id, dto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(":id")
-  async delete(@Param("id") id: string) {
-    return await this.accountService.delete(id);
+  async delete(@Param("id") id: string, @Req() req: any) {
+    return await this.accountService.delete(id, req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch("state/:id")
-  async setState(@Param("id") id: string, @Query("state") state: boolean) {
-    return await this.accountService.setState(id, state);
+  async setState(
+    @Param("id") id: string,
+    @Query("state") state: boolean,
+    @Req() req: any,
+  ) {
+    return await this.accountService.setState(id, req.user.id, state);
   }
 }

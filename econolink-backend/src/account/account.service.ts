@@ -14,33 +14,33 @@ export class AccountService {
     return account;
   }
 
-  async create(dto: AccountDto) {
+  async create(dto: AccountDto, user_id: string) {
     const account = await this.prisma.accounts.create({
-      data: { ...dto },
+      data: { ...dto, user_id: user_id },
     });
     return account;
   }
 
-  async update(id: string, dto: AccountDto) {
+  async update(id: string, user_id: string, dto: AccountDto) {
     const account = await this.prisma.accounts.update({
-      where: { id: id },
+      where: { id: id, user_id: user_id },
       data: { ...dto },
     });
     return account;
   }
 
-  async delete(id: string) {
+  async delete(id: string, user_id: string) {
     const account = await this.prisma.accounts.delete({
-      where: { id: id },
+      where: { id: id, user_id: user_id },
     });
     return account;
   }
 
   /*----- State----------------*/
 
-  async setState(id: string, state: boolean) {
+  async setState(id: string, user_id: string, state: boolean) {
     const account = await this.prisma.accounts.update({
-      where: { id: id },
+      where: { id: id, user_id: user_id },
       data: { is_active: state },
     });
     return account;
