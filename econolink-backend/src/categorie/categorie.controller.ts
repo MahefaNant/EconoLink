@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
   Body,
   Controller,
@@ -6,7 +8,7 @@ import {
   Param,
   Patch,
   Post,
-  Query,
+  Req,
   UseGuards,
 } from "@nestjs/common";
 import { CategorieService } from "./categorie.service";
@@ -20,25 +22,29 @@ export class CategorieController {
 
   @UseGuards(JwtAuthGuard)
   @Get("all")
-  async getAll(@Query("user_id") user_id: string) {
-    return await this.categorieService.getAll(user_id);
+  async getAll(@Req() req: any) {
+    return await this.categorieService.getAll(req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post("create")
-  async create(@Body() dto: CategorieAddDto) {
-    return await this.categorieService.create(dto);
+  async create(@Body() dto: CategorieAddDto, @Req() req: any) {
+    return await this.categorieService.create(dto, req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch(":id")
-  async update(@Param("id") id: string, @Body() dto: CategorieUpdateDto) {
-    return await this.categorieService.update(id, dto);
+  async update(
+    @Param("id") id: string,
+    @Body() dto: CategorieUpdateDto,
+    @Req() req: any,
+  ) {
+    return await this.categorieService.update(id, req.user.id, dto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(":id")
-  async delete(@Query("id") id: string) {
-    return await this.categorieService.delete(id);
+  async delete(@Param("id") id: string, @Req() req: any) {
+    return await this.categorieService.delete(id, req.user.id);
   }
 }

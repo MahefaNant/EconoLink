@@ -26,7 +26,6 @@ export class AccountController {
   @UseGuards(JwtAuthGuard)
   @Post("create")
   async create(@Body() dto: AccountDto) {
-    console.log("DTO", dto);
     return await this.accountService.create(dto);
   }
 

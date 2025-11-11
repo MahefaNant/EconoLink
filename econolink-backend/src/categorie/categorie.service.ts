@@ -21,24 +21,24 @@ export class CategorieService {
     return categories;
   }
 
-  async create(dto: CategorieAddDto) {
+  async create(dto: CategorieAddDto, user_id: string) {
     const categories = await this.prisma.categories.create({
-      data: { ...dto },
+      data: { ...dto, user_id: user_id },
     });
     return categories;
   }
 
-  async update(id: string, dto: CategorieUpdateDto) {
+  async update(id: string, user_id: string, dto: CategorieUpdateDto) {
     const categorie = await this.prisma.categories.update({
-      where: { id: id },
+      where: { id: id, user_id: user_id },
       data: { ...dto },
     });
     return categorie;
   }
 
-  async delete(id: string) {
+  async delete(id: string, user_id: string) {
     const categorie = await this.prisma.categories.delete({
-      where: { id: id },
+      where: { id: id, user_id: user_id },
     });
     return categorie;
   }
