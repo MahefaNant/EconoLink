@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from "@nestjs/common";
@@ -16,6 +17,7 @@ import { TransactionService } from "./transaction.service";
 import { JwtAuthGuard } from "src/auth/jwt/jwt-auth.guard";
 import { CreateTransactionDto } from "./dto/create-transaction.dto";
 import { UpdateTransactionDto } from "./dto/update-transaction.dto";
+import { TransactionQueryDto } from "./dto/transaction-query.dto";
 
 @Controller("transaction")
 export class TransactionController {
@@ -30,9 +32,20 @@ export class TransactionController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll(@Req() req: any) {
+  async findAll(@Query() query: TransactionQueryDto, @Req() req: any) {
     const userId = req.user.id;
-    return this.transactionService.findAll(userId);
+    return this.transactionService.findAll(userId, query);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("stats")
+  async getStats(
+    @Query("startDate") startDate?: string,
+    @Query("endDate") endDate?: string,
+    @Req() req?: any,
+  ) {
+    const userId = req.user.id;
+    return this.transactionService.getStats(userId, startDate, endDate);
   }
 
   @UseGuards(JwtAuthGuard)

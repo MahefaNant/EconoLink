@@ -48,32 +48,161 @@ CREATE TRIGGER update_reminders_updated_at
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- =============================================
--- TRIGGER POUR METTRE À JOUR LES SOLDES
+-- SUPPRESSION DES ANCIENS TRIGGERS ET FONCTION
+-- =============================================
+
+DROP TRIGGER IF EXISTS trigger_update_balance_insert ON transactions;
+DROP TRIGGER IF EXISTS trigger_update_balance_update ON transactions;
+DROP TRIGGER IF EXISTS trigger_update_balance_delete ON transactions;
+DROP FUNCTION IF EXISTS update_account_balance();
+
+-- =============================================
+-- NOUVELLE FONCTION CORRIGÉE POUR TOUTES LES OPÉRATIONS
 -- =============================================
 
 CREATE OR REPLACE FUNCTION update_account_balance()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Mettre à jour le solde du compte source
-    UPDATE accounts 
-    SET balance = balance + NEW.amount,
-        updated_at = NOW()
-    WHERE id = NEW.account_id;
+    -- CAS 1: INSERT (Nouvelle transaction)
+    IF TG_OP = 'INSERT' THEN
+        -- Pour INCOME: augmenter le balance du compte
+        IF NEW.type = 'INCOME' THEN
+            UPDATE accounts 
+            SET balance = balance + NEW.amount,
+                updated_at = NOW()
+            WHERE id = NEW.account_id;
+        
+        -- Pour EXPENSE: diminuer le balance du compte
+        ELSIF NEW.type = 'EXPENSE' THEN
+            UPDATE accounts 
+            SET balance = balance - NEW.amount,
+                updated_at = NOW()
+            WHERE id = NEW.account_id;
+        
+        -- Pour TRANSFER: diminuer le compte source, augmenter le compte destination
+        ELSIF NEW.type = 'TRANSFER' AND NEW.to_account_id IS NOT NULL THEN
+            -- Diminuer le compte source
+            UPDATE accounts 
+            SET balance = balance - NEW.amount,
+                updated_at = NOW()
+            WHERE id = NEW.account_id;
+            
+            -- Augmenter le compte destination
+            UPDATE accounts 
+            SET balance = balance + NEW.amount,
+                updated_at = NOW()
+            WHERE id = NEW.to_account_id;
+        END IF;
+        RETURN NEW;
     
-    -- Pour les transferts, mettre à jour aussi le compte destination
-    IF NEW.type = 'TRANSFER' AND NEW.to_account_id IS NOT NULL THEN
-        UPDATE accounts 
-        SET balance = balance - NEW.amount,
-            updated_at = NOW()
-        WHERE id = NEW.to_account_id;
+    -- CAS 2: UPDATE (Modification d'une transaction existante)
+    ELSIF TG_OP = 'UPDATE' THEN
+        -- D'abord annuler l'ancienne transaction (comme un DELETE)
+        IF OLD.type = 'INCOME' THEN
+            UPDATE accounts 
+            SET balance = balance - OLD.amount,
+                updated_at = NOW()
+            WHERE id = OLD.account_id;
+        
+        ELSIF OLD.type = 'EXPENSE' THEN
+            UPDATE accounts 
+            SET balance = balance + OLD.amount,
+                updated_at = NOW()
+            WHERE id = OLD.account_id;
+        
+        ELSIF OLD.type = 'TRANSFER' AND OLD.to_account_id IS NOT NULL THEN
+            -- Rétablir le compte source
+            UPDATE accounts 
+            SET balance = balance + OLD.amount,
+                updated_at = NOW()
+            WHERE id = OLD.account_id;
+            
+            -- Rétablir le compte destination
+            UPDATE accounts 
+            SET balance = balance - OLD.amount,
+                updated_at = NOW()
+            WHERE id = OLD.to_account_id;
+        END IF;
+        
+        -- Puis appliquer la nouvelle transaction (comme un INSERT)
+        IF NEW.type = 'INCOME' THEN
+            UPDATE accounts 
+            SET balance = balance + NEW.amount,
+                updated_at = NOW()
+            WHERE id = NEW.account_id;
+        
+        ELSIF NEW.type = 'EXPENSE' THEN
+            UPDATE accounts 
+            SET balance = balance - NEW.amount,
+                updated_at = NOW()
+            WHERE id = NEW.account_id;
+        
+        ELSIF NEW.type = 'TRANSFER' AND NEW.to_account_id IS NOT NULL THEN
+            -- Diminuer le compte source
+            UPDATE accounts 
+            SET balance = balance - NEW.amount,
+                updated_at = NOW()
+            WHERE id = NEW.account_id;
+            
+            -- Augmenter le compte destination
+            UPDATE accounts 
+            SET balance = balance + NEW.amount,
+                updated_at = NOW()
+            WHERE id = NEW.to_account_id;
+        END IF;
+        RETURN NEW;
+    
+    -- CAS 3: DELETE (Suppression d'une transaction)
+    ELSIF TG_OP = 'DELETE' THEN
+        IF OLD.type = 'INCOME' THEN
+            UPDATE accounts 
+            SET balance = balance - OLD.amount,
+                updated_at = NOW()
+            WHERE id = OLD.account_id;
+        
+        ELSIF OLD.type = 'EXPENSE' THEN
+            UPDATE accounts 
+            SET balance = balance + OLD.amount,
+                updated_at = NOW()
+            WHERE id = OLD.account_id;
+        
+        ELSIF OLD.type = 'TRANSFER' AND OLD.to_account_id IS NOT NULL THEN
+            -- Rétablir le compte source
+            UPDATE accounts 
+            SET balance = balance + OLD.amount,
+                updated_at = NOW()
+            WHERE id = OLD.account_id;
+            
+            -- Rétablir le compte destination
+            UPDATE accounts 
+            SET balance = balance - OLD.amount,
+                updated_at = NOW()
+            WHERE id = OLD.to_account_id;
+        END IF;
+        RETURN OLD;
     END IF;
     
-    RETURN NEW;
+    RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_update_balance 
+-- =============================================
+-- CRÉATION DES TROIS TRIGGERS
+-- =============================================
+
+-- Trigger pour INSERT
+CREATE TRIGGER trigger_update_balance_insert
     AFTER INSERT ON transactions 
+    FOR EACH ROW EXECUTE FUNCTION update_account_balance();
+
+-- Trigger pour UPDATE
+CREATE TRIGGER trigger_update_balance_update
+    AFTER UPDATE ON transactions 
+    FOR EACH ROW EXECUTE FUNCTION update_account_balance();
+
+-- Trigger pour DELETE
+CREATE TRIGGER trigger_update_balance_delete
+    AFTER DELETE ON transactions 
     FOR EACH ROW EXECUTE FUNCTION update_account_balance();
 
 -- =============================================
@@ -107,3 +236,73 @@ SELECT
 FROM budgets b
 LEFT JOIN categories c ON b.category_id = c.id
 WHERE b.end_date IS NULL OR b.end_date >= CURRENT_DATE;
+
+-- =============================================
+-- RECALCUL COMPLET DE TOUTES LES BALANCES
+-- =============================================
+
+DO $$
+DECLARE
+    account_record RECORD;
+    calculated_balance DECIMAL(15,2);
+BEGIN
+    FOR account_record IN SELECT id FROM accounts LOOP
+        -- Calculer le balance basé sur toutes les transactions
+        SELECT COALESCE(SUM(
+            CASE 
+                WHEN type = 'INCOME' THEN amount
+                WHEN type = 'EXPENSE' THEN -amount
+                WHEN type = 'TRANSFER' AND account_id = account_record.id THEN -amount
+                WHEN type = 'TRANSFER' AND to_account_id = account_record.id THEN amount
+                ELSE 0
+            END
+        ), 0)
+        INTO calculated_balance
+        FROM transactions
+        WHERE account_id = account_record.id OR to_account_id = account_record.id;
+        
+        -- Mettre à jour le balance du compte
+        UPDATE accounts 
+        SET balance = calculated_balance,
+            updated_at = NOW()
+        WHERE id = account_record.id;
+        
+        RAISE NOTICE 'Compte %: balance recalculée à %', account_record.id, calculated_balance;
+    END LOOP;
+END $$;
+
+-- =============================================
+-- VÉRIFICATION DES BALANCES
+-- =============================================
+
+SELECT 
+    a.id as account_id,
+    a.name as account_name,
+    a.balance as current_balance,
+    (
+        SELECT COALESCE(SUM(
+            CASE 
+                WHEN t.type = 'INCOME' THEN t.amount
+                WHEN t.type = 'EXPENSE' THEN -t.amount
+                WHEN t.type = 'TRANSFER' AND t.account_id = a.id THEN -t.amount
+                WHEN t.type = 'TRANSFER' AND t.to_account_id = a.id THEN t.amount
+                ELSE 0
+            END
+        ), 0)
+        FROM transactions t
+        WHERE t.account_id = a.id OR t.to_account_id = a.id
+    ) as calculated_balance,
+    a.balance - (
+        SELECT COALESCE(SUM(
+            CASE 
+                WHEN t.type = 'INCOME' THEN t.amount
+                WHEN t.type = 'EXPENSE' THEN -t.amount
+                WHEN t.type = 'TRANSFER' AND t.account_id = a.id THEN -t.amount
+                WHEN t.type = 'TRANSFER' AND t.to_account_id = a.id THEN t.amount
+                ELSE 0
+            END
+        ), 0)
+        FROM transactions t
+        WHERE t.account_id = a.id OR t.to_account_id = a.id
+    ) as difference
+FROM accounts a;
