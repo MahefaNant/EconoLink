@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CategorieUpdateDto } from "./dto/categorieUpdate.dto";
 import { CategorieAddDto } from "./dto/categorieAdd.dto";
+import { transaction_type } from "@prisma/client";
 
 @Injectable()
 export class CategorieService {
@@ -15,7 +16,22 @@ export class CategorieService {
           { user_id: null }, //
         ],
       },
-      orderBy: [{ type: "asc" }, { name: "asc" }],
+      orderBy: [{ user_id: "asc" }, { type: "asc" }, { name: "asc" }],
+    });
+    if (!categories) return [];
+    return categories;
+  }
+
+  async getByType(user_id: string, type: transaction_type) {
+    const categories = await this.prisma.categories.findMany({
+      where: {
+        type: type,
+        OR: [
+          { user_id: user_id },
+          { user_id: null }, //
+        ],
+      },
+      orderBy: [{ user_id: "asc" }, { type: "asc" }, { name: "asc" }],
     });
     if (!categories) return [];
     return categories;
