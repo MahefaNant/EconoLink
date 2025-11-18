@@ -72,11 +72,25 @@
     "SideBar": {
       "home": "Retour à l'accueil",
       "Route": {
-        "accout-space": {
-          "title": "Espace compte",
+        "home-space": {
+          "title": "Espace d'accueil",
           "dashboard": "Tableau de bord",
-          "profile": "Mon profil",
-          "accounts": "Comptes"
+          "profile": "Mon profil"
+        },
+        "account-space": {
+          "title": "Espace des comptes",
+          "accounts": "Comptes",
+          "add": "Ajouter un compte"
+        },
+        "category-space": {
+          "title": "Espace des catégories",
+          "categories": "Catégories",
+          "add": "Ajouter une catégorie"
+        },
+        "transaction-space": {
+          "title": "Espace des transactions",
+          "transactions": "Transactions",
+          "add": "Ajouter une transaction"
         }
       }
     }
@@ -167,6 +181,67 @@
       "offline-queued": "Vous êtes hors ligne. L'opération a été mise en file d'attente et sera traitée une fois que vous serez de nouveau en ligne.",
       "offline-fetch": "Vous êtes hors ligne. Affichage des comptes stockés localement.",
       "foreign-key-error": "Impossible de supprimer ce compte car il est référencé par d'autres données."
+    }
+  },
+  "Category": {
+    "title": "Catégories",
+    "add-account": "Ajouter une catégorie",
+    "filter": {
+      "by-type": "Filtrer par type"
+    },
+    "type": {
+      "income": "Revenu",
+      "expense": "Dépense",
+      "transfer": "Transfert"
+    },
+    "list": {
+      "balance": "Solde",
+      "active": "Active",
+      "inactive": "Inactive",
+      "name": "Nom",
+      "type": "Type",
+      "color": "Couleur",
+      "transactions": "Transactions",
+      "description": "Description",
+      "icon": "Icône"
+    },
+    "dialog": {
+      "add-title": "Ajouter une nouvelle catégorie",
+      "edit-title": "Modifier la catégorie",
+      "name-placeholder": "Entrez le nom de la catégorie",
+      "type-placeholder": "Sélectionnez le type de la catégorie",
+      "icon-placeholder": "Choisissez une icône",
+      "color-placeholder": "Choisissez une couleur",
+      "delete-title": "Supprimer cette catégorie ?",
+      "delete-desc": "Êtes-vous sûr de vouloir supprimer cette catégorie ? Cette action est irréversible.",
+      "icon-preview": "Aperçu de la catégorie",
+      "icon-preview-placeholder": "Nom de la catégorie",
+      "button": {
+        "delete": "Supprimer la catégorie",
+        "create": "Créer la catégorie",
+        "save": "Enregistrer les modifications",
+        "cancel": "Annuler"
+      }
+    },
+    "colorLabel": {
+      "red": "Rouge",
+      "green": "Vert",
+      "blue": "Bleu",
+      "yellow": "Jaune",
+      "purple": "Violet",
+      "gray": "Gris",
+      "black": "Noir"
+    },
+    "messages": {
+      "fetch-error": "Échec du chargement des catégories",
+      "add-success": "Catégorie ajoutée avec succès",
+      "name-required": "Le nom est requis",
+      "edit-success": "Catégorie mise à jour avec succès",
+      "delete-success": "Catégorie supprimée avec succès",
+      "operation-failed": "Échec de l'opération",
+      "offline-queued": "Vous êtes hors ligne. L'opération a été mise en file d'attente et sera traitée une fois que vous serez de nouveau en ligne.",
+      "offline-fetch": "Vous êtes hors ligne. Affichage des catégories stockées localement.",
+      "foreign-key-error": "Impossible de supprimer cette catégorie car elle est référencée par d'autres données."
     }
   }
 }

@@ -5,4 +5,7 @@ export class CategorieUpdateDto extends CategorieDto {
   @IsOptional()
   @IsString()
   name?: string;
+
+  @IsOptional()
+  user_id?: string;
 }

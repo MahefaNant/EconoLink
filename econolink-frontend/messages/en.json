@@ -72,11 +72,25 @@
     "SideBar": {
       "home": "Return Home",
       "Route": {
-        "accout-space": {
-          "title": "Account space",
+        "home-space": {
+          "title": "Home space",
           "dashboard": "dashboard",
-          "profile": "My profile",
-          "accounts": "Accounts"
+          "profile": "My profile"
+        },
+        "account-space": {
+          "title": "Account space",
+          "accounts": "Accounts",
+          "add": "Add Account"
+        },
+        "category-space": {
+          "title": "Category space",
+          "categories": "Categories",
+          "add": "Add Category"
+        },
+        "transaction-space": {
+          "title": "Transaction space",
+          "transactions": "Transactions",
+          "add": "Add Transaction"
         }
       }
     }
@@ -167,6 +181,69 @@
       "offline-queued": "You are offline. The operation has been queued and will be processed once you are back online.",
       "offline-fetch": "You are offline. Displaying locally stored accounts.",
       "foreign-key-error": "Cannot delete this account as it is referenced by other data."
+    }
+  },
+  "Category": {
+    "title": "Categories",
+    "add-account": "Add category",
+    "filter": {
+      "by-type": "Filter by type"
+    },
+    "type": {
+      "income": "Income",
+      "expense": "Expense",
+      "transfer": "Transfer"
+    },
+    "list": {
+      "balance": "Balance",
+      "active": "Active",
+      "inactive": "Inactive",
+      "name": "Name",
+      "type": "Type",
+      "color": "Color",
+      "transactions": "Transactions",
+      "description": "Description",
+      "icon": "Icon"
+    },
+    "dialog": {
+      "add-title": "Add New Category",
+      "edit-title": "Edit Category",
+      "description-placeholder": "Enter category description",
+      "name-placeholder": "Enter category name",
+      "type-placeholder": "Select category type",
+      "icon-placeholder": "Choose an icon",
+      "color-placeholder": "Choose a color",
+      "delete-title": "Delete this Category?",
+      "delete-desc": "Are you sure you want to delete this category? This action cannot be undone.",
+      "icon-preview": "Category Preview",
+      "icon-preview-placeholder": "Category Name",
+      "button": {
+        "delete": "Delete Category",
+        "create": "Create",
+        "save": "Save Changes",
+        "cancel": "Cancel"
+      }
+    },
+    "colorLabel": {
+      "red": "Red",
+      "green": "Green",
+      "blue": "Blue",
+      "yellow": "Yellow",
+      "purple": "Purple",
+      "gray": "Gray",
+      "black": "Black"
+    },
+    "messages": {
+      "fetch-error": "Failed to load categories",
+      "no-categories": "No categories available",
+      "add-success": "Category added successfully",
+      "name-required": "Name is required",
+      "edit-success": "Category updated successfully",
+      "delete-success": "Category deleted successfully",
+      "operation-failed": "Operation failed",
+      "offline-queued": "You are offline. The operation has been queued and will be processed once you are back online.",
+      "offline-fetch": "You are offline. Displaying locally stored categories.",
+      "foreign-key-error": "Cannot delete this category as it is referenced by other data."
     }
   }
 }
