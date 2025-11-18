@@ -29,7 +29,7 @@ import useCategory from "@/app/(private)/category/hooks/useCategory";
 interface CategorySelectWithCreateProps {
   value: string;
   onValueChange: (value: string) => void;
-  type?: "EXPENSE" | "INCOME" | "TRANSFER"; // Filtre par type
+  type?: "EXPENSE" | "INCOME" | "TRANSFER";
   placeholder?: string;
   disabled?: boolean;
   autoSelectFirst?: boolean;
@@ -38,7 +38,7 @@ interface CategorySelectWithCreateProps {
 export function CategorySelectWithCreate({
   value,
   onValueChange,
-  type = "EXPENSE", // Par défaut pour les dépenses
+  type = "EXPENSE",
   placeholder = "Select a category...",
   disabled = false,
 }: CategorySelectWithCreateProps) {
@@ -50,14 +50,12 @@ export function CategorySelectWithCreate({
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 
-  // Utilisez votre hook existant
   const {
     allCategories,
     saveCategory,
     loading: categoriesLoading,
   } = useCategory();
 
-  // Filtrer les catégories par type et terme de recherche
   const filteredCategories = allCategories.filter(
     (category) =>
       category.type === type &&
@@ -69,14 +67,12 @@ export function CategorySelectWithCreate({
     (category) => category.id === value
   );
 
-  // Remplir automatiquement le nom avec le searchTerm
   useEffect(() => {
     if (showCreateForm && searchTerm && !newCategoryName) {
       setNewCategoryName(searchTerm);
     }
   }, [showCreateForm, searchTerm, newCategoryName]);
 
-  // Mettre à jour le type quand la prop change
   useEffect(() => {
     setNewCategoryType(type);
   }, [type]);
@@ -92,30 +88,25 @@ export function CategorySelectWithCreate({
     setIsCreating(true);
 
     try {
-      // Préparer les données de la catégorie
       const categoryData = {
         name: newCategoryName.trim(),
         type: newCategoryType,
         description: "",
-        color: "#3B82F6", // Couleur par défaut
+        color: "#3B82F6",
         icon: newCategoryIcon,
       };
 
-      // Utiliser saveCategory qui prend les données directement
       await saveCategory(categoryData);
 
-      // Réinitialiser APRÈS le succès
       setNewCategoryName("");
       setNewCategoryIcon("🛠️");
       setShowCreateForm(false);
       setSearchTerm("");
 
-      // Fermer le popover
       setTimeout(() => {
         setOpen(false);
       }, 500);
     } catch {
-      // Géré par le hook
     } finally {
       setIsCreating(false);
     }
@@ -134,7 +125,6 @@ export function CategorySelectWithCreate({
     }
   };
 
-  // Réinitialiser quand le popover se ferme
   useEffect(() => {
     if (!open) {
       setShowCreateForm(false);
@@ -208,7 +198,7 @@ export function CategorySelectWithCreate({
                     disabled={isCreating}
                   />
 
-                  {/* Sélecteur de type */}
+                  {/* Type selector */}
                   <select
                     value={newCategoryType}
                     onChange={(e) =>
@@ -224,7 +214,7 @@ export function CategorySelectWithCreate({
                     <option value="TRANSFER">Transfer</option>
                   </select>
 
-                  {/* Sélecteur d'icône */}
+                  {/* icon selector */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Icon</label>
                     <div className="grid grid-cols-6 gap-1 max-h-32 overflow-y-auto">

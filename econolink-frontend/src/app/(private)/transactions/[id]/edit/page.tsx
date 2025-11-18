@@ -30,7 +30,6 @@ export default function EditTransactionPage() {
   const [fetching, setFetching] = useState(true);
   const [transaction, setTransaction] = useState<ITransaction | null>(null);
 
-  // Utilisez le hook category
   const { allCategories } = useCategory();
 
   const [formData, setFormData] = useState({
@@ -44,7 +43,6 @@ export default function EditTransactionPage() {
     category_id: "",
   });
 
-  // Fonction pour trouver la première catégorie d'un type donné
   const getFirstCategoryByType = (type: TransactionType): string => {
     const firstCategory = allCategories.find(
       (category) => category.type === type
@@ -52,11 +50,9 @@ export default function EditTransactionPage() {
     return firstCategory?.id || "";
   };
 
-  // Effet pour la sélection automatique de catégorie
   useEffect(() => {
     if (allCategories.length > 0) {
       const firstCategoryId = getFirstCategoryByType(formData.type);
-      // Ne mettre à jour que si la catégorie actuelle n'est pas déjà une catégorie du bon type
       const currentCategory = allCategories.find(
         (cat) => cat.id === formData.category_id
       );
@@ -69,7 +65,6 @@ export default function EditTransactionPage() {
     }
   }, [formData.type, allCategories]);
 
-  // Charger la transaction à éditer
   useEffect(() => {
     const fetchTransaction = async () => {
       if (!transactionId) return;
@@ -329,7 +324,7 @@ export default function EditTransactionPage() {
               />
             </div>
 
-            {/* Informations de la transaction */}
+            {/* Transaction informations */}
             <div className="p-4 bg-muted rounded-lg space-y-2">
               <h4 className="font-medium text-sm">Transaction Information</h4>
               <div className="grid grid-cols-2 gap-2 text-sm">

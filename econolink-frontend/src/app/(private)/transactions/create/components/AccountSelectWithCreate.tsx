@@ -42,7 +42,6 @@ export function AccountSelectWithCreate({
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 
-  // Utilisez votre hook existant
   const { accounts, saveAccount, loading: accountsLoading } = useAccount();
 
   const selectedAccount = accounts.find((account) => account.id === value);
@@ -53,7 +52,6 @@ export function AccountSelectWithCreate({
       account.type.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Remplir automatiquement le nom du compte avec le searchTerm
   useEffect(() => {
     if (showCreateForm && searchTerm && !newAccountName) {
       setNewAccountName(searchTerm);
@@ -71,7 +69,6 @@ export function AccountSelectWithCreate({
     setIsCreating(true);
 
     try {
-      // Préparer les données du compte
       const accountData = {
         name: newAccountName.trim(),
         type: newAccountType,
@@ -79,16 +76,13 @@ export function AccountSelectWithCreate({
         icon: getIconByAccountType(newAccountType),
       };
 
-      // Utiliser saveWithData qui prend les données directement
       await saveAccount(accountData);
 
-      // Réinitialiser APRÈS le succès
       setNewAccountName("");
       setNewAccountType("CASH");
       setShowCreateForm(false);
       setSearchTerm("");
 
-      // Fermer le popover
       setTimeout(() => {
         setOpen(false);
       }, 500);
@@ -112,7 +106,6 @@ export function AccountSelectWithCreate({
     }
   };
 
-  // Réinitialiser quand le popover se ferme
   useEffect(() => {
     if (!open) {
       setShowCreateForm(false);

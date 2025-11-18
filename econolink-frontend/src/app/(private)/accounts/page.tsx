@@ -33,7 +33,7 @@ export default function AccountsPage() {
     setOpenDialog,
     form,
     setForm,
-    updateFormType, // ← Nouvelle fonction
+    updateFormType,
     editing,
     openAdd,
     openEdit,
@@ -174,10 +174,7 @@ export default function AccountsPage() {
               <label className="text-sm font-medium text-muted-foreground">
                 {tAcc("list.type")}
               </label>
-              <Select
-                onValueChange={updateFormType} // ← Utiliser la nouvelle fonction
-                defaultValue={form.type}
-              >
+              <Select onValueChange={updateFormType} defaultValue={form.type}>
                 <SelectTrigger className="h-11">
                   <SelectValue placeholder={tAcc("dialog.type-placeholder")} />
                 </SelectTrigger>
@@ -195,7 +192,7 @@ export default function AccountsPage() {
               </Select>
             </div>
 
-            {/* ICON (CACHÉ MAIS TOUJOURS DANS LE FORM) */}
+            {/* ICON */}
             <input type="hidden" value={form.icon} />
 
             {/* COLOR */}
@@ -228,7 +225,6 @@ export default function AccountsPage() {
               </Select>
             </div>
 
-            {/* Aperçu de l'icône */}
             <div className="sm:col-span-2 flex items-center justify-center p-4 border rounded-xl bg-muted/50">
               <div className="text-center">
                 <p className="text-sm text-muted-foreground mb-2">

@@ -35,7 +35,6 @@ export default function CreateTransactionPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  // Utilisez le hook category pour avoir accès aux catégories
   const { allCategories } = useCategory();
 
   const [formData, setFormData] = useState({
@@ -49,7 +48,6 @@ export default function CreateTransactionPage() {
     category_id: "",
   });
 
-  // Fonction pour trouver la première catégorie d'un type donné
   const getFirstCategoryByType = (type: TransactionType): string => {
     const firstCategory = allCategories.find(
       (category) => category.type === type
@@ -57,7 +55,6 @@ export default function CreateTransactionPage() {
     return firstCategory?.id || "";
   };
 
-  // Effet pour mettre à jour la catégorie quand le type change
   useEffect(() => {
     if (allCategories.length > 0) {
       const firstCategoryId = getFirstCategoryByType(formData.type);
@@ -68,7 +65,7 @@ export default function CreateTransactionPage() {
         }));
       }
     }
-  }, [formData.type, allCategories]); // Se déclenche quand le type ou les catégories changent
+  }, [formData.type, allCategories]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,7 +86,6 @@ export default function CreateTransactionPage() {
       await transactionApi.create(data as CreateTransactionDto);
       toast.success("Transaction created successfully");
 
-      // Redirection vers la liste des transactions
       router.push("/transactions");
     } catch {
       toast.error("Failed to create transaction");
@@ -218,7 +214,7 @@ export default function CreateTransactionPage() {
                 onValueChange={handleCategoryChange}
                 type={formData.type}
                 placeholder="Select a category..."
-                autoSelectFirst={false} // Désactivé car on gère manuellement
+                autoSelectFirst={false}
               />
               <p className="text-xs text-muted-foreground">
                 Category automatically selected based on transaction type

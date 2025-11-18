@@ -36,7 +36,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data } = useRouterData();
   const router = useRouter();
 
-  // Initialiser tous les groupes collapsibles comme ouverts par défaut
   const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>(
     () => {
       const initialState: Record<string, boolean> = {};

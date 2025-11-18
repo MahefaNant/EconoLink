@@ -10,9 +10,8 @@ export async function processSyncQueue() {
 
   for (const task of tasks) {
     try {
-      // Pour les DELETE sur temp accounts, on ignore car le compte n'existe pas en ligne
+      // FOR DELETE on temp accounts, we ignore cause the account doesn't exist online
       if (task.method === "DELETE" && task.url.includes("temp-")) {
-        console.log("Ignoring DELETE for temp account:", task.url);
         await dexieDb.syncQueue.delete(task.id!);
         continue;
       }
