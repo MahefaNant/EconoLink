@@ -9,4 +9,5 @@ export type TAccount = {
   user_id: string;
   created_at: string | null;
   updated_at: string | null;
+  isTemporary?: boolean; // Nouveau champ pour identifier les comptes temporaires
 };

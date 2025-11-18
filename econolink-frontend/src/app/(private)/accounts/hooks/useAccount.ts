@@ -1,8 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
-
-// --- FILE: app/(dashboard)/accounts/page.tsx
-// Next.js App Router page (client component) - Accounts list + Add / Edit / Delete
 
 import { dexieDb } from "@/lib/dexieDb";
 import { checkApiConnection, fetcher } from "@/lib/fetcher";
@@ -113,6 +110,9 @@ export default function useAccount() {
     }
 
     const payload = { ...data, user_id: userId };
+    const isTempId = editing?.id?.startsWith("temp-");
+    const finalId = editing ? editing.id : `temp-${crypto.randomUUID()}`;
+
     const url = editing ? `/account/${editing.id}` : "/account/create";
     const method = editing ? "PATCH" : "POST";
 
@@ -121,11 +121,10 @@ export default function useAccount() {
 
       // ---------- OFFLINE MODE ----------
       if (!isApiConnected) {
-        const tempId = editing ? editing.id : `temp-${crypto.randomUUID()}`;
-
+        // Update local data
         await dexieDb.accounts.put({
-          id: tempId,
           ...payload,
+          id: finalId,
           created_at: editing ? editing.created_at : new Date().toISOString(),
           updated_at: new Date().toISOString(),
           is_active: editing ? editing.is_active : true,
@@ -133,26 +132,69 @@ export default function useAccount() {
           user_id: userId || "",
         });
 
-        await dexieDb.syncQueue.add({
-          url,
-          method,
-          body: payload,
-          tempId: editing ? undefined : tempId,
-          createdAt: Date.now(),
-        });
+        const existingTasks = await dexieDb.syncQueue
+          .filter(
+            (task) =>
+              task.tempId === finalId ||
+              (task.body && task.body.id === finalId) ||
+              (task.url === `/account/${finalId}` && task.method !== "DELETE")
+          )
+          .toArray();
+
+        if (existingTasks.length > 0) {
+          // Update existing task
+          const existingTask = existingTasks[0];
+          await dexieDb.syncQueue.update(existingTask.id!, {
+            url,
+            method,
+            body: { ...payload, id: finalId },
+            tempId: method === "POST" ? finalId : undefined,
+            createdAt: Date.now(),
+          });
+        } else {
+          // Create a new task
+          await dexieDb.syncQueue.add({
+            url,
+            method,
+            body: { ...payload, id: finalId },
+            tempId: method === "POST" ? finalId : undefined,
+            createdAt: Date.now(),
+          });
+        }
 
         toast(tAcc("offline-queued"));
         await fetchAccounts();
+        setOpenDialog(false);
         return;
       }
 
       // ---------- ONLINE MODE ----------
-      await fetcher(url, {
-        method,
-        body: payload,
-        noStoreCache: true,
-        includeCredentials: true,
-      });
+      // update on temp account ( special case )
+      if (editing && isTempId) {
+        // create first the online account, then update it
+        const createResponse = await fetcher("/account/create", {
+          method: "POST",
+          body: { ...payload, id: undefined }, // remove temp id
+          noStoreCache: true,
+          includeCredentials: true,
+        });
+
+        // update local id with the online id
+        await dexieDb.accounts.delete(finalId);
+        await dexieDb.accounts.add({
+          ...createResponse,
+          created_at: createResponse.created_at || new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
+      } else {
+        // normal case : CREATE or UPDATE on real account
+        await fetcher(url, {
+          method,
+          body: payload,
+          noStoreCache: true,
+          includeCredentials: true,
+        });
+      }
 
       await fetchAccounts();
       setOpenDialog(false);
@@ -166,6 +208,58 @@ export default function useAccount() {
 
   async function remove(id: string) {
     try {
+      const isApiConnected = await checkApiConnection();
+
+      // ---------- OFFLINE MODE ----------
+      if (!isApiConnected) {
+        // delete localy
+        await dexieDb.accounts.delete(id);
+        setAccounts((s) => s.filter((a) => a.id !== id));
+
+        // verify if it's a temp account
+        const isTempAccount = id.startsWith("temp-");
+
+        // find all existing tasks for this account
+        const existingTasks = await dexieDb.syncQueue
+          .filter(
+            (task) =>
+              task.tempId === id ||
+              (task.body && task.body.id === id) ||
+              task.url === `/account/${id}`
+          )
+          .toArray();
+
+        // FOR successif CREATE → UPDATE → DELETE
+        if (existingTasks.length > 0) {
+          // delete all existing tasks for this account
+          await dexieDb.syncQueue
+            .filter(
+              (task) =>
+                task.tempId === id ||
+                (task.body && task.body.id === id) ||
+                task.url === `/account/${id}`
+            )
+            .delete();
+        } else {
+          // only add delete for non-temp accounts
+          if (!isTempAccount) {
+            await dexieDb.syncQueue.add({
+              url: `/account/${id}`,
+              method: "DELETE",
+              createdAt: Date.now(),
+            });
+          } else {
+            console.log(
+              "Temp account with no existing tasks - nothing to sync"
+            );
+          }
+        }
+
+        toast(tAcc("messages.offline-queued"));
+        return;
+      }
+
+      // ---------- ONLINE MODE ----------
       await fetcher(`/account/${id}`, {
         method: "DELETE",
         noStoreCache: true,
@@ -173,43 +267,11 @@ export default function useAccount() {
       });
 
       setAccounts((s) => s.filter((a) => a.id !== id));
-
       await dexieDb.accounts.delete(id);
 
       toast(tAcc("messages.delete-success"));
-    } catch (err: any) {
-      // backend error (ex: foreign key)
-      if (err?.status && err.status !== 0) {
-        toast.error(tAcc("messages.foreign-key-error"));
-        return;
-      }
-
-      // delete locally
-      await dexieDb.accounts.delete(id);
-      setAccounts((s) => s.filter((a) => a.id !== id));
-
-      const existingTasks = await dexieDb.syncQueue
-        .filter((task) => task.id === Number(id) || task.tempId === id)
-        .toArray();
-
-      // If there is already a task → remove it AND don't add anything
-      if (existingTasks.length > 0) {
-        await dexieDb.syncQueue
-          .filter((task) => task.id === Number(id) || task.tempId === id)
-          .delete();
-
-        toast(tAcc("messages.offline-queued"));
-        return;
-      }
-
-      // add the DELETE query to the syncQueue
-      await dexieDb.syncQueue.add({
-        url: `/account/${id}`,
-        method: "DELETE",
-        createdAt: Date.now(),
-      });
-
-      toast(tAcc("messages.offline-queued"));
+    } catch {
+      toast.error(tAcc("messages.operation-failed"));
     }
   }
 
