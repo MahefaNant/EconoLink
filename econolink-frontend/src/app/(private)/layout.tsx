@@ -10,7 +10,7 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "./dashboard/components/app-sidebar";
 import NavBar from "./dashboard/components/nav-bar";
 import useDocumentReadyState from "@/hooks/useDocumentReadyState";
-import { processSyncQueue } from "@/lib/sync";
+// import { processSyncQueue } from "@/lib/sync";
 
 const user_info = "user_info";
 

@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+// app/transactions/create/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +16,9 @@ import type {
   TransactionType,
 } from "@/types/ITransaction";
 import { AccountSelectWithCreate } from "./components/AccountSelectWithCreate";
+import { CategorySelectWithCreate } from "./components/CategorySelectWithCreate";
 import { transactionApi } from "../lib/transaction";
+import useCategory from "../../category/hooks/useCategory";
 
 export interface IFormDataTransaction {
   amount: string;
@@ -30,6 +34,10 @@ export interface IFormDataTransaction {
 export default function CreateTransactionPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+
+  // Utilisez le hook category pour avoir accès aux catégories
+  const { allCategories } = useCategory();
+
   const [formData, setFormData] = useState({
     amount: "",
     description: "",
@@ -40,6 +48,27 @@ export default function CreateTransactionPage() {
     account_id: "",
     category_id: "",
   });
+
+  // Fonction pour trouver la première catégorie d'un type donné
+  const getFirstCategoryByType = (type: TransactionType): string => {
+    const firstCategory = allCategories.find(
+      (category) => category.type === type
+    );
+    return firstCategory?.id || "";
+  };
+
+  // Effet pour mettre à jour la catégorie quand le type change
+  useEffect(() => {
+    if (allCategories.length > 0) {
+      const firstCategoryId = getFirstCategoryByType(formData.type);
+      if (firstCategoryId && firstCategoryId !== formData.category_id) {
+        setFormData((prev) => ({
+          ...prev,
+          category_id: firstCategoryId,
+        }));
+      }
+    }
+  }, [formData.type, allCategories]); // Se déclenche quand le type ou les catégories changent
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,7 +91,7 @@ export default function CreateTransactionPage() {
 
       // Redirection vers la liste des transactions
       router.push("/transactions");
-    } catch (error) {
+    } catch {
       toast.error("Failed to create transaction");
     } finally {
       setLoading(false);
@@ -80,6 +109,13 @@ export default function CreateTransactionPage() {
     setFormData((prev) => ({
       ...prev,
       account_id: accountId,
+    }));
+  };
+
+  const handleCategoryChange = (categoryId: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      category_id: categoryId,
     }));
   };
 
@@ -174,6 +210,21 @@ export default function CreateTransactionPage() {
               </div>
             </div>
 
+            {/* Category */}
+            <div className="space-y-2">
+              <Label htmlFor="category_id">Category</Label>
+              <CategorySelectWithCreate
+                value={formData.category_id}
+                onValueChange={handleCategoryChange}
+                type={formData.type}
+                placeholder="Select a category..."
+                autoSelectFirst={false} // Désactivé car on gère manuellement
+              />
+              <p className="text-xs text-muted-foreground">
+                Category automatically selected based on transaction type
+              </p>
+            </div>
+
             {/* Notes and Location */}
             <div className="space-y-2">
               <Label htmlFor="notes">Notes</Label>
@@ -193,19 +244,6 @@ export default function CreateTransactionPage() {
                 placeholder="Transaction location"
                 value={formData.location}
                 onChange={(e) => handleInputChange("location", e.target.value)}
-              />
-            </div>
-
-            {/* Category */}
-            <div className="space-y-2">
-              <Label htmlFor="category_id">Category</Label>
-              <Input
-                id="category_id"
-                placeholder="Category ID"
-                value={formData.category_id}
-                onChange={(e) =>
-                  handleInputChange("category_id", e.target.value)
-                }
               />
             </div>
 

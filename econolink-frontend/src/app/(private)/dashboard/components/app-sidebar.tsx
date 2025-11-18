@@ -17,7 +17,7 @@ import {
 import { SearchForm } from "./search-form";
 import { VersionSwitcher } from "./version-switcher";
 import { Button } from "@/components/ui/button";
-import { Home, LogOut } from "lucide-react";
+import { Home, LogOut, ChevronDown, ChevronRight } from "lucide-react";
 import { logout } from "@/app/(auth)/lib/logOut";
 import { useRouter } from "next/navigation";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
@@ -33,8 +33,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const tOffline = useTranslations("offline");
   const userStore = useAuthStore((s) => s.user);
   const [open, setOpen] = React.useState(false);
-  const router = useRouter();
   const { data } = useRouterData();
+  const router = useRouter();
+
+  // Initialiser tous les groupes collapsibles comme ouverts par défaut
+  const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>(
+    () => {
+      const initialState: Record<string, boolean> = {};
+      data.navMain.forEach((group) => {
+        if (group.isCollapsible) {
+          initialState[group.title] = true;
+        }
+      });
+      return initialState;
+    }
+  );
 
   const handleLogout = async () => {
     try {
@@ -48,6 +61,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       toast.error(tOffline("text3"));
     }
   };
+
+  const toggleGroup = (groupId: string) => {
+    setOpenGroups((prev) => ({
+      ...prev,
+      [groupId]: !prev[groupId],
+    }));
+  };
+
   return (
     <>
       <Sidebar {...props}>
@@ -85,20 +106,75 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </div>
             </SidebarGroupLabel>
           </SidebarGroup>
-          {data.navMain.map((item) => (
-            <SidebarGroup key={item.title}>
-              <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {item.items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild isActive={item.isActive}>
-                        <a href={item.url}>{item.title}</a>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
+          {data.navMain.map((group) => (
+            <SidebarGroup key={group.title}>
+              {group.isCollapsible ? (
+                <>
+                  <SidebarGroupLabel
+                    asChild
+                    className="cursor-pointer hover:bg-accent rounded-md p-2 transition-colors"
+                    onClick={() => toggleGroup(group.title)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{group.title}</span>
+                      {openGroups[group.title] ? (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </div>
+                  </SidebarGroupLabel>
+                  {openGroups[group.title] && (
+                    <SidebarGroupContent>
+                      <SidebarMenu>
+                        {group.items.map((item) => {
+                          const IconComponent = item.icon;
+                          return (
+                            <SidebarMenuItem key={item.title}>
+                              <SidebarMenuButton
+                                asChild
+                                isActive={item.isActive}
+                              >
+                                <a
+                                  href={item.url}
+                                  className="flex items-center gap-2"
+                                >
+                                  <IconComponent className="h-4 w-4" />
+                                  <span>{item.title}</span>
+                                </a>
+                              </SidebarMenuButton>
+                            </SidebarMenuItem>
+                          );
+                        })}
+                      </SidebarMenu>
+                    </SidebarGroupContent>
+                  )}
+                </>
+              ) : (
+                <>
+                  <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      {group.items.map((item) => {
+                        const IconComponent = item.icon;
+                        return (
+                          <SidebarMenuItem key={item.title}>
+                            <SidebarMenuButton asChild isActive={item.isActive}>
+                              <a
+                                href={item.url}
+                                className="flex items-center gap-2"
+                              >
+                                <IconComponent className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </a>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        );
+                      })}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </>
+              )}
             </SidebarGroup>
           ))}
         </SidebarContent>
