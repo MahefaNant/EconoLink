@@ -145,7 +145,6 @@ export class TransactionService {
       }),
     ]);
 
-    // Conversion des BigInt/Decimal en Number
     const totalIncome = Number(incomeSum._sum.amount) || 0;
     const totalExpense = Number(expenseSum._sum.amount) || 0;
 

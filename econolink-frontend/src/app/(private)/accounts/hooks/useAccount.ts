@@ -5,13 +5,14 @@
 // Next.js App Router page (client component) - Accounts list + Add / Edit / Delete
 
 import { dexieDb } from "@/lib/dexieDb";
-import { fetcher } from "@/lib/fetcher";
+import { checkApiConnection, fetcher } from "@/lib/fetcher";
 import { processSyncQueue } from "@/lib/sync";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { TAccount } from "@/types/TAccount";
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { getIconByAccountType } from "../lib/account.lib";
 
 export default function useAccount() {
   const tAcc = useTranslations("Accounts");
@@ -25,10 +26,11 @@ export default function useAccount() {
     name: "",
     type: "CASH",
     color: "#3B82F6",
-    icon: "💰",
+    icon: "💵",
   });
 
   async function fetchAccounts() {
+    let message = null;
     await processSyncQueue();
     if (!userId) {
       return;
@@ -36,6 +38,19 @@ export default function useAccount() {
 
     setLoading(true);
     try {
+      const isApiConnected = await checkApiConnection();
+
+      if (isApiConnected === false) {
+        message = tAcc("messages.offline-fetch");
+        toast(message);
+        const offlineData = await dexieDb.accounts
+          .where("user_id")
+          .equals(userId)
+          .toArray();
+        setAccounts(offlineData);
+        return;
+      }
+
       const data = await fetcher("/account/all", {
         noStoreCache: true,
         includeCredentials: true,
@@ -45,19 +60,17 @@ export default function useAccount() {
       await dexieDb.accounts.clear();
       await dexieDb.accounts.bulkAdd(data);
     } catch {
-      const offlineData = await dexieDb.accounts
-        .where("user_id")
-        .equals(userId)
-        .toArray();
-      setAccounts(offlineData);
-      toast(tAcc("messages.offline-fetch"));
+      message = tAcc("messages.offline-fetch");
     } finally {
+      if (message) {
+        toast(message);
+      }
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    fetchAccounts();
+    if (userId) fetchAccounts();
   }, [userId]);
 
   function openAdd() {
@@ -66,7 +79,7 @@ export default function useAccount() {
       name: "",
       type: "CASH",
       color: "#3B82F6",
-      icon: "💰",
+      icon: "💵",
     });
     setOpenDialog(true);
   }
@@ -77,57 +90,77 @@ export default function useAccount() {
       name: a.name,
       type: a.type,
       color: a.color ?? "#3B82F6",
-      icon: a.icon ?? "💰",
+      icon: a.icon ?? getIconByAccountType(a.type),
     });
     setOpenDialog(true);
   }
 
-  async function save() {
-    if (!form.name || form.name.length < 1)
-      return toast(tAcc("messages.name-required"));
+  const updateFormType = (type: string) => {
+    const newIcon = getIconByAccountType(type);
+    setForm((s) => ({ ...s, type, icon: newIcon }));
+  };
 
-    const payload = { ...form, user_id: userId };
+  async function saveAccount(input?: {
+    name: string;
+    type: string;
+    color: string;
+    icon: string;
+  }) {
+    const data = input ?? form;
+
+    if (!data.name || data.name.length < 1) {
+      return toast(tAcc("messages.name-required"));
+    }
+
+    const payload = { ...data, user_id: userId };
     const url = editing ? `/account/${editing.id}` : "/account/create";
     const method = editing ? "PATCH" : "POST";
+
     try {
+      const isApiConnected = await checkApiConnection();
+
+      // ---------- OFFLINE MODE ----------
+      if (!isApiConnected) {
+        const tempId = editing ? editing.id : `temp-${crypto.randomUUID()}`;
+
+        await dexieDb.accounts.put({
+          id: tempId,
+          ...payload,
+          created_at: editing ? editing.created_at : new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          is_active: editing ? editing.is_active : true,
+          balance: editing ? editing.balance : 0,
+          user_id: userId || "",
+        });
+
+        await dexieDb.syncQueue.add({
+          url,
+          method,
+          body: payload,
+          tempId: editing ? undefined : tempId,
+          createdAt: Date.now(),
+        });
+
+        toast(tAcc("offline-queued"));
+        await fetchAccounts();
+        return;
+      }
+
+      // ---------- ONLINE MODE ----------
       await fetcher(url, {
         method,
         body: payload,
         noStoreCache: true,
         includeCredentials: true,
       });
+
       await fetchAccounts();
       setOpenDialog(false);
       toast(
         editing ? tAcc("messages.edit-success") : tAcc("messages.add-success")
       );
     } catch {
-      const tempId = editing ? editing.id : `temp-${crypto.randomUUID()}`;
-
-      // add/update in Dexie.accounts
-      await dexieDb.accounts.put({
-        id: tempId,
-        ...payload,
-        created_at: editing ? editing.created_at : new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        is_active: editing ? editing.is_active : true,
-        balance: editing ? editing.balance : 0,
-        user_id: userId || "",
-      });
-
-      //add the query to the syncQueue
-      await dexieDb.syncQueue.add({
-        url,
-        method,
-        body: { ...payload, user_id: userId },
-        tempId: editing ? undefined : tempId,
-        createdAt: Date.now(),
-      });
-
-      toast(tAcc("messages.offline-queued"));
-
-      // maj UI
-      await fetchAccounts();
+      toast.error(tAcc("messages.operation-failed"));
     }
   }
 
@@ -187,10 +220,12 @@ export default function useAccount() {
     setOpenDialog,
     form,
     setForm,
+    updateFormType,
     editing,
     openAdd,
     openEdit,
-    save,
+    saveAccount,
     remove,
+    userId,
   };
 }

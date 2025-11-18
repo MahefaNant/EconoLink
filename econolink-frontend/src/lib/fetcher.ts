@@ -42,3 +42,15 @@ export async function fetcher<T = any>(
 
   return res.json();
 }
+
+export const checkApiConnection = async (): Promise<boolean> => {
+  try {
+    await fetcher("/app/health-check", {
+      noStoreCache: true,
+      includeCredentials: true,
+    });
+    return true;
+  } catch {
+    return false;
+  }
+};

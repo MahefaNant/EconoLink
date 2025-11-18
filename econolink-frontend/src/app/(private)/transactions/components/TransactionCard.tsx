@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { ITransaction, TransactionType } from "@/types/ITransaction";
 import { MoreHorizontal } from "lucide-react";
 import { JSX, memo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface TransactionCardProps {
   transaction: ITransaction;
@@ -22,6 +23,7 @@ export const TransactionCard = memo(function TransactionCard({
   getTypeVariant,
 }: TransactionCardProps) {
   const [showMenu, setShowMenu] = useState(false);
+  const router = useRouter();
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -123,7 +125,7 @@ export const TransactionCard = memo(function TransactionCard({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onEdit(transaction)}
+            onClick={() => router.push(`/transactions/${transaction.id}/edit`)}
           >
             Edit
           </Button>

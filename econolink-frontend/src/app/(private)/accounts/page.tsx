@@ -20,6 +20,7 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { Edit, Trash2 } from "lucide-react";
 import { AccountStateSwitch } from "./components/AccountStateSwitch";
 import { useTranslations } from "next-intl";
+import { accountTypesData } from "./lib/account.lib";
 
 export default function AccountsPage() {
   const tAcc = useTranslations("Accounts");
@@ -32,34 +33,30 @@ export default function AccountsPage() {
     setOpenDialog,
     form,
     setForm,
+    updateFormType, // ← Nouvelle fonction
     editing,
     openAdd,
     openEdit,
-    save,
+    saveAccount,
     remove,
   } = useAccount();
 
   const isDocumentReady = useDocumentReadyState();
 
-  const accountsTypes = [
-    { value: "CASH", label: tAcc("iconLabel.cash") },
-    { value: "MOBILE_MONEY", label: tAcc("iconLabel.mobile-money") },
-    { value: "BANK_ACCOUNT", label: tAcc("iconLabel.bank") },
-    { value: "CREDIT_CARD", label: tAcc("iconLabel.credit-card") },
-    { value: "SAVINGS", label: tAcc("iconLabel.savings") },
-    { value: "INVESTMENT", label: tAcc("iconLabel.investment") },
-    { value: "OTHER", label: tAcc("iconLabel.other") },
-  ];
+  const labelKeys: Record<string, string> = {
+    CASH: "cash",
+    MOBILE_MONEY: "mobile-money",
+    BANK_ACCOUNT: "bank",
+    CREDIT_CARD: "credit-card",
+    SAVINGS: "savings",
+    INVESTMENT: "investment",
+    OTHER: "other",
+  };
 
-  const iconOptions = [
-    { value: "💵", label: tAcc("iconLabel.cash") },
-    { value: "📱", label: tAcc("iconLabel.mobile-money") },
-    { value: "🏦", label: tAcc("iconLabel.bank") },
-    { value: "💳", label: tAcc("iconLabel.credit-card") },
-    { value: "📊", label: tAcc("iconLabel.investment") },
-    { value: "💰", label: tAcc("iconLabel.savings") },
-    { value: "⭐", label: tAcc("iconLabel.other") },
-  ];
+  const accountsTypesList = accountTypesData.map((item) => ({
+    ...item,
+    label: tAcc(`iconLabel.${labelKeys[item.value]}`),
+  }));
 
   const colorOptions = [
     { label: tAcc("colorLabel.red"), value: "#EF4444" },
@@ -98,7 +95,10 @@ export default function AccountsPage() {
                 <div>
                   <h2 className="font-semibold text-lg">{a.name}</h2>
                   <p className="text-sm opacity-70">
-                    {accountsTypes.find((type) => type.value === a.type)?.label}
+                    {
+                      accountsTypesList.find((type) => type.value === a.type)
+                        ?.label
+                    }
                   </p>
                 </div>
               </div>
@@ -175,7 +175,7 @@ export default function AccountsPage() {
                 {tAcc("list.type")}
               </label>
               <Select
-                onValueChange={(v) => setForm((s) => ({ ...s, type: v }))}
+                onValueChange={updateFormType} // ← Utiliser la nouvelle fonction
                 defaultValue={form.type}
               >
                 <SelectTrigger className="h-11">
@@ -183,40 +183,20 @@ export default function AccountsPage() {
                 </SelectTrigger>
 
                 <SelectContent>
-                  {accountsTypes.map((t) => (
+                  {accountsTypesList.map((t) => (
                     <SelectItem key={t.value} value={t.value}>
-                      {t.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* ICON */}
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-muted-foreground">
-                Icon
-              </label>
-              <Select
-                value={form.icon}
-                onValueChange={(v) => setForm((s) => ({ ...s, icon: v }))}
-              >
-                <SelectTrigger className="h-11">
-                  <SelectValue placeholder={tAcc("dialog.icon-placeholder")} />
-                </SelectTrigger>
-
-                <SelectContent>
-                  {iconOptions.map((i) => (
-                    <SelectItem key={i.value} value={i.value}>
-                      <span className="flex items-center gap-2 text-lg">
-                        <span>{i.value}</span>
-                        <span className="text-sm">{i.label}</span>
+                      <span className="flex items-center gap-2">
+                        <span className="text-lg">{t.icon}</span>
+                        {t.label}
                       </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
+
+            {/* ICON (CACHÉ MAIS TOUJOURS DANS LE FORM) */}
+            <input type="hidden" value={form.icon} />
 
             {/* COLOR */}
             <div className="flex flex-col gap-1">
@@ -247,6 +227,24 @@ export default function AccountsPage() {
                 </SelectContent>
               </Select>
             </div>
+
+            {/* Aperçu de l'icône */}
+            <div className="sm:col-span-2 flex items-center justify-center p-4 border rounded-xl bg-muted/50">
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground mb-2">
+                  {tAcc("dialog.icon-preview")}
+                </p>
+                <div
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mx-auto"
+                  style={{ background: form.color }}
+                >
+                  {form.icon}
+                </div>
+                <p className="text-sm mt-2 font-medium">
+                  {form.name || tAcc("dialog.icon-preview-placeholder")}
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* ACTIONS */}
@@ -262,7 +260,7 @@ export default function AccountsPage() {
             <Button
               className="px-5"
               onClick={() => {
-                save();
+                saveAccount();
                 setOpenDialog(false);
               }}
             >

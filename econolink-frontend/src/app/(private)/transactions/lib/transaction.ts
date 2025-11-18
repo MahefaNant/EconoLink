@@ -16,8 +16,6 @@ export const transactionApi = {
       : "";
     const url = `/transaction${queryString ? `?${queryString}` : ""}`;
 
-    console.log("Fetching transactions from URL:", url);
-
     return fetcher<PaginatedResponse<ITransaction>>(url, {
       includeCredentials: true,
       noStoreCache: true,

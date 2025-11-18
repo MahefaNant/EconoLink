@@ -24,7 +24,7 @@ export default function PrivateLayout({ children }: { children: ReactNode }) {
       try {
         const me = await getMe();
         setUser(me);
-        await processSyncQueue();
+        // await processSyncQueue();
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
