@@ -10,6 +10,12 @@ export async function processSyncQueue() {
 
   for (const task of tasks) {
     try {
+      // FOR DELETE on temp accounts, we ignore cause the account doesn't exist online
+      if (task.method === "DELETE" && task.url.includes("temp-")) {
+        await dexieDb.syncQueue.delete(task.id!);
+        continue;
+      }
+
       await fetcher(task.url, {
         method: task.method,
         body: task.body,

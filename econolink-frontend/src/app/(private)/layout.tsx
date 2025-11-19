@@ -10,7 +10,7 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "./dashboard/components/app-sidebar";
 import NavBar from "./dashboard/components/nav-bar";
 import useDocumentReadyState from "@/hooks/useDocumentReadyState";
-import { processSyncQueue } from "@/lib/sync";
+// import { processSyncQueue } from "@/lib/sync";
 
 const user_info = "user_info";
 
@@ -24,7 +24,7 @@ export default function PrivateLayout({ children }: { children: ReactNode }) {
       try {
         const me = await getMe();
         setUser(me);
-        await processSyncQueue();
+        // await processSyncQueue();
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
