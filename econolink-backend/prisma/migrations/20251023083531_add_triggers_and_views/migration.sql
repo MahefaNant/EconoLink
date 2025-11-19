@@ -206,7 +206,7 @@ CREATE TRIGGER trigger_update_balance_delete
     FOR EACH ROW EXECUTE FUNCTION update_account_balance();
 
 -- =============================================
--- VUES UTILES
+-- VUES TRANSACTIONNELLES
 -- =============================================
 
 -- Vue pour le résumé mensuel
@@ -221,6 +221,77 @@ SELECT
     AVG(amount) as average_amount
 FROM transactions 
 GROUP BY user_id, DATE_TRUNC('month', date), type, category_id;
+
+-- Stats mensuelles EXCLUANT les transfers
+CREATE MATERIALIZED VIEW monthly_financial_stats AS
+SELECT 
+  user_id,
+  DATE_TRUNC('month', date) as month,
+  COUNT(*) as transaction_count,
+  ROUND(SUM(CASE WHEN type = 'INCOME' THEN amount ELSE 0 END)::numeric, 2) as total_income,
+  ROUND(SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END)::numeric, 2) as total_expense,
+  COUNT(CASE WHEN type = 'INCOME' THEN 1 END) as income_count,
+  COUNT(CASE WHEN type = 'EXPENSE' THEN 1 END) as expense_count,
+  ROUND(AVG(CASE WHEN type = 'INCOME' THEN amount END)::numeric, 2) as avg_income,
+  ROUND(AVG(CASE WHEN type = 'EXPENSE' THEN amount END)::numeric, 2) as avg_expense,
+  ROUND(MAX(CASE WHEN type IN ('INCOME', 'EXPENSE') THEN amount END)::numeric, 2) as largest_transaction,
+  ROUND(SUM(CASE 
+    WHEN type = 'INCOME' THEN amount 
+    WHEN type = 'EXPENSE' THEN -amount 
+    ELSE 0 
+  END)::numeric, 2) as net_cash_flow
+FROM transactions
+WHERE type IN ('INCOME', 'EXPENSE')
+GROUP BY user_id, DATE_TRUNC('month', date);
+
+CREATE UNIQUE INDEX idx_monthly_financial_stats ON monthly_financial_stats (user_id, month);
+
+-- Stats des transfers
+CREATE MATERIALIZED VIEW transfer_stats AS
+SELECT 
+  user_id,
+  DATE_TRUNC('month', date) as month,
+  COUNT(*) as transfer_count,
+  ROUND(SUM(amount)::numeric, 2) as total_transferred,
+  COUNT(DISTINCT account_id) as unique_from_accounts,
+  COUNT(DISTINCT to_account_id) as unique_to_accounts
+FROM transactions
+WHERE type = 'TRANSFER'
+GROUP BY user_id, DATE_TRUNC('month', date);
+
+CREATE UNIQUE INDEX idx_transfer_stats ON transfer_stats (user_id, month);
+
+-- Vue pour les stats par catégorie
+CREATE MATERIALIZED VIEW category_stats AS
+SELECT 
+  t.user_id,
+  t.category_id,
+  c.name as category_name,
+  t.type,
+  COUNT(*) as transaction_count,
+  ROUND(SUM(t.amount)::numeric, 2) as total_amount,
+  ROUND(AVG(t.amount)::numeric, 2) as avg_amount,
+  ROUND(MAX(t.amount)::numeric, 2) as max_amount
+FROM transactions t
+LEFT JOIN categories c ON t.category_id = c.id
+WHERE t.type IN ('INCOME', 'EXPENSE') AND t.category_id IS NOT NULL
+GROUP BY t.user_id, t.category_id, c.name, t.type;
+
+CREATE INDEX idx_category_stats_user ON category_stats (user_id);
+
+-- Fonction pour rafraîchir toutes les vues
+CREATE OR REPLACE FUNCTION refresh_all_stats()
+RETURNS void AS $$
+BEGIN
+  REFRESH MATERIALIZED VIEW CONCURRENTLY monthly_financial_stats;
+  REFRESH MATERIALIZED VIEW CONCURRENTLY transfer_stats;
+  REFRESH MATERIALIZED VIEW CONCURRENTLY category_stats;
+END;
+$$ LANGUAGE plpgsql;
+
+-- =============================================
+-- VUES UTILES
+-- =============================================
 
 -- Vue pour le statut des budgets
 CREATE VIEW budget_status AS
