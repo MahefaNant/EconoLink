@@ -208,6 +208,7 @@
     "dialog": {
       "add-title": "Ajouter une nouvelle catégorie",
       "edit-title": "Modifier la catégorie",
+      "description-placeholder": "Entrez la description de la catégorie",
       "name-placeholder": "Entrez le nom de la catégorie",
       "type-placeholder": "Sélectionnez le type de la catégorie",
       "icon-placeholder": "Choisissez une icône",

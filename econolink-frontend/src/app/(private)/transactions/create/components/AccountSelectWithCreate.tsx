@@ -27,6 +27,7 @@ interface AccountSelectWithCreateProps {
   onValueChange: (value: string) => void;
   placeholder?: string;
   disabled?: boolean;
+  excludeAccount?: string; // NOUVEAU: ID du compte à exclure (pour éviter de sélectionner le même compte)
 }
 
 export function AccountSelectWithCreate({
@@ -34,6 +35,7 @@ export function AccountSelectWithCreate({
   onValueChange,
   placeholder = "Select an account...",
   disabled = false,
+  excludeAccount, // NOUVEAU: Pour les transfers
 }: AccountSelectWithCreateProps) {
   const [open, setOpen] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -46,11 +48,22 @@ export function AccountSelectWithCreate({
 
   const selectedAccount = accounts.find((account) => account.id === value);
 
-  const filteredAccounts = accounts.filter(
-    (account) =>
+  // Filtrer les comptes : exclure le compte spécifié (pour éviter les transfers vers le même compte)
+  const filteredAccounts = accounts.filter((account) => {
+    const matchesSearch =
       account.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      account.type.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      account.type.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // Exclure le compte spécifié si provided
+    const isExcluded = excludeAccount && account.id === excludeAccount;
+
+    return matchesSearch && !isExcluded;
+  });
+
+  // Comptes disponibles après exclusion
+  const availableAccounts = excludeAccount
+    ? accounts.filter((account) => account.id !== excludeAccount)
+    : accounts;
 
   useEffect(() => {
     if (showCreateForm && searchTerm && !newAccountName) {
@@ -87,7 +100,7 @@ export function AccountSelectWithCreate({
         setOpen(false);
       }, 500);
     } catch {
-      // -----------------
+      // Gestion d'erreur silencieuse
     } finally {
       setIsCreating(false);
     }
@@ -114,6 +127,13 @@ export function AccountSelectWithCreate({
       setIsCreating(false);
     }
   }, [open]);
+
+  // Réinitialiser la sélection si le compte sélectionné est exclu
+  useEffect(() => {
+    if (excludeAccount && value === excludeAccount) {
+      onValueChange("");
+    }
+  }, [excludeAccount, value, onValueChange]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -231,27 +251,37 @@ export function AccountSelectWithCreate({
                   </div>
                 </CommandEmpty>
                 <CommandGroup>
-                  {filteredAccounts.map((account) => (
-                    <CommandItem
-                      key={account.id}
-                      value={account.name}
-                      onSelect={() => handleSelectAccount(account.id)}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          value === account.id ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                      <div className="flex items-center gap-2 flex-1">
-                        <span className="flex-shrink-0">{account.icon}</span>
-                        <span className="truncate flex-1">{account.name}</span>
-                        <span className="text-muted-foreground text-sm flex-shrink-0">
-                          ({account.type})
-                        </span>
-                      </div>
-                    </CommandItem>
-                  ))}
+                  {filteredAccounts.length === 0 ? (
+                    <div className="p-2 text-center text-sm text-muted-foreground">
+                      {excludeAccount && availableAccounts.length === 0
+                        ? "No other accounts available"
+                        : "No accounts found"}
+                    </div>
+                  ) : (
+                    filteredAccounts.map((account) => (
+                      <CommandItem
+                        key={account.id}
+                        value={account.name}
+                        onSelect={() => handleSelectAccount(account.id)}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            value === account.id ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        <div className="flex items-center gap-2 flex-1">
+                          <span className="flex-shrink-0">{account.icon}</span>
+                          <span className="truncate flex-1">
+                            {account.name}
+                          </span>
+                          <span className="text-muted-foreground text-sm flex-shrink-0">
+                            ({account.type})
+                          </span>
+                        </div>
+                      </CommandItem>
+                    ))
+                  )}
                 </CommandGroup>
               </>
             )}

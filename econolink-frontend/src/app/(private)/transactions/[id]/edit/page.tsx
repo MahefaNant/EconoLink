@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 // app/transactions/edit/[id]/page.tsx
 "use client";
@@ -41,6 +42,7 @@ export default function EditTransactionPage() {
     location: "",
     account_id: "",
     category_id: "",
+    to_account_id: "", // NOUVEAU: Pour TRANSFER
   });
 
   const getFirstCategoryByType = (type: TransactionType): string => {
@@ -51,7 +53,7 @@ export default function EditTransactionPage() {
   };
 
   useEffect(() => {
-    if (allCategories.length > 0) {
+    if (allCategories.length > 0 && formData.type !== "TRANSFER") {
       const firstCategoryId = getFirstCategoryByType(formData.type);
       const currentCategory = allCategories.find(
         (cat) => cat.id === formData.category_id
@@ -64,6 +66,21 @@ export default function EditTransactionPage() {
       }
     }
   }, [formData.type, allCategories]);
+
+  // Réinitialiser les champs quand le type change
+  useEffect(() => {
+    if (formData.type === "TRANSFER") {
+      setFormData((prev) => ({
+        ...prev,
+        category_id: "", // Catégorie vide pour TRANSFER
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        to_account_id: "", // to_account_id vide pour INCOME/EXPENSE
+      }));
+    }
+  }, [formData.type]);
 
   useEffect(() => {
     const fetchTransaction = async () => {
@@ -83,6 +100,7 @@ export default function EditTransactionPage() {
           location: data.location || "",
           account_id: data.account_id,
           category_id: data.category_id || "",
+          to_account_id: data.to_account_id || "", // Récupérer to_account_id
         });
       } catch {
         toast.error("Failed to load transaction");
@@ -103,6 +121,19 @@ export default function EditTransactionPage() {
       return;
     }
 
+    if (formData.type === "TRANSFER" && !formData.to_account_id) {
+      toast.error("Please select a destination account for transfer");
+      return;
+    }
+
+    if (
+      formData.type === "TRANSFER" &&
+      formData.account_id === formData.to_account_id
+    ) {
+      toast.error("Cannot transfer to the same account");
+      return;
+    }
+
     if (!transaction) {
       toast.error("Transaction not found");
       return;
@@ -110,18 +141,28 @@ export default function EditTransactionPage() {
 
     setLoading(true);
     try {
-      const data = {
-        ...formData,
+      const data: UpdateTransactionDto = {
         amount: parseFloat(formData.amount),
+        description: formData.description,
+        type: formData.type,
         date: new Date(formData.date).toISOString(),
+        account_id: formData.account_id,
+        // Gérer les champs optionnels selon le type
+        notes: formData.notes || undefined,
+        location: formData.location || undefined,
+        category_id:
+          formData.type !== "TRANSFER"
+            ? formData.category_id || undefined
+            : undefined,
+        to_account_id:
+          formData.type === "TRANSFER" ? formData.to_account_id : undefined,
       };
 
-      await transactionApi.update(transaction.id, data as UpdateTransactionDto);
+      await transactionApi.update(transaction.id, data);
       toast.success("Transaction updated successfully");
-
       router.push("/transactions");
-    } catch {
-      toast.error("Failed to update transaction");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to update transaction");
     } finally {
       setLoading(false);
     }
@@ -138,6 +179,13 @@ export default function EditTransactionPage() {
     setFormData((prev) => ({
       ...prev,
       account_id: accountId,
+    }));
+  };
+
+  const handleToAccountChange = (accountId: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      to_account_id: accountId,
     }));
   };
 
@@ -278,7 +326,11 @@ export default function EditTransactionPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="account_id">Account *</Label>
+                <Label htmlFor="account_id">
+                  {formData.type === "TRANSFER"
+                    ? "From Account *"
+                    : "Account *"}
+                </Label>
                 <AccountSelectWithCreate
                   value={formData.account_id}
                   onValueChange={handleAccountChange}
@@ -287,20 +339,34 @@ export default function EditTransactionPage() {
               </div>
             </div>
 
-            {/* Category */}
-            <div className="space-y-2">
-              <Label htmlFor="category_id">Category</Label>
-              <CategorySelectWithCreate
-                value={formData.category_id}
-                onValueChange={handleCategoryChange}
-                type={formData.type}
-                placeholder="Select a category..."
-                autoSelectFirst={false}
-              />
-              <p className="text-xs text-muted-foreground">
-                Category automatically selected based on transaction type
-              </p>
-            </div>
+            {/* To Account (seulement pour TRANSFER) */}
+            {formData.type === "TRANSFER" && (
+              <div className="space-y-2">
+                <Label htmlFor="to_account_id">To Account *</Label>
+                <AccountSelectWithCreate
+                  value={formData.to_account_id}
+                  onValueChange={handleToAccountChange}
+                  placeholder="Select destination account..."
+                />
+              </div>
+            )}
+
+            {/* Category (caché pour TRANSFER) */}
+            {formData.type !== "TRANSFER" && (
+              <div className="space-y-2">
+                <Label htmlFor="category_id">Category</Label>
+                <CategorySelectWithCreate
+                  value={formData.category_id}
+                  onValueChange={handleCategoryChange}
+                  type={formData.type}
+                  placeholder="Select a category..."
+                  autoSelectFirst={false}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Category automatically selected based on transaction type
+                </p>
+              </div>
+            )}
 
             {/* Notes and Location */}
             <div className="space-y-2">

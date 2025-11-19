@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -13,6 +14,156 @@ import { TransactionQueryDto } from "./dto/transaction-query.dto";
 @Injectable()
 export class TransactionService {
   constructor(private prisma: PrismaService) {}
+
+  async getDashboardStats(
+    userId: string,
+    period: "month" | "quarter" | "year" = "month",
+  ) {
+    const dateFilter = this.getDateFilter(period);
+
+    const [financialStats, categoryStats, transferStats, recentTrends] =
+      await Promise.all([
+        // Stats financières (sans transfers)
+        this.prisma.$queryRaw<
+          Array<{
+            total_count: number | null;
+            total_income: number | null;
+            total_expense: number | null;
+            net_cash_flow: number | null;
+            avg_income: number | null;
+            avg_expense: number | null;
+            largest_transaction: number | null;
+          }>
+        >`
+        SELECT 
+          SUM(transaction_count) as total_count,
+          SUM(total_income) as total_income,
+          SUM(total_expense) as total_expense,
+          SUM(net_cash_flow) as net_cash_flow,
+          AVG(avg_income) as avg_income,
+          AVG(avg_expense) as avg_expense,
+          MAX(largest_transaction) as largest_transaction
+        FROM monthly_financial_stats 
+        WHERE user_id = ${userId} 
+        AND month >= ${dateFilter}
+      `,
+
+        // Top catégories
+        this.prisma.$queryRaw`
+        SELECT 
+          category_name,
+          type,
+          total_amount,
+          transaction_count
+        FROM category_stats 
+        WHERE user_id = ${userId}
+        ORDER BY total_amount DESC
+        LIMIT 5
+      `,
+
+        // Stats transfers
+        this.prisma.$queryRaw<
+          Array<{
+            total_transfers: number | null;
+            total_transferred: number | null;
+          }>
+        >`
+        SELECT 
+          SUM(transfer_count) as total_transfers,
+          SUM(total_transferred) as total_transferred
+        FROM transfer_stats 
+        WHERE user_id = ${userId}
+        AND month >= ${dateFilter}
+      `,
+
+        // Tendances 6 derniers mois
+        this.prisma.$queryRaw`
+        SELECT 
+          TO_CHAR(month, 'YYYY-MM') as period,
+          total_income,
+          total_expense,
+          net_cash_flow,
+          transaction_count
+        FROM monthly_financial_stats 
+        WHERE user_id = ${userId}
+        AND month >= DATE_TRUNC('month', NOW() - INTERVAL '6 months')
+        ORDER BY month DESC
+      `,
+      ]);
+
+    return {
+      financial: financialStats[0],
+      topCategories: categoryStats,
+      transfers: transferStats[0],
+      trends: recentTrends,
+      period,
+      generatedAt: new Date(),
+    };
+  }
+
+  async getBasicStats(userId: string, startDate?: string, endDate?: string) {
+    const whereClause: any = {
+      user_id: userId,
+      type: { in: ["INCOME", "EXPENSE"] }, // EXCLURE LES TRANSFERS
+    };
+
+    if (startDate || endDate) {
+      whereClause.date = {};
+      if (startDate) whereClause.date.gte = new Date(startDate);
+      if (endDate) whereClause.date.lte = new Date(endDate);
+    }
+
+    const [totalCount, incomeSum, expenseSum, transferCount] =
+      await Promise.all([
+        this.prisma.transactions.count({ where: whereClause }),
+        this.prisma.transactions.aggregate({
+          where: { ...whereClause, type: "INCOME" },
+          _sum: { amount: true },
+        }),
+        this.prisma.transactions.aggregate({
+          where: { ...whereClause, type: "EXPENSE" },
+          _sum: { amount: true },
+        }),
+        this.prisma.transactions.count({
+          where: {
+            user_id: userId,
+            type: "TRANSFER",
+            ...(startDate || endDate
+              ? {
+                  date: {
+                    ...(startDate ? { gte: new Date(startDate) } : {}),
+                    ...(endDate ? { lte: new Date(endDate) } : {}),
+                  },
+                }
+              : {}),
+          },
+        }),
+      ]);
+
+    return {
+      totalCount,
+      totalIncome: Number(incomeSum._sum.amount) || 0,
+      totalExpense: Number(expenseSum._sum.amount) || 0,
+      net:
+        (Number(incomeSum._sum.amount) || 0) -
+        (Number(expenseSum._sum.amount) || 0),
+      transferCount,
+    };
+  }
+
+  private getDateFilter(period: string): Date {
+    const now = new Date();
+    switch (period) {
+      case "month":
+        return new Date(now.getFullYear(), now.getMonth(), 1);
+      case "quarter":
+        return new Date(now.getFullYear(), now.getMonth() - 3, 1);
+      case "year":
+        return new Date(now.getFullYear(), 0, 1);
+      default:
+        return new Date(now.getFullYear(), now.getMonth(), 1);
+    }
+  }
 
   async findAll(userId: string, query: TransactionQueryDto) {
     const {
@@ -88,11 +239,28 @@ export class TransactionService {
   }
 
   async create(dto: CreateTransactionDto, userId: string) {
+    // VALIDATION TRANSFER
+    if (dto.type === "TRANSFER") {
+      if (!dto.to_account_id) {
+        throw new BadRequestException(
+          "to_account_id is required for TRANSFER transactions",
+        );
+      }
+      if (dto.account_id === dto.to_account_id) {
+        throw new BadRequestException("Cannot transfer to the same account");
+      }
+      // Forcer category_id à null pour les transfers
+      dto.category_id = null;
+    } else {
+      // Pour INCOME/EXPENSE, to_account_id doit être null
+      dto.to_account_id = null;
+    }
     return await this.prisma.transactions.create({
       data: {
         ...dto,
         user_id: userId,
         is_synced: dto.is_synced ?? true,
+        date: dto.date !== undefined ? dto.date : null,
       },
       include: {
         categories: true,
@@ -102,6 +270,17 @@ export class TransactionService {
 
   async update(id: string, dto: UpdateTransactionDto, userId: string) {
     await this.ensureOwnership(id, userId);
+
+    if (dto.type === "TRANSFER") {
+      if (!dto.to_account_id) {
+        throw new BadRequestException(
+          "to_account_id is required for TRANSFER transactions",
+        );
+      }
+      dto.category_id = null;
+    } else if (dto.type) {
+      dto.to_account_id = null;
+    }
 
     return await this.prisma.transactions.update({
       where: { id },

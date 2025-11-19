@@ -24,6 +24,27 @@ export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 
   @UseGuards(JwtAuthGuard)
+  @Get("dashboard")
+  async getDashboardStats(
+    @Query("period") period: "month" | "quarter" | "year",
+    @Req() req: any,
+  ) {
+    const userId = req.user.id;
+    return this.transactionService.getDashboardStats(userId, period);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("basic")
+  async getBasicStats(
+    @Query("startDate") startDate?: string,
+    @Query("endDate") endDate?: string,
+    @Req() req?: any,
+  ) {
+    const userId = req.user.id;
+    return this.transactionService.getBasicStats(userId, startDate, endDate);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() dto: CreateTransactionDto, @Req() req: any) {
     const userId = req.user.id;

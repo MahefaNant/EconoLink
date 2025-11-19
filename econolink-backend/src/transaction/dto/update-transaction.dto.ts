@@ -28,15 +28,15 @@ export class UpdateTransactionDto {
 
   @IsOptional()
   @IsString()
-  notes?: string;
+  notes?: string | null; // Accepter null
 
   @IsOptional()
   @IsString()
-  location?: string;
+  location?: string | null;
 
   @IsOptional()
   @IsString()
-  receipt_image?: string;
+  receipt_image?: string | null;
 
   @IsOptional()
   @IsBoolean()
@@ -44,7 +44,7 @@ export class UpdateTransactionDto {
 
   @IsOptional()
   @IsString()
-  recurring_id?: string;
+  recurring_id?: string | null;
 
   @IsOptional()
   @IsObject()
@@ -56,16 +56,16 @@ export class UpdateTransactionDto {
 
   @IsOptional()
   @IsString()
-  to_account_id?: string;
+  to_account_id?: string | null;
 
   @IsOptional()
   @IsString()
-  category_id?: string;
+  category_id?: string | null;
 
   // For offline sync updates
   @IsOptional()
   @IsString()
-  local_id?: string;
+  local_id?: string | null;
 
   @IsOptional()
   @IsBoolean()
