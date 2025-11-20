@@ -28,7 +28,7 @@ export default function useCategory() {
     icon: "🛠️",
   });
 
-  // Filtrer les catégories par type localement
+  // Filter categories by type locally
   const filteredCategories = useMemo(() => {
     return allCategories.filter((category) => category.type === form.type);
   }, [allCategories, form.type]);
@@ -47,7 +47,7 @@ export default function useCategory() {
       if (isApiConnected === false) {
         message = tAcc("messages.offline-fetch");
         toast(message);
-        // Récupérer toutes les catégories depuis Dexie
+        // Retrieve all categories from Dexie
         const offlineData = (
           await dexieDb.categories
             .filter(
@@ -288,7 +288,7 @@ export default function useCategory() {
 
   return {
     categories: filteredCategories, // return only filtered categories
-    allCategories, // Optionnel: if you need access to all categories
+    allCategories,
     loading,
     openDialog,
     setOpenDialog,

@@ -27,7 +27,7 @@ interface AccountSelectWithCreateProps {
   onValueChange: (value: string) => void;
   placeholder?: string;
   disabled?: boolean;
-  excludeAccount?: string; // NOUVEAU: ID du compte à exclure (pour éviter de sélectionner le même compte)
+  excludeAccount?: string;
 }
 
 export function AccountSelectWithCreate({
@@ -35,7 +35,7 @@ export function AccountSelectWithCreate({
   onValueChange,
   placeholder = "Select an account...",
   disabled = false,
-  excludeAccount, // NOUVEAU: Pour les transfers
+  excludeAccount,
 }: AccountSelectWithCreateProps) {
   const [open, setOpen] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -48,19 +48,19 @@ export function AccountSelectWithCreate({
 
   const selectedAccount = accounts.find((account) => account.id === value);
 
-  // Filtrer les comptes : exclure le compte spécifié (pour éviter les transfers vers le même compte)
+  // Filter accounts: exclude the specified account (to prevent transfers to the same account)
   const filteredAccounts = accounts.filter((account) => {
     const matchesSearch =
       account.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       account.type.toLowerCase().includes(searchTerm.toLowerCase());
 
-    // Exclure le compte spécifié si provided
+    // Exclude the specified account if provided
     const isExcluded = excludeAccount && account.id === excludeAccount;
 
     return matchesSearch && !isExcluded;
   });
 
-  // Comptes disponibles après exclusion
+  // Accounts available after exclusion
   const availableAccounts = excludeAccount
     ? accounts.filter((account) => account.id !== excludeAccount)
     : accounts;
@@ -100,7 +100,6 @@ export function AccountSelectWithCreate({
         setOpen(false);
       }, 500);
     } catch {
-      // Gestion d'erreur silencieuse
     } finally {
       setIsCreating(false);
     }
@@ -128,7 +127,7 @@ export function AccountSelectWithCreate({
     }
   }, [open]);
 
-  // Réinitialiser la sélection si le compte sélectionné est exclu
+  // Reset the selection if the selected account is excluded.
   useEffect(() => {
     if (excludeAccount && value === excludeAccount) {
       onValueChange("");

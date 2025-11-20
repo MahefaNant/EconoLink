@@ -16,7 +16,7 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
 
   return (
     <div className="space-y-4">
-      {/* Bannière mode offline */}
+      {/* Offline fashion banner */}
       {!isOnline && (
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
           <div className="flex items-center gap-2 text-amber-800">
@@ -28,29 +28,29 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
         </div>
       )}
 
-      {/* Stats financières */}
+      {/* Financial statistics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
           title="Total Income"
-          value={financialStats.totalIncome}
+          value={financialStats.total_income}
           format="currency"
           icon={<TrendingUp className="h-4 w-4 text-green-500" />}
         />
         <StatCard
           title="Total Expense"
-          value={financialStats.totalExpense}
+          value={financialStats.total_expense}
           format="currency"
           icon={<TrendingDown className="h-4 w-4 text-red-500" />}
         />
         <StatCard
           title="Net Cash Flow"
-          value={financialStats.net || financialStats.netCashFlow}
+          value={financialStats.net || financialStats.net_cash_flow}
           format="currency"
           variant={financialStats.net >= 0 ? "default" : "destructive"}
         />
         <StatCard
           title="Transactions"
-          value={financialStats.totalCount || financialStats.transactionCount}
+          value={financialStats.totalCount || financialStats.total_count}
           format="number"
         />
       </div>
@@ -68,7 +68,7 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-2xl font-bold">
-                  {transferStats.totalTransfers}
+                  {transferStats.total_transfers}
                 </p>
                 <p className="text-sm text-muted-foreground">Total Transfers</p>
               </div>
@@ -77,7 +77,7 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
                   {new Intl.NumberFormat("en-US", {
                     style: "currency",
                     currency: "USD",
-                  }).format(transferStats.totalTransferred || 0)}
+                  }).format(transferStats.total_transferred || 0)}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   Amount Transferred
@@ -88,7 +88,7 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
         </Card>
       )}
 
-      {/* Stats avancées seulement en ligne */}
+      {/* Advanced stats only online */}
       {isOnline && stats.topCategories && stats.topCategories.length > 0 && (
         <Card>
           <CardHeader>

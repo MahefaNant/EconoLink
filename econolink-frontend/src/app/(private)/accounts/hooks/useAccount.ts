@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { dexieDb } from "@/lib/dexieDb";
@@ -248,10 +247,6 @@ export default function useAccount() {
               method: "DELETE",
               createdAt: Date.now(),
             });
-          } else {
-            console.log(
-              "Temp account with no existing tasks - nothing to sync"
-            );
           }
         }
 

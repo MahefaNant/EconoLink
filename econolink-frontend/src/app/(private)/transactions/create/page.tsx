@@ -20,10 +20,13 @@ import { AccountSelectWithCreate } from "./components/AccountSelectWithCreate";
 import { CategorySelectWithCreate } from "./components/CategorySelectWithCreate";
 import { transactionApi } from "../lib/transaction";
 import useCategory from "../../category/hooks/useCategory";
+import { useTransactionPage } from "../hooks/useTransactionPage";
 
 export default function CreateTransactionPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
+
+  const { createTransaction } = useTransactionPage();
 
   const { allCategories } = useCategory();
 
@@ -97,7 +100,7 @@ export default function CreateTransactionPage() {
       return;
     }
 
-    setLoading(true);
+    setLocalLoading(true);
     try {
       const data: CreateTransactionDto = {
         amount: parseFloat(formData.amount),
@@ -116,13 +119,12 @@ export default function CreateTransactionPage() {
           formData.type === "TRANSFER" ? formData.to_account_id : undefined,
       };
 
-      await transactionApi.create(data);
-      toast.success("Transaction created successfully");
+      await createTransaction(data);
       router.push("/transactions");
     } catch (error: any) {
       toast.error(error.message || "Failed to create transaction");
     } finally {
-      setLoading(false);
+      setLocalLoading(false);
     }
   };
 
@@ -307,12 +309,12 @@ export default function CreateTransactionPage() {
                 type="button"
                 variant="outline"
                 onClick={() => router.push("/transactions")}
-                disabled={loading}
+                disabled={localLoading}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading}>
-                {loading ? "Creating..." : "Create Transaction"}
+              <Button type="submit" disabled={localLoading}>
+                {localLoading ? "Creating..." : "Create Transaction"}
               </Button>
             </div>
           </form>

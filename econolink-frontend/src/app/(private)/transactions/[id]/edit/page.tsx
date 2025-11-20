@@ -21,15 +21,19 @@ import { AccountSelectWithCreate } from "../../create/components/AccountSelectWi
 import { CategorySelectWithCreate } from "../../create/components/CategorySelectWithCreate";
 import useCategory from "@/app/(private)/category/hooks/useCategory";
 import { transactionApi } from "../../lib/transaction";
+import { useTransactionPage } from "../../hooks/useTransactionPage";
 
 export default function EditTransactionPage() {
   const router = useRouter();
   const params = useParams();
   const transactionId = params.id as string;
 
-  const [loading, setLoading] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [transaction, setTransaction] = useState<ITransaction | null>(null);
+
+  const { updateTransaction, deleteTransaction, getTransactionById } =
+    useTransactionPage();
 
   const { allCategories } = useCategory();
 
@@ -42,7 +46,7 @@ export default function EditTransactionPage() {
     location: "",
     account_id: "",
     category_id: "",
-    to_account_id: "", // NOUVEAU: Pour TRANSFER
+    to_account_id: "",
   });
 
   const getFirstCategoryByType = (type: TransactionType): string => {
@@ -67,17 +71,17 @@ export default function EditTransactionPage() {
     }
   }, [formData.type, allCategories]);
 
-  // Réinitialiser les champs quand le type change
+  // Reset the fields when the type changes
   useEffect(() => {
     if (formData.type === "TRANSFER") {
       setFormData((prev) => ({
         ...prev,
-        category_id: "", // Catégorie vide pour TRANSFER
+        category_id: "",
       }));
     } else {
       setFormData((prev) => ({
         ...prev,
-        to_account_id: "", // to_account_id vide pour INCOME/EXPENSE
+        to_account_id: "",
       }));
     }
   }, [formData.type]);
@@ -88,20 +92,25 @@ export default function EditTransactionPage() {
 
       try {
         setFetching(true);
-        const data = await transactionApi.getById(transactionId);
+        const data = await getTransactionById(transactionId);
         setTransaction(data);
 
-        setFormData({
-          amount: Math.abs(data.amount).toString(),
-          description: data.description,
-          type: data.type,
-          date: data.date.split("T")[0],
-          notes: data.notes || "",
-          location: data.location || "",
-          account_id: data.account_id,
-          category_id: data.category_id || "",
-          to_account_id: data.to_account_id || "", // Récupérer to_account_id
-        });
+        if (data) {
+          setFormData({
+            amount: Math.abs(data.amount).toString(),
+            description: data.description,
+            type: data.type,
+            date: data.date.split("T")[0],
+            notes: data.notes || "",
+            location: data.location || "",
+            account_id: data.account_id,
+            category_id: data.category_id || "",
+            to_account_id: data.to_account_id || "",
+          });
+        } else {
+          toast.error("Transaction not found");
+          router.push("/transactions");
+        }
       } catch {
         toast.error("Failed to load transaction");
         router.push("/transactions");
@@ -111,7 +120,7 @@ export default function EditTransactionPage() {
     };
 
     fetchTransaction();
-  }, [transactionId, router]);
+  }, [transactionId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,7 +148,7 @@ export default function EditTransactionPage() {
       return;
     }
 
-    setLoading(true);
+    setLocalLoading(true);
     try {
       const data: UpdateTransactionDto = {
         amount: parseFloat(formData.amount),
@@ -147,7 +156,7 @@ export default function EditTransactionPage() {
         type: formData.type,
         date: new Date(formData.date).toISOString(),
         account_id: formData.account_id,
-        // Gérer les champs optionnels selon le type
+        // Manage optional fields according to type
         notes: formData.notes || undefined,
         location: formData.location || undefined,
         category_id:
@@ -158,13 +167,12 @@ export default function EditTransactionPage() {
           formData.type === "TRANSFER" ? formData.to_account_id : undefined,
       };
 
-      await transactionApi.update(transaction.id, data);
-      toast.success("Transaction updated successfully");
+      await updateTransaction(transaction.id, data);
       router.push("/transactions");
     } catch (error: any) {
       toast.error(error.message || "Failed to update transaction");
     } finally {
-      setLoading(false);
+      setLocalLoading(false);
     }
   };
 
@@ -203,15 +211,14 @@ export default function EditTransactionPage() {
       return;
     }
 
-    setLoading(true);
+    setLocalLoading(true);
     try {
-      await transactionApi.delete(transaction.id);
-      toast.success("Transaction deleted successfully");
+      await deleteTransaction();
       router.push("/transactions");
     } catch {
       toast.error("Failed to delete transaction");
     } finally {
-      setLoading(false);
+      setLocalLoading(false);
     }
   };
 
@@ -260,7 +267,11 @@ export default function EditTransactionPage() {
           </h1>
           <p className="text-muted-foreground">Update transaction details</p>
         </div>
-        <Button variant="destructive" onClick={handleDelete} disabled={loading}>
+        <Button
+          variant="destructive"
+          onClick={handleDelete}
+          disabled={localLoading}
+        >
           Delete
         </Button>
       </div>
@@ -427,12 +438,12 @@ export default function EditTransactionPage() {
                 type="button"
                 variant="outline"
                 onClick={() => router.push("/transactions")}
-                disabled={loading}
+                disabled={localLoading}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading}>
-                {loading ? (
+              <Button type="submit" disabled={localLoading}>
+                {localLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Updating...

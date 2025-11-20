@@ -19,7 +19,12 @@ export default function NavBar() {
     .flatMap((d) => d.items.map((item) => ({ ...item, parentTitle: d.title })))
     .find((item) => item.isActive);
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
+    <header
+      className="sticky top-0 z-50 
+    flex h-16 shrink-0 items-center justify-between gap-2 
+    border-b px-4 
+    bg-background/80 backdrop-blur"
+    >
       <div className="flex items-center gap-2">
         <SidebarTrigger className="-ml-1" />
         <Separator
