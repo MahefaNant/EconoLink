@@ -125,7 +125,7 @@ export const TransactionCard = memo(function TransactionCard({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => router.push(`/transactions/${transaction.id}/edit`)}
+            onClick={() => router.push(`/transactions/edit/${transaction.id}`)}
           >
             Edit
           </Button>

@@ -71,7 +71,7 @@ export function useTransactionPage() {
   useEffect(() => {
     loadTransactions();
     loadStats("month");
-  }, [userId]);
+  }, [userId, queryParams]);
 
   // Initialize local states from queryParams on component mount
   useEffect(() => {
@@ -170,7 +170,8 @@ export function useTransactionPage() {
     updateTransactionServ(id, dto, loadTransactions);
 
   // In useTransactionPage.ts - Add this function
-  const getTransactionById = (id: string) => getTransactionByIdServ(id, userId);
+  const getTransactionById = async (id: string) =>
+    await getTransactionByIdServ(id, userId);
 
   return {
     transactions,

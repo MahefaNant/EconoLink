@@ -120,7 +120,7 @@ export const loadTransactionsServ = async (
       await dexieDb.transactions.bulkAdd(response.data);
     }
   } catch {
-    toast.error("Failed to load transactions");
+    // toast.error("Failed to load transactions");
   } finally {
     setLoading(false);
   }

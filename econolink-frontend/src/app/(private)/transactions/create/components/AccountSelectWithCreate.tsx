@@ -21,6 +21,7 @@ import {
 import { toast } from "sonner";
 import useAccount from "@/app/(private)/accounts/hooks/useAccount";
 import { getIconByAccountType } from "@/app/(private)/accounts/lib/account.lib";
+import useDocumentReadyState from "@/hooks/useDocumentReadyState";
 
 interface AccountSelectWithCreateProps {
   value: string;
@@ -37,6 +38,8 @@ export function AccountSelectWithCreate({
   disabled = false,
   excludeAccount,
 }: AccountSelectWithCreateProps) {
+  const isReady = useDocumentReadyState();
+
   const [open, setOpen] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
@@ -133,6 +136,8 @@ export function AccountSelectWithCreate({
       onValueChange("");
     }
   }, [excludeAccount, value, onValueChange]);
+
+  if (!isReady) return null;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

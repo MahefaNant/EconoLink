@@ -73,7 +73,7 @@ export default function useCategory() {
       await dexieDb.categories.clear();
       await dexieDb.categories.bulkAdd(data);
     } catch {
-      message = tAcc("messages.offline-fetch");
+      // message = tAcc("messages.offline-fetch");
     } finally {
       if (message) {
         toast(message);

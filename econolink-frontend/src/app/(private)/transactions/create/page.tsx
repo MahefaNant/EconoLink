@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 // app/transactions/create/page.tsx
 "use client";
@@ -18,15 +17,16 @@ import type {
 } from "@/types/ITransaction";
 import { AccountSelectWithCreate } from "./components/AccountSelectWithCreate";
 import { CategorySelectWithCreate } from "./components/CategorySelectWithCreate";
-import { transactionApi } from "../lib/transaction";
 import useCategory from "../../category/hooks/useCategory";
-import { useTransactionPage } from "../hooks/useTransactionPage";
+import useDocumentReadyState from "@/hooks/useDocumentReadyState";
+import { useCreateTransaction } from "./hooks/useCreateTransaction";
 
 export default function CreateTransactionPage() {
   const router = useRouter();
-  const [localLoading, setLocalLoading] = useState(false);
 
-  const { createTransaction } = useTransactionPage();
+  const isReady = useDocumentReadyState();
+
+  const { loading, createTransaction } = useCreateTransaction();
 
   const { allCategories } = useCategory();
 
@@ -100,7 +100,6 @@ export default function CreateTransactionPage() {
       return;
     }
 
-    setLocalLoading(true);
     try {
       const data: CreateTransactionDto = {
         amount: parseFloat(formData.amount),
@@ -121,10 +120,8 @@ export default function CreateTransactionPage() {
 
       await createTransaction(data);
       router.push("/transactions");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to create transaction");
-    } finally {
-      setLocalLoading(false);
+    } catch {
+      // toast.error(error.message || "Failed to create transaction");
     }
   };
 
@@ -155,6 +152,8 @@ export default function CreateTransactionPage() {
       category_id: categoryId,
     }));
   };
+
+  if (!isReady) return null;
 
   return (
     <div className="container mx-auto p-4 max-w-2xl">
@@ -309,12 +308,12 @@ export default function CreateTransactionPage() {
                 type="button"
                 variant="outline"
                 onClick={() => router.push("/transactions")}
-                disabled={localLoading}
+                disabled={loading}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={localLoading}>
-                {localLoading ? "Creating..." : "Create Transaction"}
+              <Button type="submit" disabled={loading}>
+                {loading ? "Creating..." : "Create Transaction"}
               </Button>
             </div>
           </form>

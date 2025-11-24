@@ -15,27 +15,27 @@ import { toast } from "sonner";
 import type {
   UpdateTransactionDto,
   TransactionType,
-  ITransaction,
 } from "@/types/ITransaction";
 import { AccountSelectWithCreate } from "../../create/components/AccountSelectWithCreate";
 import { CategorySelectWithCreate } from "../../create/components/CategorySelectWithCreate";
 import useCategory from "@/app/(private)/category/hooks/useCategory";
-import { transactionApi } from "../../lib/transaction";
-import { useTransactionPage } from "../../hooks/useTransactionPage";
+import useDocumentReadyState from "@/hooks/useDocumentReadyState";
+import { useEditTransaction } from "./hooks/useEditTransaction";
 
 export default function EditTransactionPage() {
+  const isReady = useDocumentReadyState();
   const router = useRouter();
   const params = useParams();
   const transactionId = params.id as string;
 
-  const [localLoading, setLocalLoading] = useState(false);
-  const [fetching, setFetching] = useState(true);
-  const [transaction, setTransaction] = useState<ITransaction | null>(null);
-
-  const { updateTransaction, deleteTransaction, getTransactionById } =
-    useTransactionPage();
-
   const { allCategories } = useCategory();
+  const {
+    transaction,
+    fetching,
+    loading,
+    updateTransaction,
+    deleteTransaction,
+  } = useEditTransaction(transactionId);
 
   const [formData, setFormData] = useState({
     amount: "",
@@ -55,6 +55,22 @@ export default function EditTransactionPage() {
     );
     return firstCategory?.id || "";
   };
+
+  useEffect(() => {
+    if (transaction) {
+      setFormData({
+        amount: Math.abs(transaction.amount).toString(),
+        description: transaction.description,
+        type: transaction.type,
+        date: transaction.date.split("T")[0],
+        notes: transaction.notes || "",
+        location: transaction.location || "",
+        account_id: transaction.account_id,
+        category_id: transaction.category_id || "",
+        to_account_id: transaction.to_account_id || "",
+      });
+    }
+  }, [transaction]);
 
   useEffect(() => {
     if (allCategories.length > 0 && formData.type !== "TRANSFER") {
@@ -86,42 +102,6 @@ export default function EditTransactionPage() {
     }
   }, [formData.type]);
 
-  useEffect(() => {
-    const fetchTransaction = async () => {
-      if (!transactionId) return;
-
-      try {
-        setFetching(true);
-        const data = await getTransactionById(transactionId);
-        setTransaction(data);
-
-        if (data) {
-          setFormData({
-            amount: Math.abs(data.amount).toString(),
-            description: data.description,
-            type: data.type,
-            date: data.date.split("T")[0],
-            notes: data.notes || "",
-            location: data.location || "",
-            account_id: data.account_id,
-            category_id: data.category_id || "",
-            to_account_id: data.to_account_id || "",
-          });
-        } else {
-          toast.error("Transaction not found");
-          router.push("/transactions");
-        }
-      } catch {
-        toast.error("Failed to load transaction");
-        router.push("/transactions");
-      } finally {
-        setFetching(false);
-      }
-    };
-
-    fetchTransaction();
-  }, [transactionId]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -148,7 +128,6 @@ export default function EditTransactionPage() {
       return;
     }
 
-    setLocalLoading(true);
     try {
       const data: UpdateTransactionDto = {
         amount: parseFloat(formData.amount),
@@ -171,8 +150,6 @@ export default function EditTransactionPage() {
       router.push("/transactions");
     } catch (error: any) {
       toast.error(error.message || "Failed to update transaction");
-    } finally {
-      setLocalLoading(false);
     }
   };
 
@@ -211,16 +188,15 @@ export default function EditTransactionPage() {
       return;
     }
 
-    setLocalLoading(true);
     try {
       await deleteTransaction();
       router.push("/transactions");
     } catch {
       toast.error("Failed to delete transaction");
-    } finally {
-      setLocalLoading(false);
     }
   };
+
+  if (!isReady) return null;
 
   if (fetching) {
     return (
@@ -267,11 +243,7 @@ export default function EditTransactionPage() {
           </h1>
           <p className="text-muted-foreground">Update transaction details</p>
         </div>
-        <Button
-          variant="destructive"
-          onClick={handleDelete}
-          disabled={localLoading}
-        >
+        <Button variant="destructive" onClick={handleDelete} disabled={loading}>
           Delete
         </Button>
       </div>
@@ -438,12 +410,12 @@ export default function EditTransactionPage() {
                 type="button"
                 variant="outline"
                 onClick={() => router.push("/transactions")}
-                disabled={localLoading}
+                disabled={loading}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={localLoading}>
-                {localLoading ? (
+              <Button type="submit" disabled={loading}>
+                {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Updating...
