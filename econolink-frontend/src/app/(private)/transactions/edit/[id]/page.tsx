@@ -21,8 +21,12 @@ import { CategorySelectWithCreate } from "../../create/components/CategorySelect
 import useCategory from "@/app/(private)/category/hooks/useCategory";
 import useDocumentReadyState from "@/hooks/useDocumentReadyState";
 import { useEditTransaction } from "./hooks/useEditTransaction";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { useTranslations } from "next-intl";
 
 export default function EditTransactionPage() {
+  const tAcc = useTranslations("Accounts");
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
   const isReady = useDocumentReadyState();
   const router = useRouter();
   const params = useParams();
@@ -184,10 +188,6 @@ export default function EditTransactionPage() {
   const handleDelete = async () => {
     if (!transaction) return;
 
-    if (!confirm("Are you sure you want to delete this transaction?")) {
-      return;
-    }
-
     try {
       await deleteTransaction();
       router.push("/transactions");
@@ -243,10 +243,28 @@ export default function EditTransactionPage() {
           </h1>
           <p className="text-muted-foreground">Update transaction details</p>
         </div>
-        <Button variant="destructive" onClick={handleDelete} disabled={loading}>
+        <Button
+          variant="destructive"
+          onClick={() => setOpenDelete(true)}
+          disabled={loading}
+        >
           Delete
         </Button>
       </div>
+
+      <ConfirmDialog
+        open={openDelete}
+        onOpenChange={() => setOpenDelete(false)}
+        collapsible={true}
+        actionColor="red"
+        text={{
+          title: tAcc("dialog.delete-title"),
+          description: tAcc("dialog.delete-desc"),
+          cancel: tAcc("dialog.button.cancel"),
+          confirm: tAcc("dialog.button.delete"),
+        }}
+        onConfirm={handleDelete}
+      />
 
       {/* Formulaire */}
       <Card>

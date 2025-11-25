@@ -207,6 +207,9 @@ export default function useAccount() {
 
   async function remove(id: string) {
     try {
+      if (!confirm("Are you sure you want to delete this Account?")) {
+        return;
+      }
       const isApiConnected = await checkApiConnection();
 
       // ---------- OFFLINE MODE ----------
