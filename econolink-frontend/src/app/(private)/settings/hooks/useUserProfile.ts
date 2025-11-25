@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { currenciesList } from "@/lib/format";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -37,7 +38,7 @@ const avatars = [
   { url: "/avatars/avatar_10.svg", name: "Cartoon" },
 ];
 
-const currencies = ["USD", "EUR", "AR", "GBP", "JPY"];
+const currencies = currenciesList;
 
 export default function useUserProfile() {
   const router = useRouter();
@@ -137,14 +138,15 @@ export default function useUserProfile() {
 
       const updated = await res.json();
       setUser(updated);
-      setUserStore({
+      const new_user = {
         id: updated.id,
         email: updated.email,
         name: updated.name,
         avatar: updated.avatar,
         currency: updated.currency,
-      });
-      localStorage.setItem(user_info, JSON.stringify(userStore));
+      };
+      setUserStore(new_user);
+      localStorage.setItem(user_info, JSON.stringify(new_user));
       setSuccessShake(true);
       setTimeout(() => setSuccessShake(false), 600);
       toast.success(t("success"));

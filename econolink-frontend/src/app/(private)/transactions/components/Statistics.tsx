@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/Statistics.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, TrendingDown, ArrowLeftRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { fmtCurrency, fmtNumberCompact } from "@/lib/format";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { TrendingUp, TrendingDown, ArrowLeftRight, Eye } from "lucide-react";
+import { useState } from "react";
 
 interface StatisticsProps {
   stats: any;
@@ -33,19 +42,16 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
         <StatCard
           title="Total Income"
           value={financialStats.total_income}
-          format="currency"
           icon={<TrendingUp className="h-4 w-4 text-green-500" />}
         />
         <StatCard
           title="Total Expense"
           value={financialStats.total_expense}
-          format="currency"
           icon={<TrendingDown className="h-4 w-4 text-red-500" />}
         />
         <StatCard
           title="Net Cash Flow"
           value={financialStats.net || financialStats.net_cash_flow}
-          format="currency"
           variant={financialStats.net >= 0 ? "default" : "destructive"}
         />
         <StatCard
@@ -67,21 +73,18 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-2xl font-bold">
-                  {transferStats.total_transfers}
-                </p>
-                <p className="text-sm text-muted-foreground">Total Transfers</p>
+                <ValueWithPopover
+                  value={transferStats.total_transfers}
+                  format="number"
+                  title="Total Transfers"
+                />
               </div>
               <div>
-                <p className="text-2xl font-bold">
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  }).format(transferStats.total_transferred || 0)}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Amount Transferred
-                </p>
+                <ValueWithPopover
+                  value={transferStats.total_transferred || 0}
+                  format="currency"
+                  title="Amount Transferred"
+                />
               </div>
             </div>
           </CardContent>
@@ -101,15 +104,15 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
                 .map((category: any, index: number) => (
                   <div
                     key={index}
-                    className="flex justify-between items-center"
+                    className="flex justify-between items-center group"
                   >
                     <span className="text-sm">{category.category_name}</span>
-                    <span className="text-sm font-medium">
-                      {new Intl.NumberFormat("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                      }).format(category.total_amount)}
-                    </span>
+                    <ValueWithPopover
+                      value={category.total_amount}
+                      format="currency"
+                      compact={true}
+                      className="text-sm font-medium"
+                    />
                   </div>
                 ))}
             </div>
@@ -120,21 +123,100 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
   );
 }
 
+// ValueWithPopover component
+interface ValueWithPopoverProps {
+  value: number;
+  format: "currency" | "number";
+  title?: string;
+  compact?: boolean;
+  className?: string;
+}
+
+function ValueWithPopover({
+  value,
+  format,
+  title,
+  compact = true,
+  className = "",
+}: ValueWithPopoverProps) {
+  const user = useAuthStore((s) => s.user);
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Format the compact value
+  const formattedCompact =
+    format === "currency"
+      ? fmtCurrency(String(value), user?.currency, undefined, compact)
+      : fmtNumberCompact(value);
+
+  // Format the full value
+  const formattedFull =
+    format === "currency"
+      ? fmtCurrency(String(value), user?.currency, undefined, false)
+      : new Intl.NumberFormat().format(value);
+
+  return (
+    <div className="flex items-center gap-1">
+      {title ? (
+        <>
+          <Popover open={isOpen} onOpenChange={setIsOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 p-0 hover:bg-transparent"
+                aria-label="Show full value"
+              >
+                <Eye className="h-3 w-3" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-2 text-sm" align="start">
+              <div className="font-mono">{formattedFull}</div>
+            </PopoverContent>
+          </Popover>
+          <div>
+            <p className="text-2xl font-bold">{formattedCompact}</p>
+            <p className="text-sm text-muted-foreground">{title}</p>
+          </div>
+        </>
+      ) : (
+        <Popover open={isOpen} onOpenChange={setIsOpen}>
+          <PopoverTrigger asChild>
+            <div className="flex items-center gap-1 cursor-pointer group">
+              <span
+                className={`${className} group-hover:opacity-80 transition-opacity`}
+              >
+                {formattedCompact}
+              </span>
+              <Eye className="h-3 w-3 opacity-50 group-hover:opacity-100 transition-opacity" />
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-2 text-sm" align="end">
+            <div className="font-mono">{formattedFull}</div>
+          </PopoverContent>
+        </Popover>
+      )}
+    </div>
+  );
+}
+
 // Composant StatCard helper
 function StatCard({
   title,
   value,
-  format = "currency",
+  format = undefined,
   variant = "default",
   icon,
 }: any) {
-  const formattedValue =
-    format === "currency"
-      ? new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(value || 0)
-      : value;
+  const user = useAuthStore((s) => s.user);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const formattedValue = format
+    ? fmtNumberCompact(value)
+    : fmtCurrency(value, user?.currency, undefined, true);
+
+  const fullValue = format
+    ? new Intl.NumberFormat().format(value)
+    : fmtCurrency(value, user?.currency, undefined, false);
 
   return (
     <Card>
@@ -143,12 +225,29 @@ function StatCard({
         {icon}
       </CardHeader>
       <CardContent>
-        <div
-          className={`text-2xl font-bold ${
-            variant === "destructive" ? "text-red-500" : ""
-          }`}
-        >
-          {formattedValue}
+        <div className="flex items-center gap-1">
+          <Popover open={isOpen} onOpenChange={setIsOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 p-0 hover:bg-transparent"
+                aria-label="Show full value"
+              >
+                <Eye className="h-3 w-3" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-2 text-sm">
+              <div className="font-mono">{fullValue}</div>
+            </PopoverContent>
+          </Popover>
+          <div
+            className={`text-2xl font-bold ${
+              variant === "destructive" ? "text-red-500" : ""
+            }`}
+          >
+            {formattedValue}
+          </div>
         </div>
       </CardContent>
     </Card>
