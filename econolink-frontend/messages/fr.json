@@ -237,6 +237,7 @@
     },
     "messages": {
       "fetch-error": "Échec du chargement des catégories",
+      "no-categories": "No categories available",
       "add-success": "Catégorie ajoutée avec succès",
       "name-required": "Le nom est requis",
       "edit-success": "Catégorie mise à jour avec succès",

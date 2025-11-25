@@ -197,7 +197,7 @@ export default function useAccount() {
 
       await fetchAccounts();
       setOpenDialog(false);
-      toast(
+      toast.success(
         editing ? tAcc("messages.edit-success") : tAcc("messages.add-success")
       );
     } catch {

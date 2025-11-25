@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -120,7 +119,7 @@ export default function useCategory() {
     const data = input ?? form;
 
     if (!data.name || data.name.length < 1) {
-      return toast(tAcc("messages.name-required"));
+      return toast.error(tAcc("messages.name-required"));
     }
 
     const payload = { ...data, user_id: userId };
@@ -210,7 +209,7 @@ export default function useCategory() {
 
       await fetchAllCategories();
       setOpenDialog(false);
-      toast(
+      toast.success(
         editing ? tAcc("messages.edit-success") : tAcc("messages.add-success")
       );
     } catch {
@@ -220,7 +219,7 @@ export default function useCategory() {
 
   async function remove(id: string) {
     try {
-      if (!confirm("Are you sure you want to delete this Category?")) {
+      if (!confirm(tAcc("dialog.delete-desc-high"))) {
         return;
       }
       const isApiConnected = await checkApiConnection();
@@ -262,10 +261,6 @@ export default function useCategory() {
               method: "DELETE",
               createdAt: Date.now(),
             });
-          } else {
-            console.log(
-              "Temp category with no existing tasks - nothing to sync"
-            );
           }
         }
 
