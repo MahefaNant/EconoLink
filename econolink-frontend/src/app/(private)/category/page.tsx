@@ -18,10 +18,11 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { Edit, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import useCategory from "./hooks/useCategory";
-import { categoryIcons } from "./lib/category";
+import { categoryDataKeyMap, categoryIcons } from "./lib/category";
 
 export default function CategoriesPage() {
   const tCat = useTranslations("Category");
+  const t = useTranslations();
   const [openDeleteId, setOpenDeleteId] = useState<string | null>(null);
 
   const {
@@ -85,74 +86,81 @@ export default function CategoriesPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
-        {categories.map((category) => (
-          <div
-            key={category.id}
-            className="rounded-2xl bg-card border shadow-sm p-4 hover:shadow-md transition"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold"
-                  style={{ background: category.color ?? "#e5e5e5" }}
-                >
-                  {category.icon}
+        {categories.map((category) => {
+          const mapping = categoryDataKeyMap[category.name];
+          const labelFinal = mapping ? t(mapping.label) : category.name;
+          const descriptionFinal = mapping
+            ? t(mapping.description)
+            : category.description;
+          return (
+            <div
+              key={category.id}
+              className="rounded-2xl bg-card border shadow-sm p-4 hover:shadow-md transition"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold"
+                    style={{ background: category.color ?? "#e5e5e5" }}
+                  >
+                    {category.icon}
+                  </div>
+
+                  <div>
+                    <h2 className="font-semibold text-lg">{labelFinal}</h2>
+                    <p className="text-sm opacity-70">
+                      {
+                        typeOptions.find((type) => type.value === category.type)
+                          ?.label
+                      }
+                    </p>
+                  </div>
                 </div>
 
-                <div>
-                  <h2 className="font-semibold text-lg">{category.name}</h2>
-                  <p className="text-sm opacity-70">
-                    {
-                      typeOptions.find((type) => type.value === category.type)
-                        ?.label
-                    }
+                {category.user_id && (
+                  <div className="flex gap-1">
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => openEdit(category)}
+                    >
+                      <Edit />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      onClick={() => setOpenDeleteId(category.id)}
+                    >
+                      <Trash2 />
+                    </Button>
+                  </div>
+                )}
+              </div>
+
+              {category.description && (
+                <div className="mt-3">
+                  <p className="text-sm text-muted-foreground">
+                    {descriptionFinal}
                   </p>
                 </div>
-              </div>
-
-              {category.user_id && (
-                <div className="flex gap-1">
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => openEdit(category)}
-                  >
-                    <Edit />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="destructive"
-                    onClick={() => setOpenDeleteId(category.id)}
-                  >
-                    <Trash2 />
-                  </Button>
-                </div>
               )}
+
+              <ConfirmDialog
+                open={openDeleteId === category.id}
+                onOpenChange={() => setOpenDeleteId(null)}
+                collapsible={true}
+                actionColor="red"
+                text={{
+                  title: tCat("dialog.delete-title"),
+                  description: tCat("dialog.delete-desc"),
+                  cancel: tCat("dialog.button.cancel"),
+                  confirm: tCat("dialog.button.delete"),
+                }}
+                onConfirm={() => remove(category.id)}
+              />
             </div>
-
-            {category.description && (
-              <div className="mt-3">
-                <p className="text-sm text-muted-foreground">
-                  {category.description}
-                </p>
-              </div>
-            )}
-
-            <ConfirmDialog
-              open={openDeleteId === category.id}
-              onOpenChange={() => setOpenDeleteId(null)}
-              collapsible={true}
-              actionColor="red"
-              text={{
-                title: tCat("dialog.delete-title"),
-                description: tCat("dialog.delete-desc"),
-                cancel: tCat("dialog.button.cancel"),
-                confirm: tCat("dialog.button.delete"),
-              }}
-              onConfirm={() => remove(category.id)}
-            />
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {loading && <div className="p-4 text-center">Loading...</div>}

@@ -220,6 +220,9 @@ export default function useCategory() {
 
   async function remove(id: string) {
     try {
+      if (!confirm("Are you sure you want to delete this Category?")) {
+        return;
+      }
       const isApiConnected = await checkApiConnection();
 
       // ---------- OFFLINE MODE ----------

@@ -144,6 +144,7 @@
       "color-placeholder": "Choose a color",
       "delete-title": "Delete this Account?",
       "delete-desc": "Are you sure you want to delete this account? This action cannot be undone.",
+      "delete-desc-high": "Are you absolutely sure you want to delete this account? All transactions associated with it will be deleted. This action is irreversible.",
       "icon-preview": "Account Preview",
       "icon-preview-placeholder": "Account Name",
       "button": {
@@ -215,6 +216,7 @@
       "color-placeholder": "Choose a color",
       "delete-title": "Delete this Category?",
       "delete-desc": "Are you sure you want to delete this category? This action cannot be undone.",
+      "delete-desc-high": "Are you absolutely sure you want to delete this category? All transactions associated with it will be deleted. This action is irreversible.",
       "icon-preview": "Category Preview",
       "icon-preview-placeholder": "Category Name",
       "button": {
@@ -244,6 +246,70 @@
       "offline-queued": "You are offline. The operation has been queued and will be processed once you are back online.",
       "offline-fetch": "You are offline. Displaying locally stored categories.",
       "foreign-key-error": "Cannot delete this category as it is referenced by other data."
+    },
+    "translation": {
+      "expense": {
+        "food": "Food & Groceries",
+        "food_desc": "Daily meals and groceries.",
+        "transportation": "Transportation",
+        "transportation_desc": "Fuel, taxi, or public transport.",
+        "housing": "Housing",
+        "housing_desc": "Rent, maintenance, and bills.",
+        "utilities": "Utilities",
+        "utilities_desc": "Electricity, water, gas, or internet.",
+        "entertainment": "Entertainment",
+        "entertainment_desc": "Movies, games, and streaming.",
+        "health": "Health",
+        "health_desc": "Medicine, insurance, or doctors.",
+        "education": "Education",
+        "education_desc": "Books, courses, or training.",
+        "clothing": "Clothing",
+        "clothing_desc": "Clothes and accessories.",
+        "travel": "Travel",
+        "travel_desc": "Trips and vacations.",
+        "subscriptions": "Subscriptions",
+        "subscriptions_desc": "Netflix, Spotify, etc.",
+        "personal_care": "Personal Care",
+        "personal_care_desc": "Beauty, haircuts, or gym.",
+        "gifts": "Gifts & Donations",
+        "gifts_desc": "Charity or presents.",
+        "taxes": "Taxes",
+        "taxes_desc": "Income or property taxes.",
+        "other": "Other Expenses",
+        "other_desc": "Miscellaneous expenses."
+      },
+
+      "income": {
+        "salary": "Salary",
+        "salary_desc": "Monthly salary or wages.",
+        "bonus": "Bonus",
+        "bonus_desc": "Performance or work bonus.",
+        "freelance": "Freelance",
+        "freelance_desc": "Income from freelance or side jobs.",
+        "investments": "Investments",
+        "investments_desc": "Dividends, stocks, etc.",
+        "rental": "Rental Income",
+        "rental_desc": "Rent payments received.",
+        "refunds": "Refunds",
+        "refunds_desc": "Tax or product refunds.",
+        "gift": "Gift",
+        "gift_desc": "Money received as a gift.",
+        "other": "Other Income",
+        "other_desc": "Any other income source."
+      },
+
+      "transfer": {
+        "bank": "Bank Transfer",
+        "bank_desc": "Between bank accounts.",
+        "savings": "Savings",
+        "savings_desc": "Money moved to savings.",
+        "credit_card": "Credit Card Payment",
+        "credit_card_desc": "Paying off a credit card.",
+        "loan": "Loan Payment",
+        "loan_desc": "Paying back a loan.",
+        "investment": "Investment Transfer",
+        "investment_desc": "Moving money to investments."
+      }
     }
   }
 }

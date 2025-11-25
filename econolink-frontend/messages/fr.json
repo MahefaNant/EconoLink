@@ -144,6 +144,7 @@
       "color-placeholder": "Choisissez une couleur",
       "delete-title": "Supprimer ce compte ?",
       "delete-desc": "Êtes-vous sûr de vouloir supprimer ce compte ? Cette action est irréversible.",
+      "delete-desc-high": "Êtes-vous absolument sûr de vouloir supprimer ce compte ? Toutes les transactions qui y sont associées seront supprimées. Cette action est irréversible.",
       "icon-preview": "Aperçu du compte",
       "icon-preview-placeholder": "Nom du compte",
       "button": {
@@ -215,6 +216,7 @@
       "color-placeholder": "Choisissez une couleur",
       "delete-title": "Supprimer cette catégorie ?",
       "delete-desc": "Êtes-vous sûr de vouloir supprimer cette catégorie ? Cette action est irréversible.",
+      "delete-desc-high": "Êtes-vous absolument sûr de vouloir supprimer cette catégorie? Toutes les transactions qui y sont associées seront supprimées. Cette action est irréversible.",
       "icon-preview": "Aperçu de la catégorie",
       "icon-preview-placeholder": "Nom de la catégorie",
       "button": {
@@ -243,6 +245,70 @@
       "offline-queued": "Vous êtes hors ligne. L'opération a été mise en file d'attente et sera traitée une fois que vous serez de nouveau en ligne.",
       "offline-fetch": "Vous êtes hors ligne. Affichage des catégories stockées localement.",
       "foreign-key-error": "Impossible de supprimer cette catégorie car elle est référencée par d'autres données."
+    },
+    "translation": {
+      "expense": {
+        "food": "Alimentation & Courses",
+        "food_desc": "Repas quotidiens et courses.",
+        "transportation": "Transport",
+        "transportation_desc": "Carburant, taxi ou transport public.",
+        "housing": "Logement",
+        "housing_desc": "Loyer, entretien et factures.",
+        "utilities": "Services publics",
+        "utilities_desc": "Électricité, eau, internet ou gaz.",
+        "entertainment": "Divertissement",
+        "entertainment_desc": "Films, jeux et plateformes streaming.",
+        "health": "Santé",
+        "health_desc": "Médicaments, assurance ou médecins.",
+        "education": "Éducation",
+        "education_desc": "Livres, cours ou formation.",
+        "clothing": "Vêtements",
+        "clothing_desc": "Vêtements et accessoires.",
+        "travel": "Voyages",
+        "travel_desc": "Déplacements et vacances.",
+        "subscriptions": "Abonnements",
+        "subscriptions_desc": "Netflix, Spotify, etc.",
+        "personal_care": "Soins personnels",
+        "personal_care_desc": "Beauté, coiffure ou salle de sport.",
+        "gifts": "Cadeaux & Dons",
+        "gifts_desc": "Charité ou cadeaux.",
+        "taxes": "Impôts",
+        "taxes_desc": "Impôts sur le revenu ou propriété.",
+        "other": "Autres dépenses",
+        "other_desc": "Dépenses diverses."
+      },
+
+      "income": {
+        "salary": "Salaire",
+        "salary_desc": "Salaire mensuel ou paie.",
+        "bonus": "Prime",
+        "bonus_desc": "Prime de performance ou travail.",
+        "freelance": "Freelance",
+        "freelance_desc": "Revenus indépendants ou missions.",
+        "investments": "Investissements",
+        "investments_desc": "Dividendes, actions, etc.",
+        "rental": "Revenus locatifs",
+        "rental_desc": "Paiements de loyer reçus.",
+        "refunds": "Remboursements",
+        "refunds_desc": "Remboursements fiscaux ou produits.",
+        "gift": "Cadeau",
+        "gift_desc": "Argent reçu en cadeau.",
+        "other": "Autres revenus",
+        "other_desc": "Toute autre source de revenu."
+      },
+
+      "transfer": {
+        "bank": "Virement bancaire",
+        "bank_desc": "Entre comptes bancaires.",
+        "savings": "Épargne",
+        "savings_desc": "Argent transféré vers l’épargne.",
+        "credit_card": "Paiement de carte bancaire",
+        "credit_card_desc": "Remboursement de carte bancaire.",
+        "loan": "Remboursement de prêt",
+        "loan_desc": "Remboursement d’un prêt.",
+        "investment": "Transfert vers investissement",
+        "investment_desc": "Argent transféré vers des investissements."
+      }
     }
   }
 }
