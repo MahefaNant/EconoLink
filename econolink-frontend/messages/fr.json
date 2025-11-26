@@ -127,11 +127,13 @@
   "Accounts": {
     "title": "Comptes",
     "add-account": "Ajouter un compte",
+    "search": "Rechercher des comptes...",
     "list": {
       "balance": "Solde",
       "active": "Active",
       "inactive": "Inactive",
       "name": "Nom",
+      "name-acc": "Nom du compte",
       "type": "Type",
       "color": "Couleur"
     },
@@ -150,6 +152,7 @@
       "button": {
         "delete": "Supprimer le compte",
         "create": "Créer le compte",
+        "create-loading": "Création...",
         "save": "Enregistrer les modifications",
         "cancel": "Annuler"
       }
@@ -176,6 +179,7 @@
       "fetch-error": "Échec du chargement des comptes",
       "add-success": "Compte ajouté avec succès",
       "name-required": "Le nom est requis",
+      "name-required-acc": "Le nom du compte est requis",
       "edit-success": "Compte mis à jour avec succès",
       "delete-success": "Compte supprimé avec succès",
       "operation-failed": "Échec de l'opération",
@@ -187,6 +191,7 @@
   "Category": {
     "title": "Catégories",
     "add-account": "Ajouter une catégorie",
+    "search": "Catégories de recherche...",
     "filter": {
       "by-type": "Filtrer par type"
     },
@@ -222,8 +227,10 @@
       "button": {
         "delete": "Supprimer la catégorie",
         "create": "Créer la catégorie",
+        "create-simple": "Créer",
         "save": "Enregistrer les modifications",
-        "cancel": "Annuler"
+        "cancel": "Annuler",
+        "create-loading": "Création en cours..."
       }
     },
     "colorLabel": {
@@ -239,7 +246,7 @@
       "fetch-error": "Échec du chargement des catégories",
       "no-categories": "No categories available",
       "add-success": "Catégorie ajoutée avec succès",
-      "name-required": "Le nom est requis",
+      "name-required": "Le nom de la catégorie est requis",
       "edit-success": "Catégorie mise à jour avec succès",
       "delete-success": "Catégorie supprimée avec succès",
       "operation-failed": "Échec de l'opération",
@@ -315,6 +322,12 @@
   "Transaction": {
     "desc": "Gérez vos transactions financières",
     "add-button": "Ajouter une transaction",
+    "edit": "Modifier la transaction",
+    "update": "Mettre à jour les détails de la transaction",
+    "to-account": "Vers le compte *",
+    "info": "Informations sur la transaction",
+    "created": "Créé:",
+    "last-update": "Dernière mise à jour :",
     "type": {
       "income": "revenu",
       "expense": "dépense",
@@ -362,11 +375,34 @@
       "button": {
         "delete": "Supprimer la transaction",
         "delete-simple": "Supprimer",
-        "create": "Créer",
+        "create": "Créer une transaction",
+        "create-simple": "Créer",
+        "create-loading": "Création en cours...",
         "save": "Enregistrer les modifications",
         "cancel": "Annuler",
-        "edit": "Modifier"
+        "edit": "Modifier",
+        "update": "Mise à jour de la transaction",
+        "updating": "Mise à jour..."
       }
+    },
+    "form": {
+      "create-title": "Créer une transaction",
+      "add-financial": "Ajouter une nouvelle transaction financière",
+      "amount": "Montant *",
+      "select-account-placeholder": "Sélectionnez un compte...",
+      "select-destination-placeholder": "Sélectionnez le compte de destination...",
+      "select-category-placeholder": "Sélectionnez une catégorie...",
+      "location-placeholder": "Lieu de la transaction",
+      "notes-placeholder": "Notes supplémentaires",
+      "category-desc": "Catégorie sélectionnée automatiquement en fonction du type de transaction",
+      "location": "Lieu"
+    },
+    "messages": {
+      "select-account": "Veuillez sélectionner un compte",
+      "select-destination": "Veuillez sélectionner un compte de destination pour le virement",
+      "same-transfer-error": "Impossible d'effectuer le virement vers le même compte",
+      "not-found": "Transaction introuvable",
+      "back": "Retour aux transactions"
     }
   }
 }

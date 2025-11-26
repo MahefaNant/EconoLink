@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 // app/transactions/edit/[id]/page.tsx
 "use client";
@@ -25,6 +24,7 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useTranslations } from "next-intl";
 
 export default function EditTransactionPage() {
+  const tTr = useTranslations("Transaction");
   const tAcc = useTranslations("Accounts");
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const isReady = useDocumentReadyState();
@@ -110,12 +110,12 @@ export default function EditTransactionPage() {
     e.preventDefault();
 
     if (!formData.account_id) {
-      toast.error("Please select an account");
+      toast.error(tTr("messages.select-account"));
       return;
     }
 
     if (formData.type === "TRANSFER" && !formData.to_account_id) {
-      toast.error("Please select a destination account for transfer");
+      toast.error(tTr("messages.select-destination"));
       return;
     }
 
@@ -123,7 +123,7 @@ export default function EditTransactionPage() {
       formData.type === "TRANSFER" &&
       formData.account_id === formData.to_account_id
     ) {
-      toast.error("Cannot transfer to the same account");
+      toast.error(tTr("messages.same-transfer-error"));
       return;
     }
 
@@ -152,8 +152,8 @@ export default function EditTransactionPage() {
 
       await updateTransaction(transaction.id, data);
       router.push("/transactions");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to update transaction");
+    } catch {
+      // toast.error(error.message || "Failed to update transaction");
     }
   };
 
@@ -216,10 +216,10 @@ export default function EditTransactionPage() {
       <div className="container mx-auto p-4 max-w-2xl">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-muted-foreground">
-            Transaction not found
+            {tTr("messages.not-found")}
           </h1>
           <Button onClick={() => router.push("/transactions")} className="mt-4">
-            Back to Transactions
+            {tTr("messages.back")}
           </Button>
         </div>
       </div>
@@ -238,17 +238,15 @@ export default function EditTransactionPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold tracking-tight">
-            Edit Transaction
-          </h1>
-          <p className="text-muted-foreground">Update transaction details</p>
+          <h1 className="text-3xl font-bold tracking-tight">{tTr("edit")}</h1>
+          <p className="text-muted-foreground">{tTr("update")}</p>
         </div>
         <Button
           variant="destructive"
           onClick={() => setOpenDelete(true)}
           disabled={loading}
         >
-          Delete
+          {tTr("dialog.button.delete")}
         </Button>
       </div>
 
@@ -273,7 +271,7 @@ export default function EditTransactionPage() {
             {/* Amount and Type */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="amount">Amount *</Label>
+                <Label htmlFor="amount">{tTr("form.amount")}</Label>
                 <Input
                   id="amount"
                   type="number"
@@ -293,9 +291,11 @@ export default function EditTransactionPage() {
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   required
                 >
-                  <option value="EXPENSE">Expense</option>
-                  <option value="INCOME">Income</option>
-                  <option value="TRANSFER">Transfer</option>
+                  <option value="EXPENSE">{tTr("Filter.type.expense")}</option>
+                  <option value="INCOME">{tTr("Filter.type.income")}</option>
+                  <option value="TRANSFER">
+                    {tTr("Filter.type.transfer")}
+                  </option>
                 </select>
               </div>
             </div>
@@ -305,7 +305,7 @@ export default function EditTransactionPage() {
               <Label htmlFor="description">Description *</Label>
               <Input
                 id="description"
-                placeholder="Enter description"
+                placeholder="description..."
                 value={formData.description}
                 onChange={(e) =>
                   handleInputChange("description", e.target.value)
@@ -335,7 +335,7 @@ export default function EditTransactionPage() {
                 <AccountSelectWithCreate
                   value={formData.account_id}
                   onValueChange={handleAccountChange}
-                  placeholder="Select an account..."
+                  placeholder={tTr("form.select-account-placeholder")}
                 />
               </div>
             </div>
@@ -343,11 +343,11 @@ export default function EditTransactionPage() {
             {/* To Account (seulement pour TRANSFER) */}
             {formData.type === "TRANSFER" && (
               <div className="space-y-2">
-                <Label htmlFor="to_account_id">To Account *</Label>
+                <Label htmlFor="to_account_id">{tTr("to-account")}</Label>
                 <AccountSelectWithCreate
                   value={formData.to_account_id}
                   onValueChange={handleToAccountChange}
-                  placeholder="Select destination account..."
+                  placeholder={tTr("form.select-destination-placeholder")}
                 />
               </div>
             )}
@@ -360,11 +360,11 @@ export default function EditTransactionPage() {
                   value={formData.category_id}
                   onValueChange={handleCategoryChange}
                   type={formData.type}
-                  placeholder="Select a category..."
+                  placeholder={tTr("form.select-category-placeholder")}
                   autoSelectFirst={false}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Category automatically selected based on transaction type
+                  {tTr("form.category-desc")}
                 </p>
               </div>
             )}
@@ -382,10 +382,10 @@ export default function EditTransactionPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="location">Location</Label>
+              <Label htmlFor="location">{tTr("form.location")}</Label>
               <Input
                 id="location"
-                placeholder="Transaction location"
+                placeholder={tTr("form.location-placeholder")}
                 value={formData.location}
                 onChange={(e) => handleInputChange("location", e.target.value)}
               />
@@ -393,14 +393,16 @@ export default function EditTransactionPage() {
 
             {/* Transaction informations */}
             <div className="p-4 bg-muted rounded-lg space-y-2">
-              <h4 className="font-medium text-sm">Transaction Information</h4>
+              <h4 className="font-medium text-sm">{tTr("info")}</h4>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div>
                   <span className="text-muted-foreground">ID:</span>
                   <p className="font-mono text-xs">{transaction.id}</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Created:</span>
+                  <span className="text-muted-foreground">
+                    {tTr("created")}
+                  </span>
                   <p>
                     {transaction.created_at
                       ? new Date(transaction.created_at).toLocaleDateString()
@@ -408,7 +410,9 @@ export default function EditTransactionPage() {
                   </p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Last Updated:</span>
+                  <span className="text-muted-foreground">
+                    {tTr("last-update")}
+                  </span>
                   <p>
                     {transaction.updated_at
                       ? new Date(transaction.updated_at).toLocaleDateString()
@@ -430,16 +434,16 @@ export default function EditTransactionPage() {
                 onClick={() => router.push("/transactions")}
                 disabled={loading}
               >
-                Cancel
+                {tTr("dialog.button.cancel")}
               </Button>
               <Button type="submit" disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Updating...
+                    {tTr("dialog.button.updating")}
                   </>
                 ) : (
-                  "Update Transaction"
+                  tTr("dialog.button.update")
                 )}
               </Button>
             </div>

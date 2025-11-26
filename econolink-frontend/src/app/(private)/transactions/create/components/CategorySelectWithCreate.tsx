@@ -23,8 +23,10 @@ import { toast } from "sonner";
 import {
   CategoryIcon,
   categoryIcons,
+  getTranslatedCategorie,
 } from "@/app/(private)/category/lib/category";
 import useCategory from "@/app/(private)/category/hooks/useCategory";
+import { useTranslations } from "next-intl";
 
 interface CategorySelectWithCreateProps {
   value: string;
@@ -42,6 +44,8 @@ export function CategorySelectWithCreate({
   placeholder = "Select a category...",
   disabled = false,
 }: CategorySelectWithCreateProps) {
+  const tCat = useTranslations("Category");
+  const t = useTranslations();
   const [open, setOpen] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
@@ -79,7 +83,7 @@ export function CategorySelectWithCreate({
 
   const handleCreateCategory = async () => {
     if (!newCategoryName.trim()) {
-      toast.error("Category name is required");
+      toast.error(tCat("messages.name-required"));
       return;
     }
 
@@ -149,9 +153,11 @@ export function CategorySelectWithCreate({
               <span className="flex-shrink-0 text-lg">
                 {selectedCategory.icon}
               </span>
-              <span className="truncate flex-1">{selectedCategory.name}</span>
+              <span className="truncate flex-1">
+                {getTranslatedCategorie(t, selectedCategory.name, null).name}
+              </span>
               <span className="text-muted-foreground text-sm hidden sm:inline flex-shrink-0">
-                ({selectedCategory.type.toLowerCase()})
+                ({tCat(`type.${selectedCategory.type.toLowerCase()}`)})
               </span>
             </div>
           ) : (
@@ -163,7 +169,7 @@ export function CategorySelectWithCreate({
       <PopoverContent className="w-full p-0" align="start">
         <Command>
           <CommandInput
-            placeholder="Search categories..."
+            placeholder={tCat("search")}
             value={searchTerm}
             onValueChange={setSearchTerm}
           />
@@ -174,7 +180,9 @@ export function CategorySelectWithCreate({
                 onKeyDown={handleKeyPress}
               >
                 <div className="flex items-center justify-between">
-                  <h4 className="font-medium text-sm">Create New Category</h4>
+                  <h4 className="font-medium text-sm">
+                    {tCat("dialog.add-title")}
+                  </h4>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -190,7 +198,7 @@ export function CategorySelectWithCreate({
                 </div>
                 <div className="space-y-2">
                   <Input
-                    placeholder="Category name"
+                    placeholder={tCat("dialog.name-placeholder")}
                     value={newCategoryName}
                     onChange={(e) => setNewCategoryName(e.target.value)}
                     autoFocus
@@ -209,9 +217,9 @@ export function CategorySelectWithCreate({
                     className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm"
                     disabled={isCreating}
                   >
-                    <option value="EXPENSE">Expense</option>
-                    <option value="INCOME">Income</option>
-                    <option value="TRANSFER">Transfer</option>
+                    <option value="EXPENSE">{tCat("type.expense")}</option>
+                    <option value="INCOME">{tCat("type.income")}</option>
+                    <option value="TRANSFER">{tCat("type.transfer")}</option>
                   </select>
 
                   {/* icon selector */}
@@ -248,14 +256,16 @@ export function CategorySelectWithCreate({
                       className="flex-1"
                       disabled={isCreating}
                     >
-                      Cancel
+                      {tCat("dialog.button.cancel")}
                     </Button>
                     <Button
                       onClick={handleCreateCategory}
                       disabled={!newCategoryName.trim() || isCreating}
                       className="flex-1"
                     >
-                      {isCreating ? "Creating..." : "Create"}
+                      {isCreating
+                        ? tCat("dialog.button.create-loading")
+                        : tCat("dialog.button.create-simple")}
                     </Button>
                   </div>
                 </div>
@@ -275,34 +285,44 @@ export function CategorySelectWithCreate({
                       }}
                     >
                       <Plus className="mr-2 h-4 w-4" />
-                      Create {searchTerm || "new category"}
+                      {tCat("dialog.button.create-simple")}{" "}
+                      {searchTerm || "new category"}
                     </Button>
                   </div>
                 </CommandEmpty>
                 <CommandGroup>
-                  {filteredCategories.map((category) => (
-                    <CommandItem
-                      key={category.id}
-                      value={category.name}
-                      onSelect={() => handleSelectCategory(category.id)}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          value === category.id ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                      <div className="flex items-center gap-2 flex-1">
-                        <span className="flex-shrink-0 text-lg">
-                          {category.icon}
-                        </span>
-                        <span className="truncate flex-1">{category.name}</span>
-                        <span className="text-muted-foreground text-sm flex-shrink-0">
-                          ({category.type.toLowerCase()})
-                        </span>
-                      </div>
-                    </CommandItem>
-                  ))}
+                  {filteredCategories.map((category) => {
+                    const categoryTr = getTranslatedCategorie(
+                      t,
+                      category.name,
+                      null
+                    );
+                    return (
+                      <CommandItem
+                        key={category.id}
+                        value={category.name}
+                        onSelect={() => handleSelectCategory(category.id)}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            value === category.id ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        <div className="flex items-center gap-2 flex-1">
+                          <span className="flex-shrink-0 text-lg">
+                            {category.icon}
+                          </span>
+                          <span className="truncate flex-1">
+                            {categoryTr.name}
+                          </span>
+                          <span className="text-muted-foreground text-sm flex-shrink-0">
+                            ({tCat(`type.${category.type.toLowerCase()}`)})
+                          </span>
+                        </div>
+                      </CommandItem>
+                    );
+                  })}
                 </CommandGroup>
               </>
             )}
