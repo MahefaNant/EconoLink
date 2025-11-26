@@ -21,7 +21,7 @@ import { IPagination } from "@/interface/IPagination";
 import { useTranslations } from "next-intl";
 
 export function useTransactionPage() {
-  const tTr = useTranslations("Translation");
+  const tTr = useTranslations("Transaction");
   const userStore = useAuthStore((s) => s.user);
   const userId = userStore?.id;
 
