@@ -315,6 +315,11 @@
   "Transaction": {
     "desc": "Manage your financial transactions",
     "add-button": "Add Transaction",
+    "type": {
+      "income": "income",
+      "expense": "expense",
+      "transfer": "transfer"
+    },
     "List": {
       "showing": "Showing",
       "no-found": "No transactions found",
@@ -330,6 +335,38 @@
       "net": "Net Cash Flow",
       "transfert-desc": "Internal Transfers",
       "top-categories": "Top Categories"
+    },
+    "Filter": {
+      "search-placeholder": "Search transactions...",
+      "search": "Search",
+      "type": {
+        "all": "All Types",
+        "income": "Income",
+        "expense": "Expense",
+        "transfer": "Transfer"
+      },
+      "sort": {
+        "newest": "Date: Newest First",
+        "oldest": "Date: Oldest First",
+        "hight-low": "Amount: High to Low",
+        "low-hight": "Amount: Low to High"
+      },
+      "range": "Date Range",
+      "apply": "Apply",
+      "clear": "Clear"
+    },
+    "dialog": {
+      "delete-title": "Delete Transaction?",
+      "delete-desc": "Are you sure you want to delete this transaction? This action cannot be undone.",
+      "delete-desc-high": "Are you absolutely sure you want to delete this category? All transactions associated with it will be deleted. This action is irreversible.",
+      "button": {
+        "delete": "Delete Transaction",
+        "delete-simple": "Delete",
+        "create": "Create",
+        "save": "Save Changes",
+        "cancel": "Cancel",
+        "edit": "Edit"
+      }
     }
   }
 }

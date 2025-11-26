@@ -11,6 +11,7 @@ import { JSX, memo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { fmtCurrency } from "@/lib/format";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { useTranslations } from "next-intl";
 
 interface TransactionCardProps {
   transaction: ITransaction;
@@ -33,6 +34,8 @@ export const TransactionCard = memo(function TransactionCard({
   const [amountPopoverOpen, setAmountPopoverOpen] = useState(false);
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
+
+  const tTr = useTranslations("Transaction");
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -69,7 +72,7 @@ export const TransactionCard = memo(function TransactionCard({
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
             <h3 className="font-medium truncate">{transaction.description}</h3>
             <Badge variant={getTypeVariant(transaction.type)} className="w-fit">
-              {transaction.type.toLowerCase()}
+              {tTr(`type.${transaction.type.toLowerCase()}`)}
             </Badge>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-sm text-muted-foreground mt-1">
@@ -164,14 +167,14 @@ export const TransactionCard = memo(function TransactionCard({
             size="sm"
             onClick={() => router.push(`/transactions/edit/${transaction.id}`)}
           >
-            Edit
+            {tTr("dialog.button.edit")}
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => onDelete(transaction)}
           >
-            Delete
+            {tTr("dialog.button.delete-simple")}
           </Button>
         </div>
       </div>

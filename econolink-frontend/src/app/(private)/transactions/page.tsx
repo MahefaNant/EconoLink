@@ -13,13 +13,13 @@ import {
 } from "lucide-react";
 
 import { TransactionType } from "@/types/ITransaction";
-import DeleteDialog from "./components/DeleteDialog";
 import { TransactionCard } from "./components/TransactionCard";
 import Link from "next/link";
 import { useTransactionPage } from "./hooks/useTransactionPage";
 import { Statistics } from "./components/Statistics";
 import { FilterTransaction } from "./components/FilterTransaction";
 import { useTranslations } from "next-intl";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 export default function TransactionsPage() {
   const {
@@ -173,10 +173,19 @@ export default function TransactionsPage() {
       </Card>
 
       {/* Dialogs */}
-      <DeleteDialog
+      <ConfirmDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        transaction={selectedTransaction}
+        collapsible={true}
+        actionColor="red"
+        text={{
+          title: `${tTr("dialog.delete-title")} : ${
+            selectedTransaction?.description
+          }`,
+          description: tTr("dialog.delete-desc"),
+          cancel: tTr("dialog.button.cancel"),
+          confirm: tTr("dialog.button.delete"),
+        }}
         onConfirm={handleDeleteConfirm}
       />
     </div>
