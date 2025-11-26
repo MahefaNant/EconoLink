@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useTransactionPage } from "./hooks/useTransactionPage";
 import { Statistics } from "./components/Statistics";
 import { FilterTransaction } from "./components/FilterTransaction";
+import { useTranslations } from "next-intl";
 
 export default function TransactionsPage() {
   const {
@@ -55,6 +56,7 @@ export default function TransactionsPage() {
   };
 
   const getTypeIcon = (type: TransactionType) => typeIcons[type];
+  const tTr = useTranslations("Transaction");
 
   const typeVariants: Record<
     TransactionType,
@@ -81,14 +83,12 @@ export default function TransactionsPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Transactions</h1>
-          <p className="text-muted-foreground">
-            Manage your financial transactions
-          </p>
+          <p className="text-muted-foreground">{tTr("desc")}</p>
         </div>
         <Link href="/transactions/create">
           <Button className="sm:self-stretch">
             <Plus className="h-4 w-4 mr-2" />
-            Add Transaction
+            {tTr("add-button")}
           </Button>
         </Link>
       </div>
@@ -118,14 +118,14 @@ export default function TransactionsPage() {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Transactions</CardTitle>
           <div className="text-sm text-muted-foreground">
-            Showing {transactions.length} of {pagination.total}
+            {tTr("List.showing")} {transactions.length} / {pagination.total}
           </div>
         </CardHeader>
         <CardContent className="p-0">
           <div className="space-y-2 p-4">
             {transactions.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
-                No transactions found
+                {tTr("List.no-found")}
               </div>
             ) : (
               transactions.map((transaction) => (
@@ -145,7 +145,7 @@ export default function TransactionsPage() {
           {pagination.pages > 1 && (
             <div className="flex items-center justify-between p-4 border-t">
               <div className="text-sm text-muted-foreground">
-                Page {pagination.page} of {pagination.pages}
+                Page {pagination.page} / {pagination.pages}
               </div>
               <div className="flex gap-2">
                 <Button
@@ -155,7 +155,7 @@ export default function TransactionsPage() {
                   disabled={!pagination.hasPrev}
                 >
                   <ChevronLeft className="h-4 w-4 mr-1" />
-                  Previous
+                  {tTr("List.previous-page")}
                 </Button>
                 <Button
                   variant="outline"
@@ -163,7 +163,7 @@ export default function TransactionsPage() {
                   onClick={() => handlePageChange(pagination.page + 1)}
                   disabled={!pagination.hasNext}
                 >
-                  Next
+                  {tTr("List.next-page")}
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </div>

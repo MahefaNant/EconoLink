@@ -311,5 +311,25 @@
         "investment_desc": "Moving money to investments."
       }
     }
+  },
+  "Transaction": {
+    "desc": "Manage your financial transactions",
+    "add-button": "Add Transaction",
+    "List": {
+      "showing": "Showing",
+      "no-found": "No transactions found",
+      "next-page": "Next",
+      "previous-page": "Previous"
+    },
+    "Statistics": {
+      "offline-desc": "Basic statistics - connect for advanced analytics",
+      "total-income": "Total Income",
+      "total-expense": "Total Income",
+      "total-transfer": "Total Transfers",
+      "amount-transfer": "Amount Transferred",
+      "net": "Net Cash Flow",
+      "transfert-desc": "Internal Transfers",
+      "top-categories": "Top Categories"
+    }
   }
 }

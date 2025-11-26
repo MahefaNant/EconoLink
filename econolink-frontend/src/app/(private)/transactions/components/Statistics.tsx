@@ -11,6 +11,8 @@ import { fmtCurrency, fmtNumberCompact } from "@/lib/format";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { TrendingUp, TrendingDown, ArrowLeftRight, Eye } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { getTranslatedCategorie } from "../../category/lib/category";
 
 interface StatisticsProps {
   stats: any;
@@ -18,6 +20,9 @@ interface StatisticsProps {
 }
 
 export function Statistics({ stats, isOnline = true }: StatisticsProps) {
+  const t = useTranslations();
+  const tTr = useTranslations("Transaction");
+
   if (!stats) return null;
 
   const financialStats = stats.financial || stats;
@@ -30,9 +35,7 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
           <div className="flex items-center gap-2 text-amber-800">
             <span>⚡</span>
-            <span className="text-sm">
-              Basic statistics - connect for advanced analytics
-            </span>
+            <span className="text-sm">{tTr("Statistics.offline-desc")}</span>
           </div>
         </div>
       )}
@@ -40,17 +43,17 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
       {/* Financial statistics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
-          title="Total Income"
+          title={tTr("Statistics.total-income")}
           value={financialStats.total_income}
           icon={<TrendingUp className="h-4 w-4 text-green-500" />}
         />
         <StatCard
-          title="Total Expense"
+          title={tTr("Statistics.total-expense")}
           value={financialStats.total_expense}
           icon={<TrendingDown className="h-4 w-4 text-red-500" />}
         />
         <StatCard
-          title="Net Cash Flow"
+          title={tTr("Statistics.net")}
           value={financialStats.net || financialStats.net_cash_flow}
           variant={financialStats.net >= 0 ? "default" : "destructive"}
         />
@@ -67,7 +70,7 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
               <ArrowLeftRight className="h-4 w-4 text-blue-500" />
-              Internal Transfers
+              {tTr("Statistics.transfert-desc")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -76,14 +79,14 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
                 <ValueWithPopover
                   value={transferStats.total_transfers}
                   format="number"
-                  title="Total Transfers"
+                  title={tTr("Statistics.total-transfer")}
                 />
               </div>
               <div>
                 <ValueWithPopover
                   value={transferStats.total_transferred || 0}
                   format="currency"
-                  title="Amount Transferred"
+                  title={tTr("Statistics.amount-transfer")}
                 />
               </div>
             </div>
@@ -95,26 +98,35 @@ export function Statistics({ stats, isOnline = true }: StatisticsProps) {
       {isOnline && stats.topCategories && stats.topCategories.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Top Categories</CardTitle>
+            <CardTitle className="text-sm">
+              {tTr("Statistics.top-categories")}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               {stats.topCategories
                 .slice(0, 5)
-                .map((category: any, index: number) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center group"
-                  >
-                    <span className="text-sm">{category.category_name}</span>
-                    <ValueWithPopover
-                      value={category.total_amount}
-                      format="currency"
-                      compact={true}
-                      className="text-sm font-medium"
-                    />
-                  </div>
-                ))}
+                .map((category: any, index: number) => {
+                  const categorieTr = getTranslatedCategorie(
+                    t,
+                    category.category_name,
+                    null
+                  );
+                  return (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center group"
+                    >
+                      <span className="text-sm">{categorieTr.name}</span>
+                      <ValueWithPopover
+                        value={category.total_amount}
+                        format="currency"
+                        compact={true}
+                        className="text-sm font-medium"
+                      />
+                    </div>
+                  );
+                })}
             </div>
           </CardContent>
         </Card>

@@ -18,7 +18,7 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { Edit, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import useCategory from "./hooks/useCategory";
-import { categoryDataKeyMap, categoryIcons } from "./lib/category";
+import { categoryIcons, getTranslatedCategorie } from "./lib/category";
 
 export default function CategoriesPage() {
   const tCat = useTranslations("Category");
@@ -87,11 +87,11 @@ export default function CategoriesPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
         {categories.map((category) => {
-          const mapping = categoryDataKeyMap[category.name];
-          const labelFinal = mapping ? t(mapping.label) : category.name;
-          const descriptionFinal = mapping
-            ? t(mapping.description)
-            : category.description;
+          const categoryTr = getTranslatedCategorie(
+            t,
+            category.name,
+            category.description
+          );
           return (
             <div
               key={category.id}
@@ -107,7 +107,7 @@ export default function CategoriesPage() {
                   </div>
 
                   <div>
-                    <h2 className="font-semibold text-lg">{labelFinal}</h2>
+                    <h2 className="font-semibold text-lg">{categoryTr.name}</h2>
                     <p className="text-sm opacity-70">
                       {
                         typeOptions.find((type) => type.value === category.type)
@@ -140,7 +140,7 @@ export default function CategoriesPage() {
               {category.description && (
                 <div className="mt-3">
                   <p className="text-sm text-muted-foreground">
-                    {descriptionFinal}
+                    {categoryTr.desc}
                   </p>
                 </div>
               )}

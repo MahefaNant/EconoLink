@@ -311,5 +311,25 @@
         "investment_desc": "Argent transféré vers des investissements."
       }
     }
+  },
+  "Transaction": {
+    "desc": "Gérez vos transactions financières",
+    "add-button": "Ajouter une transaction",
+    "List": {
+      "showing": "Affichage",
+      "no-found": "Aucune transaction trouvée",
+      "next-page": "Suivant",
+      "previous-page": "Précédent"
+    },
+    "Statistics": {
+      "offline-desc": "Statistiques de base - connectez-vous pour des analyses avancées",
+      "total-income": "Revenu total",
+      "total-expense": "Revenu total",
+      "total-transfer": "Total des transferts",
+      "amount-transfer": "Montant transféré",
+      "net": "Flux de trésorerie net",
+      "transfert-desc": "Transferts internes",
+      "top-categories": "Meilleures catégories"
+    }
   }
 }

@@ -1,3 +1,5 @@
+import { Formats } from "next-intl";
+
 export const categoryIcons = [
   "🍔", // Food
   "🚗", // Transport
@@ -20,6 +22,25 @@ export const categoryIcons = [
 ] as const;
 
 export type CategoryIcon = (typeof categoryIcons)[number];
+
+export function getTranslatedCategorie(
+  t: (
+    key: string,
+    values?: Record<string, string | number | Date> | undefined,
+    formats?: Formats | undefined
+  ) => string,
+  name: string,
+  desc: string | null
+): Record<"name" | "desc", string | null> {
+  const mapping = categoryDataKeyMap[name];
+  const labelFinal = mapping ? t(mapping.label) : name;
+  const descriptionFinal =
+    desc !== null ? (mapping ? t(mapping.description) : desc) : null;
+  return {
+    name: labelFinal,
+    desc: descriptionFinal,
+  };
+}
 
 export const categoryDataKeyMap: Record<
   string,
