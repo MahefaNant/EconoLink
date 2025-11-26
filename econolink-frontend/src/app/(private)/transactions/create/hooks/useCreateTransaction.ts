@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // app/transactions/create/hooks/useCreateTransaction.ts
 import { useState, useCallback } from "react";
@@ -8,8 +9,10 @@ import { dexieDb } from "@/lib/dexieDb";
 import { checkApiConnection } from "@/lib/fetcher";
 import { processSyncQueue } from "@/lib/sync";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export function useCreateTransaction() {
+  const tTr = useTranslations("Transaction");
   const userStore = useAuthStore((s) => s.user);
   const userId = userStore?.id;
 
@@ -122,16 +125,16 @@ export function useCreateTransaction() {
             id: tempId,
           });
 
-          toast.success("Transaction created offline and queued for sync");
+          toast.success(tTr("messages.create-offline"));
           return transactionData;
         } else {
           // Online
           const result = await transactionApi.create(dto);
-          toast.success("Transaction created successfully");
+          toast.success(tTr("messages.create-success"));
           return result;
         }
       } catch (error: any) {
-        toast.error(error.message || "Failed to create transaction");
+        toast.error(error.message || tTr("messages.create-failed"));
         throw error;
       } finally {
         setLoading(false);

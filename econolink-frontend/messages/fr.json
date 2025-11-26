@@ -402,7 +402,18 @@
       "select-destination": "Veuillez sélectionner un compte de destination pour le virement",
       "same-transfer-error": "Impossible d'effectuer le virement vers le même compte",
       "not-found": "Transaction introuvable",
-      "back": "Retour aux transactions"
+      "not-found-local": "Transaction introuvable dans la base de données locale",
+      "loaded-cache": "Transaction chargée depuis le cache",
+      "back": "Retour aux transactions",
+      "delete-failed": "Échec de la suppression de la transaction",
+      "delete-offline": "Transaction supprimée hors ligne et mise en file d'attente pour la synchronisation",
+      "delete-success": "Transaction supprimée avec succès",
+      "create-failed": "Échec de la création de la transaction",
+      "create-offline": "Transaction créée hors ligne et mise en file d'attente pour la synchronisation",
+      "create-success": "Transaction créée avec succès",
+      "update-failed": "Échec de la mise à jour de la transaction",
+      "update-offline": "Transaction mise à jour hors ligne et en file d'attente pour la synchronisation",
+      "update-success": "Transaction mise à jour avec succès"
     }
   }
 }

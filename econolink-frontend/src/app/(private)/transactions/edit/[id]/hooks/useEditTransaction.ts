@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // hooks/useEditTransaction.ts
@@ -8,8 +9,10 @@ import { transactionApi } from "@/app/(private)/transactions/lib/transaction";
 import { dexieDb } from "@/lib/dexieDb";
 import { checkApiConnection } from "@/lib/fetcher";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export function useEditTransaction(transactionId: string) {
+  const tTr = useTranslations("Transaction");
   const userStore = useAuthStore((s) => s.user);
   const userId = userStore?.id;
 
@@ -35,7 +38,7 @@ export function useEditTransaction(transactionId: string) {
         if (localTransaction) {
           setTransaction(localTransaction);
         } else {
-          toast.error("Transaction not found in local storage");
+          toast.error(tTr("messages.not-found-local"));
         }
       } else {
         // online
@@ -43,7 +46,7 @@ export function useEditTransaction(transactionId: string) {
         if (apiTransaction) {
           setTransaction(apiTransaction);
         } else {
-          toast.error("Transaction not found");
+          toast.error(tTr("messages.not-found"));
         }
       }
     } catch (error: any) {
@@ -54,12 +57,12 @@ export function useEditTransaction(transactionId: string) {
         );
         if (fallbackTransaction) {
           setTransaction(fallbackTransaction);
-          toast.info("Transaction loaded from cache");
+          toast.info(tTr("messages.loaded-cache"));
         } else {
-          toast.error(error.message || "Failed to load transaction");
+          toast.error(error.message || tTr("messages.not-found"));
         }
       } catch (fallbackError) {
-        toast.error(error.message || "Failed to load transaction");
+        toast.error(error.message || tTr("messages.not-found"));
       }
     } finally {
       setFetching(false);
@@ -78,7 +81,7 @@ export function useEditTransaction(transactionId: string) {
         // offline
         const existingTransaction = await dexieDb.transactions.get(id);
         if (!existingTransaction) {
-          throw new Error("Transaction not found");
+          throw new Error(tTr("messages.not-found"));
         }
 
         await dexieDb.transactions.update(id, {
@@ -97,7 +100,7 @@ export function useEditTransaction(transactionId: string) {
           createdAt: Date.now(),
         });
 
-        toast.success("Transaction updated offline and queued for sync");
+        toast.success(tTr("messages.update-offline"));
       } else {
         // online
         await transactionApi.update(id, dto);
@@ -106,10 +109,10 @@ export function useEditTransaction(transactionId: string) {
         const updatedTransaction = await transactionApi.getById(id);
         setTransaction(updatedTransaction);
 
-        toast.success("Transaction updated successfully");
+        toast.success(tTr("messages.update-success"));
       }
     } catch (error: any) {
-      toast.error(error.message || "Failed to update transaction");
+      toast.error(error.message || tTr("messages.update-failed"));
       throw error;
     } finally {
       setLoading(false);
@@ -135,16 +138,16 @@ export function useEditTransaction(transactionId: string) {
           });
         }
 
-        toast.success("Transaction deleted offline and queued for sync");
+        toast.success(tTr("messages.delete-offline"));
       } else {
         // online
         await transactionApi.delete(transaction.id);
-        toast.success("Transaction deleted successfully");
+        toast.success(tTr("messages.delete-success"));
       }
 
       return true;
     } catch (error: any) {
-      toast.error(error.message || "Failed to delete transaction");
+      toast.error(error.message || tTr("messages.delete-failed"));
       throw error;
     } finally {
       setLoading(false);

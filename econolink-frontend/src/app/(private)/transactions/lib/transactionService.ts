@@ -131,6 +131,7 @@ export const loadTransactionsServ = async (
 //---------------------------------------------------
 
 export const handleDeleteConfirmServ = async (
+  tTr: any,
   loadTransactions: () => Promise<void>,
   loadStats: (period?: string) => Promise<void>,
   selectedTransaction: ITransaction | null,
@@ -184,17 +185,17 @@ export const handleDeleteConfirmServ = async (
         }
       }
 
-      toast.success("Transaction deleted offline and queued for sync");
+      toast.success(tTr("messages.delete-offline"));
     } else {
       // Online MOde
       await transactionApi.delete(selectedTransaction.id);
-      toast.success("Transaction deleted successfully");
+      toast.success(tTr("messages.delete-success"));
     }
 
     await loadTransactions();
     await loadStats();
   } catch {
-    toast.error("Failed to delete transaction");
+    toast.error(tTr("messages.delete-failed"));
   } finally {
     setDeleteDialogOpen(false);
     setSelectedTransaction(null);
@@ -282,6 +283,7 @@ async function manageSyncQueueConflicts(
 //---------------------------------------------------
 // Function to update a transaction (online + offline)
 export const createTransactionServ = async (
+  tTr: any,
   userId: string | undefined,
   dto: CreateTransactionDto,
   loadTransactions: () => Promise<void>
@@ -314,18 +316,18 @@ export const createTransactionServ = async (
         id: tempId,
       });
 
-      toast.success("Transaction created offline and queued for sync");
+      toast.success(tTr("messages.create-offline"));
       await loadTransactions();
       return transactionData;
     } else {
       // online Mode
       const result = await transactionApi.create(dto);
-      toast.success("Transaction created successfully");
+      toast.success(tTr("messages.create-success"));
       await loadTransactions();
       return result;
     }
   } catch (error: any) {
-    toast.error(error.message || "Failed to create transaction");
+    toast.error(error.message || tTr("messages.create-failed"));
     throw error;
   }
 };
@@ -335,6 +337,7 @@ export const createTransactionServ = async (
 //---------------------------------------------------
 
 export const updateTransactionServ = async (
+  tTr: any,
   id: string,
   dto: UpdateTransactionDto,
   loadTransactions: () => Promise<void>
@@ -346,7 +349,7 @@ export const updateTransactionServ = async (
       // Offline mode - same logic as for categories
       const existingTransaction = await dexieDb.transactions.get(id);
       if (!existingTransaction) {
-        throw new Error("Transaction not found");
+        throw new Error(tTr("messages.not-found"));
       }
 
       // Update locally
@@ -367,17 +370,17 @@ export const updateTransactionServ = async (
 
       await manageSyncQueueConflicts(id, url, method, dto);
 
-      toast.success("Transaction updated offline and queued for sync");
+      toast.success(tTr("messages.update-offline"));
       await loadTransactions();
       return;
     } else {
       // Online Mode
       await transactionApi.update(id, dto);
-      toast.success("Transaction updated successfully");
+      toast.success(tTr("messages.update-success"));
       await loadTransactions();
     }
   } catch (error: any) {
-    toast.error(error.message || "Failed to update transaction");
+    toast.error(error.message || tTr("messages.update-failed"));
     throw error;
   }
 };
@@ -387,6 +390,7 @@ export const updateTransactionServ = async (
 //---------------------------------------------------
 
 export const getTransactionByIdServ = async (
+  tTr: any,
   id: string,
   userId: string | undefined
 ): Promise<ITransaction | null> => {
@@ -399,7 +403,7 @@ export const getTransactionByIdServ = async (
       // Offline mode - search in IndexedDB
       const transaction = await dexieDb.transactions.get(id);
       if (!transaction) {
-        throw new Error("Transaction not found in local database");
+        throw new Error(tTr("messages.not-found-local"));
       }
       return transaction;
     } else {

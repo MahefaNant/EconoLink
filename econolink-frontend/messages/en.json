@@ -402,7 +402,18 @@
       "select-destination": "Please select a destination account for transfer",
       "same-transfer-error": "Cannot transfer to the same account",
       "not-found": "Transaction not found",
-      "back": "Back to Transactions"
+      "not-found-local": "Transaction not found in local database",
+      "loaded-cache": "Transaction loaded from cache",
+      "back": "Back to Transactions",
+      "delete-failed": "Failed to delete transaction",
+      "delete-offline": "Transaction deleted offline and queued for sync",
+      "delete-success": "Transaction deleted successfully",
+      "create-failed": "Failed to create transaction",
+      "create-offline": "Transaction created offline and queued for sync",
+      "create-success": "Transaction created successfully",
+      "update-failed": "Failed to update transaction",
+      "update-offline": "Transaction updated offline and queued for sync",
+      "update-success": "Transaction updated successfully"
     }
   }
 }

@@ -18,8 +18,10 @@ import {
   updateTransactionServ,
 } from "../lib/transactionService";
 import { IPagination } from "@/interface/IPagination";
+import { useTranslations } from "next-intl";
 
 export function useTransactionPage() {
+  const tTr = useTranslations("Translation");
   const userStore = useAuthStore((s) => s.user);
   const userId = userStore?.id;
 
@@ -154,6 +156,7 @@ export function useTransactionPage() {
 
   const handleDeleteConfirm = async () =>
     handleDeleteConfirmServ(
+      tTr,
       loadTransactions,
       loadStats,
       selectedTransaction,
@@ -163,15 +166,15 @@ export function useTransactionPage() {
 
   // Function to create a transaction (online + offline)
   const createTransaction = async (dto: CreateTransactionDto) =>
-    createTransactionServ(userId, dto, loadTransactions);
+    createTransactionServ(tTr, userId, dto, loadTransactions);
 
   // Function to update a transaction (online + offline)
   const updateTransaction = async (id: string, dto: UpdateTransactionDto) =>
-    updateTransactionServ(id, dto, loadTransactions);
+    updateTransactionServ(tTr, id, dto, loadTransactions);
 
   // In useTransactionPage.ts - Add this function
   const getTransactionById = async (id: string) =>
-    await getTransactionByIdServ(id, userId);
+    await getTransactionByIdServ(tTr, id, userId);
 
   return {
     transactions,
