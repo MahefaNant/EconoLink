@@ -21,13 +21,15 @@ import {
 import { toast } from "sonner";
 import useAccount from "@/app/(private)/accounts/hooks/useAccount";
 import { getIconByAccountType } from "@/app/(private)/accounts/lib/account.lib";
+import useDocumentReadyState from "@/hooks/useDocumentReadyState";
+import { useTranslations } from "next-intl";
 
 interface AccountSelectWithCreateProps {
   value: string;
   onValueChange: (value: string) => void;
   placeholder?: string;
   disabled?: boolean;
-  excludeAccount?: string; // NOUVEAU: ID du compte à exclure (pour éviter de sélectionner le même compte)
+  excludeAccount?: string;
 }
 
 export function AccountSelectWithCreate({
@@ -35,8 +37,12 @@ export function AccountSelectWithCreate({
   onValueChange,
   placeholder = "Select an account...",
   disabled = false,
-  excludeAccount, // NOUVEAU: Pour les transfers
+  excludeAccount,
 }: AccountSelectWithCreateProps) {
+  const isReady = useDocumentReadyState();
+
+  const tAcc = useTranslations("Accounts");
+
   const [open, setOpen] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
@@ -48,19 +54,19 @@ export function AccountSelectWithCreate({
 
   const selectedAccount = accounts.find((account) => account.id === value);
 
-  // Filtrer les comptes : exclure le compte spécifié (pour éviter les transfers vers le même compte)
+  // Filter accounts: exclude the specified account (to prevent transfers to the same account)
   const filteredAccounts = accounts.filter((account) => {
     const matchesSearch =
       account.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       account.type.toLowerCase().includes(searchTerm.toLowerCase());
 
-    // Exclure le compte spécifié si provided
+    // Exclude the specified account if provided
     const isExcluded = excludeAccount && account.id === excludeAccount;
 
     return matchesSearch && !isExcluded;
   });
 
-  // Comptes disponibles après exclusion
+  // Accounts available after exclusion
   const availableAccounts = excludeAccount
     ? accounts.filter((account) => account.id !== excludeAccount)
     : accounts;
@@ -73,7 +79,7 @@ export function AccountSelectWithCreate({
 
   const handleCreateAccount = async () => {
     if (!newAccountName.trim()) {
-      toast.error("Account name is required");
+      toast.error(tAcc("messages.name-required-acc"));
       return;
     }
 
@@ -100,7 +106,6 @@ export function AccountSelectWithCreate({
         setOpen(false);
       }, 500);
     } catch {
-      // Gestion d'erreur silencieuse
     } finally {
       setIsCreating(false);
     }
@@ -128,12 +133,14 @@ export function AccountSelectWithCreate({
     }
   }, [open]);
 
-  // Réinitialiser la sélection si le compte sélectionné est exclu
+  // Reset the selection if the selected account is excluded.
   useEffect(() => {
     if (excludeAccount && value === excludeAccount) {
       onValueChange("");
     }
   }, [excludeAccount, value, onValueChange]);
+
+  if (!isReady) return null;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -162,7 +169,7 @@ export function AccountSelectWithCreate({
       <PopoverContent className="w-full p-0" align="start">
         <Command>
           <CommandInput
-            placeholder="Search accounts..."
+            placeholder={tAcc("search")}
             value={searchTerm}
             onValueChange={setSearchTerm}
           />
@@ -173,7 +180,7 @@ export function AccountSelectWithCreate({
                 onKeyDown={handleKeyPress}
               >
                 <div className="flex items-center justify-between">
-                  <h4 className="font-medium text-sm">Create New Account</h4>
+                  <h4 className="font-medium text-sm">{tAcc("add-account")}</h4>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -189,7 +196,7 @@ export function AccountSelectWithCreate({
                 </div>
                 <div className="space-y-2">
                   <Input
-                    placeholder="Account name"
+                    placeholder={tAcc("list.name-acc")}
                     value={newAccountName}
                     onChange={(e) => setNewAccountName(e.target.value)}
                     autoFocus
@@ -202,11 +209,16 @@ export function AccountSelectWithCreate({
                     className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm"
                     disabled={isCreating}
                   >
-                    <option value="CASH">Cash</option>
-                    <option value="BANK">Bank Account</option>
-                    <option value="CREDIT_CARD">Credit Card</option>
-                    <option value="INVESTMENT">Investment</option>
-                    <option value="SAVINGS">Savings</option>
+                    <option value="CASH">{tAcc("iconLabel.cash")}</option>
+                    <option value="BANK">{tAcc("iconLabel.bank")}</option>
+                    <option value="CREDIT_CARD">
+                      {tAcc("iconLabel.credit-card")}
+                    </option>
+                    <option value="INVESTMENT">
+                      {tAcc("iconLabel.investment")}
+                    </option>
+                    <option value="SAVINGS">{tAcc("iconLabel.savings")}</option>
+                    <option value="OTHER">{tAcc("iconLabel.other")}</option>
                   </select>
                   <div className="flex gap-2">
                     <Button
@@ -219,14 +231,16 @@ export function AccountSelectWithCreate({
                       className="flex-1"
                       disabled={isCreating}
                     >
-                      Cancel
+                      {tAcc("dialog.button.cancel")}
                     </Button>
                     <Button
                       onClick={handleCreateAccount}
                       disabled={!newAccountName.trim() || isCreating}
                       className="flex-1"
                     >
-                      {isCreating ? "Creating..." : "Create"}
+                      {isCreating
+                        ? tAcc("dialog.button.create-loading")
+                        : tAcc("dialog.button.create")}
                     </Button>
                   </div>
                 </div>
@@ -246,7 +260,8 @@ export function AccountSelectWithCreate({
                       }}
                     >
                       <Plus className="mr-2 h-4 w-4" />
-                      Create {searchTerm || "new account"}
+                      {tAcc("dialog.button.create")}{" "}
+                      {searchTerm || "new account"}
                     </Button>
                   </div>
                 </CommandEmpty>

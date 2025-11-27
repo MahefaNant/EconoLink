@@ -127,11 +127,13 @@
   "Accounts": {
     "title": "Comptes",
     "add-account": "Ajouter un compte",
+    "search": "Rechercher des comptes...",
     "list": {
       "balance": "Solde",
       "active": "Active",
       "inactive": "Inactive",
       "name": "Nom",
+      "name-acc": "Nom du compte",
       "type": "Type",
       "color": "Couleur"
     },
@@ -144,11 +146,13 @@
       "color-placeholder": "Choisissez une couleur",
       "delete-title": "Supprimer ce compte ?",
       "delete-desc": "Êtes-vous sûr de vouloir supprimer ce compte ? Cette action est irréversible.",
+      "delete-desc-high": "Êtes-vous absolument sûr de vouloir supprimer ce compte ? Toutes les transactions qui y sont associées seront supprimées. Cette action est irréversible.",
       "icon-preview": "Aperçu du compte",
       "icon-preview-placeholder": "Nom du compte",
       "button": {
         "delete": "Supprimer le compte",
         "create": "Créer le compte",
+        "create-loading": "Création...",
         "save": "Enregistrer les modifications",
         "cancel": "Annuler"
       }
@@ -175,6 +179,7 @@
       "fetch-error": "Échec du chargement des comptes",
       "add-success": "Compte ajouté avec succès",
       "name-required": "Le nom est requis",
+      "name-required-acc": "Le nom du compte est requis",
       "edit-success": "Compte mis à jour avec succès",
       "delete-success": "Compte supprimé avec succès",
       "operation-failed": "Échec de l'opération",
@@ -186,6 +191,7 @@
   "Category": {
     "title": "Catégories",
     "add-account": "Ajouter une catégorie",
+    "search": "Catégories de recherche...",
     "filter": {
       "by-type": "Filtrer par type"
     },
@@ -215,13 +221,16 @@
       "color-placeholder": "Choisissez une couleur",
       "delete-title": "Supprimer cette catégorie ?",
       "delete-desc": "Êtes-vous sûr de vouloir supprimer cette catégorie ? Cette action est irréversible.",
+      "delete-desc-high": "Êtes-vous absolument sûr de vouloir supprimer cette catégorie? Toutes les transactions qui y sont associées seront supprimées. Cette action est irréversible.",
       "icon-preview": "Aperçu de la catégorie",
       "icon-preview-placeholder": "Nom de la catégorie",
       "button": {
         "delete": "Supprimer la catégorie",
         "create": "Créer la catégorie",
+        "create-simple": "Créer",
         "save": "Enregistrer les modifications",
-        "cancel": "Annuler"
+        "cancel": "Annuler",
+        "create-loading": "Création en cours..."
       }
     },
     "colorLabel": {
@@ -235,14 +244,176 @@
     },
     "messages": {
       "fetch-error": "Échec du chargement des catégories",
+      "no-categories": "No categories available",
       "add-success": "Catégorie ajoutée avec succès",
-      "name-required": "Le nom est requis",
+      "name-required": "Le nom de la catégorie est requis",
       "edit-success": "Catégorie mise à jour avec succès",
       "delete-success": "Catégorie supprimée avec succès",
       "operation-failed": "Échec de l'opération",
       "offline-queued": "Vous êtes hors ligne. L'opération a été mise en file d'attente et sera traitée une fois que vous serez de nouveau en ligne.",
       "offline-fetch": "Vous êtes hors ligne. Affichage des catégories stockées localement.",
       "foreign-key-error": "Impossible de supprimer cette catégorie car elle est référencée par d'autres données."
+    },
+    "translation": {
+      "expense": {
+        "food": "Alimentation & Courses",
+        "food_desc": "Repas quotidiens et courses.",
+        "transportation": "Transport",
+        "transportation_desc": "Carburant, taxi ou transport public.",
+        "housing": "Logement",
+        "housing_desc": "Loyer, entretien et factures.",
+        "utilities": "Services publics",
+        "utilities_desc": "Électricité, eau, internet ou gaz.",
+        "entertainment": "Divertissement",
+        "entertainment_desc": "Films, jeux et plateformes streaming.",
+        "health": "Santé",
+        "health_desc": "Médicaments, assurance ou médecins.",
+        "education": "Éducation",
+        "education_desc": "Livres, cours ou formation.",
+        "clothing": "Vêtements",
+        "clothing_desc": "Vêtements et accessoires.",
+        "travel": "Voyages",
+        "travel_desc": "Déplacements et vacances.",
+        "subscriptions": "Abonnements",
+        "subscriptions_desc": "Netflix, Spotify, etc.",
+        "personal_care": "Soins personnels",
+        "personal_care_desc": "Beauté, coiffure ou salle de sport.",
+        "gifts": "Cadeaux & Dons",
+        "gifts_desc": "Charité ou cadeaux.",
+        "taxes": "Impôts",
+        "taxes_desc": "Impôts sur le revenu ou propriété.",
+        "other": "Autres dépenses",
+        "other_desc": "Dépenses diverses."
+      },
+
+      "income": {
+        "salary": "Salaire",
+        "salary_desc": "Salaire mensuel ou paie.",
+        "bonus": "Prime",
+        "bonus_desc": "Prime de performance ou travail.",
+        "freelance": "Freelance",
+        "freelance_desc": "Revenus indépendants ou missions.",
+        "investments": "Investissements",
+        "investments_desc": "Dividendes, actions, etc.",
+        "rental": "Revenus locatifs",
+        "rental_desc": "Paiements de loyer reçus.",
+        "refunds": "Remboursements",
+        "refunds_desc": "Remboursements fiscaux ou produits.",
+        "gift": "Cadeau",
+        "gift_desc": "Argent reçu en cadeau.",
+        "other": "Autres revenus",
+        "other_desc": "Toute autre source de revenu."
+      },
+
+      "transfer": {
+        "bank": "Virement bancaire",
+        "bank_desc": "Entre comptes bancaires.",
+        "savings": "Épargne",
+        "savings_desc": "Argent transféré vers l’épargne.",
+        "credit_card": "Paiement de carte bancaire",
+        "credit_card_desc": "Remboursement de carte bancaire.",
+        "loan": "Remboursement de prêt",
+        "loan_desc": "Remboursement d’un prêt.",
+        "investment": "Transfert vers investissement",
+        "investment_desc": "Argent transféré vers des investissements."
+      }
+    }
+  },
+  "Transaction": {
+    "desc": "Gérez vos transactions financières",
+    "add-button": "Ajouter une transaction",
+    "edit": "Modifier la transaction",
+    "update": "Mettre à jour les détails de la transaction",
+    "to-account": "Vers le compte *",
+    "info": "Informations sur la transaction",
+    "created": "Créé:",
+    "last-update": "Dernière mise à jour :",
+    "type": {
+      "income": "revenu",
+      "expense": "dépense",
+      "transfer": "transfert"
+    },
+    "List": {
+      "showing": "Affichage",
+      "no-found": "Aucune transaction trouvée",
+      "next-page": "Suivant",
+      "previous-page": "Précédent"
+    },
+    "Statistics": {
+      "offline-desc": "Statistiques de base - connectez-vous pour des analyses avancées",
+      "total-income": "Revenu total",
+      "total-expense": "Revenu total",
+      "total-transfer": "Total des transferts",
+      "amount-transfer": "Montant transféré",
+      "net": "Flux de trésorerie net",
+      "transfert-desc": "Transferts internes",
+      "top-categories": "Meilleures catégories"
+    },
+    "Filter": {
+      "search-placeholder": "Rechercher des transactions...",
+      "search": "Rechercher",
+      "type": {
+        "all": "Tous les types",
+        "income": "Revenu",
+        "expense": "Dépense",
+        "transfer": "Transfert"
+      },
+      "sort": {
+        "newest": "Date : du plus récent au plus ancien",
+        "oldest": "Date : du plus ancien au plus récent",
+        "hight-low": "Montant : du plus élevé au plus bas",
+        "low-hight": "Montant : du plus bas au plus élevé"
+      },
+      "range": "Plage de dates",
+      "apply": "Appliquer",
+      "clear": "Effacer"
+    },
+    "dialog": {
+      "delete-title": "Supprimer la transaction ?",
+      "delete-desc": "Êtes-vous sûr de vouloir supprimer cette transaction ? Cette action est irréversible.",
+      "delete-desc-high": "Êtes-vous absolument sûr de vouloir supprimer cette catégorie ? Toutes les transactions qui y sont associées seront supprimées. Cette action est irréversible.",
+      "button": {
+        "delete": "Supprimer la transaction",
+        "delete-simple": "Supprimer",
+        "create": "Créer une transaction",
+        "create-simple": "Créer",
+        "create-loading": "Création en cours...",
+        "save": "Enregistrer les modifications",
+        "cancel": "Annuler",
+        "edit": "Modifier",
+        "update": "Mise à jour de la transaction",
+        "updating": "Mise à jour..."
+      }
+    },
+    "form": {
+      "create-title": "Créer une transaction",
+      "add-financial": "Ajouter une nouvelle transaction financière",
+      "amount": "Montant *",
+      "select-account-placeholder": "Sélectionnez un compte...",
+      "select-destination-placeholder": "Sélectionnez le compte de destination...",
+      "select-category-placeholder": "Sélectionnez une catégorie...",
+      "location-placeholder": "Lieu de la transaction",
+      "notes-placeholder": "Notes supplémentaires",
+      "category-desc": "Catégorie sélectionnée automatiquement en fonction du type de transaction",
+      "location": "Lieu"
+    },
+    "messages": {
+      "select-account": "Veuillez sélectionner un compte",
+      "select-destination": "Veuillez sélectionner un compte de destination pour le virement",
+      "same-transfer-error": "Impossible d'effectuer le virement vers le même compte",
+      "not-found": "Transaction introuvable",
+      "not-found-local": "Transaction introuvable dans la base de données locale",
+      "loaded-cache": "Transaction chargée depuis le cache",
+      "back": "Retour aux transactions",
+      "delete-failed": "Échec de la suppression de la transaction",
+      "delete-offline": "Transaction supprimée hors ligne et mise en file d'attente pour la synchronisation",
+      "delete-success": "Transaction supprimée avec succès",
+      "create-failed": "Échec de la création de la transaction",
+      "create-offline": "Transaction créée hors ligne et mise en file d'attente pour la synchronisation",
+      "create-success": "Transaction créée avec succès",
+      "update-failed": "Échec de la mise à jour de la transaction",
+      "update-offline": "Transaction mise à jour hors ligne et en file d'attente pour la synchronisation",
+      "update-success": "Transaction mise à jour avec succès"
     }
   }
 }

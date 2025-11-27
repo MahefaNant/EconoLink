@@ -2,32 +2,30 @@
 "use client";
 import {
   ITransaction,
-  TransactionStats,
   TransactionQueryParams,
   TransactionType,
+  CreateTransactionDto,
+  UpdateTransactionDto,
 } from "@/types/ITransaction";
 import { useState, useCallback, useEffect } from "react";
-import { toast } from "sonner";
-import { transactionApi } from "../lib/transaction";
-import { dexieDb } from "@/lib/dexieDb";
-import { checkApiConnection } from "@/lib/fetcher";
-import { processSyncQueue } from "@/lib/sync";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useTransactionStats } from "./useTransactionStats";
-
-// Limite pour le stockage offline (3 mois)
-const OFFLINE_DATE_LIMIT = 90 * 24 * 60 * 60 * 1000;
+import {
+  createTransactionServ,
+  getTransactionByIdServ,
+  handleDeleteConfirmServ,
+  loadTransactionsServ,
+  updateTransactionServ,
+} from "../lib/transactionService";
+import { IPagination } from "@/interface/IPagination";
+import { useTranslations } from "next-intl";
 
 export function useTransactionPage() {
+  const tTr = useTranslations("Transaction");
   const userStore = useAuthStore((s) => s.user);
   const userId = userStore?.id;
 
-  const {
-    basicStats,
-    advancedStats,
-    loading: statsLoading,
-    loadStats,
-  } = useTransactionStats();
+  const { basicStats, advancedStats, loadStats } = useTransactionStats();
 
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,7 +38,7 @@ export function useTransactionPage() {
     sortBy: "date",
     sortOrder: "desc",
   });
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState<IPagination>({
     page: 1,
     limit: 10,
     total: 0,
@@ -60,111 +58,22 @@ export function useTransactionPage() {
     endDate: "",
   });
 
-  // Fonction pour limiter les données offline par date
-  const getOfflineDateLimit = () => {
-    const limitDate = new Date(Date.now() - OFFLINE_DATE_LIMIT);
-    return limitDate.toISOString().split("T")[0];
-  };
-
-  const loadTransactions = useCallback(async () => {
-    if (!userId) return;
-
-    try {
-      setLoading(true);
-      await processSyncQueue();
-
-      const isApiConnected = await checkApiConnection();
-
-      if (!isApiConnected) {
-        // Mode offline
-        const offlineLimitDate = getOfflineDateLimit();
-
-        let collection = dexieDb.transactions
-          .where("user_id")
-          .equals(userId)
-          .and((item) => new Date(item.date) >= new Date(offlineLimitDate));
-
-        // Appliquer les filtres
-        if (queryParams.search) {
-          const searchTerm = queryParams.search.toLowerCase();
-          collection = collection.filter(
-            (item) =>
-              (item.description?.toLowerCase().includes(searchTerm) ?? false) ||
-              (item.notes?.toLowerCase().includes(searchTerm) ?? false)
-          );
-        }
-
-        if (queryParams.type && queryParams.type !== "ALL") {
-          collection = collection.filter(
-            (item) => item.type === queryParams.type
-          );
-        }
-
-        if (queryParams.startDate) {
-          collection = collection.filter((item) =>
-            queryParams.startDate
-              ? new Date(item.date) >= new Date(queryParams.startDate)
-              : true
-          );
-        }
-
-        if (queryParams.endDate) {
-          collection = collection.filter((item) =>
-            queryParams.endDate
-              ? new Date(item.date) <= new Date(queryParams.endDate as string)
-              : true
-          );
-        }
-
-        // Trier et paginer
-        const allData = await collection.toArray();
-        const sortedData = allData.sort((a, b) => {
-          const aVal = a[queryParams.sortBy as keyof ITransaction];
-          const bVal = b[queryParams.sortBy as keyof ITransaction];
-
-          if (queryParams.sortOrder === "desc") {
-            return aVal < bVal ? 1 : -1;
-          }
-          return aVal > bVal ? 1 : -1;
-        });
-
-        const startIndex =
-          ((queryParams.page ?? 1) - 1) * (queryParams.limit ?? 10);
-        const paginatedData = sortedData.slice(
-          startIndex,
-          startIndex + (queryParams.limit ?? 10)
-        );
-
-        setTransactions(paginatedData);
-        setPagination({
-          page: queryParams.page ?? 1,
-          limit: queryParams.limit ?? 10,
-          total: allData.length,
-          pages: Math.ceil(allData.length / (queryParams.limit ?? 10)),
-          hasNext: startIndex + (queryParams.limit ?? 10) < allData.length,
-          hasPrev: (queryParams.page ?? 1) > 1,
-        });
-      } else {
-        // Mode online
-        const response = await transactionApi.getAll(queryParams);
-        setTransactions(response.data);
-        setPagination(response.pagination);
-
-        // Mettre en cache les données
-        await dexieDb.transactions.clear();
-        await dexieDb.transactions.bulkAdd(response.data);
-      }
-    } catch {
-      toast.error("Failed to load transactions");
-    } finally {
-      setLoading(false);
-    }
-  }, [queryParams, userId]);
+  const loadTransactions = useCallback(
+    async () =>
+      loadTransactionsServ(
+        userId,
+        queryParams,
+        setLoading,
+        setTransactions,
+        setPagination
+      ),
+    [queryParams, userId]
+  );
 
   useEffect(() => {
     loadTransactions();
     loadStats("month");
-  }, [loadTransactions, loadStats]);
+  }, [userId, queryParams]);
 
   // Initialize local states from queryParams on component mount
   useEffect(() => {
@@ -245,70 +154,27 @@ export function useTransactionPage() {
     setDeleteDialogOpen(true);
   };
 
-  const handleDeleteConfirm = async () => {
-    if (!selectedTransaction) return;
+  const handleDeleteConfirm = async () =>
+    handleDeleteConfirmServ(
+      tTr,
+      loadTransactions,
+      loadStats,
+      selectedTransaction,
+      setDeleteDialogOpen,
+      setSelectedTransaction
+    );
 
-    try {
-      const isApiConnected = await checkApiConnection();
+  // Function to create a transaction (online + offline)
+  const createTransaction = async (dto: CreateTransactionDto) =>
+    createTransactionServ(tTr, userId, dto, loadTransactions);
 
-      if (!isApiConnected) {
-        // Mode offline
-        await dexieDb.transactions.delete(selectedTransaction.id);
+  // Function to update a transaction (online + offline)
+  const updateTransaction = async (id: string, dto: UpdateTransactionDto) =>
+    updateTransactionServ(tTr, id, dto, loadTransactions);
 
-        // Gérer la sync queue
-        const existingTasks = await dexieDb.syncQueue
-          .filter(
-            (task) =>
-              task.tempId === selectedTransaction.id ||
-              task.url === `/transaction/${selectedTransaction.id}`
-          )
-          .toArray();
-
-        if (existingTasks.length > 0) {
-          // Supprimer toutes les tâches existantes
-          await dexieDb.syncQueue
-            .filter(
-              (task) =>
-                task.tempId === selectedTransaction.id ||
-                task.url === `/transaction/${selectedTransaction.id}`
-            )
-            .delete();
-
-          // Si c'était une transaction temporaire, on n'ajoute pas de DELETE
-          if (!selectedTransaction.id.startsWith("temp-")) {
-            await dexieDb.syncQueue.add({
-              url: `/transaction/${selectedTransaction.id}`,
-              method: "DELETE",
-              createdAt: Date.now(),
-            });
-          }
-        } else {
-          // Aucune tâche existante - ajouter DELETE seulement pour les vrais IDs
-          if (!selectedTransaction.id.startsWith("temp-")) {
-            await dexieDb.syncQueue.add({
-              url: `/transaction/${selectedTransaction.id}`,
-              method: "DELETE",
-              createdAt: Date.now(),
-            });
-          }
-        }
-
-        toast.success("Transaction deleted offline and queued for sync");
-      } else {
-        // Mode online
-        await transactionApi.delete(selectedTransaction.id);
-        toast.success("Transaction deleted successfully");
-      }
-
-      await loadTransactions();
-      await loadStats();
-    } catch {
-      toast.error("Failed to delete transaction");
-    } finally {
-      setDeleteDialogOpen(false);
-      setSelectedTransaction(null);
-    }
-  };
+  // In useTransactionPage.ts - Add this function
+  const getTransactionById = async (id: string) =>
+    await getTransactionByIdServ(tTr, id, userId);
 
   return {
     transactions,
@@ -335,5 +201,10 @@ export function useTransactionPage() {
     handleEdit,
     handleDelete,
     handleDeleteConfirm,
+    createTransaction,
+    updateTransaction,
+    deleteTransaction: handleDeleteConfirm,
+    loadTransactions,
+    getTransactionById,
   };
 }

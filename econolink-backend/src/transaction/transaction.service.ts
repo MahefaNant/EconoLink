@@ -19,11 +19,11 @@ export class TransactionService {
     userId: string,
     period: "month" | "quarter" | "year" = "month",
   ) {
+    await this.prisma.$executeRaw`SELECT refresh_all_stats()`;
     const dateFilter = this.getDateFilter(period);
 
     const [financialStats, categoryStats, transferStats, recentTrends] =
       await Promise.all([
-        // Stats financières (sans transfers)
         this.prisma.$queryRaw<
           Array<{
             total_count: number | null;
@@ -36,16 +36,16 @@ export class TransactionService {
           }>
         >`
         SELECT 
-          SUM(transaction_count) as total_count,
-          SUM(total_income) as total_income,
-          SUM(total_expense) as total_expense,
-          SUM(net_cash_flow) as net_cash_flow,
-          AVG(avg_income) as avg_income,
-          AVG(avg_expense) as avg_expense,
-          MAX(largest_transaction) as largest_transaction
-        FROM monthly_financial_stats 
-        WHERE user_id = ${userId} 
-        AND month >= ${dateFilter}
+          SUM(transaction_count)::text as total_count,
+          SUM(total_income)::text as total_income,
+          SUM(total_expense)::text as total_expense,
+          SUM(net_cash_flow)::text as net_cash_flow,
+          AVG(avg_income)::text as avg_income,
+          AVG(avg_expense)::text as avg_expense,
+          MAX(largest_transaction)::text as largest_transaction
+        FROM monthly_financial_stats
+        WHERE user_id = ${userId}
+          AND month >= ${dateFilter}
       `,
 
         // Top catégories
@@ -69,14 +69,14 @@ export class TransactionService {
           }>
         >`
         SELECT 
-          SUM(transfer_count) as total_transfers,
+          SUM(transfer_count)::text as total_transfers,
           SUM(total_transferred) as total_transferred
         FROM transfer_stats 
         WHERE user_id = ${userId}
         AND month >= ${dateFilter}
       `,
 
-        // Tendances 6 derniers mois
+        // Trends last 6 months
         this.prisma.$queryRaw`
         SELECT 
           TO_CHAR(month, 'YYYY-MM') as period,
@@ -91,8 +91,20 @@ export class TransactionService {
       `,
       ]);
 
+    const f = financialStats[0];
+
+    const toNum = (v: any) => (v === null ? null : Number(v));
+
     return {
-      financial: financialStats[0],
+      financial: {
+        total_count: toNum(f?.total_count),
+        total_income: toNum(f?.total_income),
+        total_expense: toNum(f?.total_expense),
+        net_cash_flow: toNum(f?.net_cash_flow),
+        avg_income: toNum(f?.avg_income),
+        avg_expense: toNum(f?.avg_expense),
+        largest_transaction: toNum(f?.largest_transaction),
+      },
       topCategories: categoryStats,
       transfers: transferStats[0],
       trends: recentTrends,
@@ -102,9 +114,10 @@ export class TransactionService {
   }
 
   async getBasicStats(userId: string, startDate?: string, endDate?: string) {
+    await this.prisma.$executeRaw`SELECT refresh_all_stats()`;
     const whereClause: any = {
       user_id: userId,
-      type: { in: ["INCOME", "EXPENSE"] }, // EXCLURE LES TRANSFERS
+      type: { in: ["INCOME", "EXPENSE"] }, // EXCLUDE TRANSFERTS
     };
 
     if (startDate || endDate) {
@@ -179,7 +192,7 @@ export class TransactionService {
 
     const skip = (page - 1) * limit;
 
-    // Construction du where clause
+    // Construction of where clause
     const where: any = { user_id: userId };
 
     if (search) {
@@ -199,7 +212,7 @@ export class TransactionService {
       if (endDate) where.date.lte = new Date(endDate);
     }
 
-    // Requête pour les données
+    // Request for Datas
     const [transactions, total] = await Promise.all([
       this.prisma.transactions.findMany({
         where,
@@ -249,10 +262,10 @@ export class TransactionService {
       if (dto.account_id === dto.to_account_id) {
         throw new BadRequestException("Cannot transfer to the same account");
       }
-      // Forcer category_id à null pour les transfers
+      // Forced category_id to null for the transferts
       dto.category_id = null;
     } else {
-      // Pour INCOME/EXPENSE, to_account_id doit être null
+      // for INCOME/EXPENSE, to_account_id must be null
       dto.to_account_id = null;
     }
     return await this.prisma.transactions.create({

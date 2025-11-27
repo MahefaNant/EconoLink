@@ -1,9 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -15,16 +19,21 @@ import {
 import useDocumentReadyState from "@/hooks/useDocumentReadyState";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import useAccount from "./hooks/useAccount";
-import { formatMoney } from "@/lib/format";
+import { fmtCurrency } from "@/lib/format";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, Eye } from "lucide-react";
 import { AccountStateSwitch } from "./components/AccountStateSwitch";
 import { useTranslations } from "next-intl";
 import { accountTypesData } from "./lib/account.lib";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function AccountsPage() {
+  const user = useAuthStore((s) => s.user);
   const tAcc = useTranslations("Accounts");
   const [openDeleteId, setOpenDeleteId] = useState<string | null>(null);
+  const [balancePopoverOpen, setBalancePopoverOpen] = useState<string | null>(
+    null
+  );
 
   const {
     accounts,
@@ -78,69 +87,111 @@ export default function AccountsPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
-        {accounts.map((a) => (
-          <div
-            key={a.id}
-            className="rounded-2xl bg-card border shadow-sm p-4 hover:shadow-md transition"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold"
-                  style={{ background: a.color ?? "#e5e5e5" }}
-                >
-                  {a.icon}
+        {accounts.map((a) => {
+          const compactBalance = fmtCurrency(
+            String(a.balance),
+            user?.currency,
+            undefined,
+            true
+          );
+          const fullBalance = fmtCurrency(
+            String(a.balance),
+            user?.currency,
+            undefined,
+            false
+          );
+
+          return (
+            <div
+              key={a.id}
+              className="rounded-2xl bg-card border shadow-sm p-4 hover:shadow-md transition"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold"
+                    style={{ background: a.color ?? "#e5e5e5" }}
+                  >
+                    {a.icon}
+                  </div>
+
+                  <div>
+                    <h2 className="font-semibold text-lg">{a.name}</h2>
+                    <p className="text-sm opacity-70">
+                      {
+                        accountsTypesList.find((type) => type.value === a.type)
+                          ?.label
+                      }
+                    </p>
+                  </div>
                 </div>
 
-                <div>
-                  <h2 className="font-semibold text-lg">{a.name}</h2>
-                  <p className="text-sm opacity-70">
-                    {
-                      accountsTypesList.find((type) => type.value === a.type)
-                        ?.label
+                <div className="flex gap-1">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => openEdit(a)}
+                  >
+                    <Edit />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="destructive"
+                    onClick={() => setOpenDeleteId(a.id)}
+                  >
+                    <Trash2 />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <p className="text-sm opacity-70">{tAcc("list.balance")}</p>
+                <div className="flex items-center gap-1">
+                  <Popover
+                    open={balancePopoverOpen === a.id}
+                    onOpenChange={(open) =>
+                      setBalancePopoverOpen(open ? a.id : null)
                     }
-                  </p>
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0 hover:bg-transparent"
+                        aria-label="Show full balance"
+                      >
+                        <Eye className="h-3 w-3" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="w-auto p-2 text-sm"
+                      align="start"
+                    >
+                      <div className="font-mono">{fullBalance}</div>
+                    </PopoverContent>
+                  </Popover>
+                  <p className="text-3xl font-bold">{compactBalance}</p>
                 </div>
               </div>
 
-              <div className="flex gap-1">
-                <Button size="icon" variant="ghost" onClick={() => openEdit(a)}>
-                  <Edit />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="destructive"
-                  onClick={() => setOpenDeleteId(a.id)}
-                >
-                  <Trash2 />
-                </Button>
-              </div>
+              <AccountStateSwitch key={a.id} account={a} />
+
+              <ConfirmDialog
+                open={openDeleteId === a.id}
+                onOpenChange={() => setOpenDeleteId(null)}
+                collapsible={true}
+                actionColor="red"
+                text={{
+                  title: tAcc("dialog.delete-title"),
+                  description: tAcc("dialog.delete-desc"),
+                  cancel: tAcc("dialog.button.cancel"),
+                  confirm: tAcc("dialog.button.delete"),
+                }}
+                onConfirm={() => remove(a.id)}
+              />
             </div>
-
-            <div className="mt-4">
-              <p className="text-sm opacity-70">{tAcc("list.balance")}</p>
-              <p className="text-3xl font-bold">
-                {formatMoney(a.balance as any)}
-              </p>
-            </div>
-
-            <AccountStateSwitch key={a.id} account={a} />
-
-            <ConfirmDialog
-              open={openDeleteId === a.id}
-              onOpenChange={() => setOpenDeleteId(null)}
-              collapsible={true}
-              actionColor="red"
-              text={{
-                title: tAcc("dialog.delete-title"),
-                description: tAcc("dialog.delete-desc"),
-                cancel: tAcc("dialog.button.cancel"),
-                confirm: tAcc("dialog.button.delete"),
-              }}
-              onConfirm={() => remove(a.id)}
-            />
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {loading && <div className="p-4 text-center">Loading...</div>}

@@ -127,11 +127,13 @@
   "Accounts": {
     "title": "Accounts",
     "add-account": "Add Account",
+    "search": "Search accounts...",
     "list": {
       "balance": "Balance",
       "active": "Active",
       "inactive": "Inactive",
       "name": "Name",
+      "name-acc": "Account name",
       "type": "Type",
       "color": "Color"
     },
@@ -144,11 +146,13 @@
       "color-placeholder": "Choose a color",
       "delete-title": "Delete this Account?",
       "delete-desc": "Are you sure you want to delete this account? This action cannot be undone.",
+      "delete-desc-high": "Are you absolutely sure you want to delete this account? All transactions associated with it will be deleted. This action is irreversible.",
       "icon-preview": "Account Preview",
       "icon-preview-placeholder": "Account Name",
       "button": {
         "delete": "Delete Account",
         "create": "Create",
+        "create-loading": "Creating...",
         "save": "Save Changes",
         "cancel": "Cancel"
       }
@@ -175,6 +179,7 @@
       "fetch-error": "Failed to load accounts",
       "add-success": "Account added successfully",
       "name-required": "Name is required",
+      "name-required-acc": "Account name is required",
       "edit-success": "Account updated successfully",
       "delete-success": "Account deleted successfully",
       "operation-failed": "Operation failed",
@@ -186,6 +191,7 @@
   "Category": {
     "title": "Categories",
     "add-account": "Add category",
+    "search": "Search categories...",
     "filter": {
       "by-type": "Filter by type"
     },
@@ -206,7 +212,7 @@
       "icon": "Icon"
     },
     "dialog": {
-      "add-title": "Add New Category",
+      "add-title": "Create New Category",
       "edit-title": "Edit Category",
       "description-placeholder": "Enter category description",
       "name-placeholder": "Enter category name",
@@ -215,13 +221,16 @@
       "color-placeholder": "Choose a color",
       "delete-title": "Delete this Category?",
       "delete-desc": "Are you sure you want to delete this category? This action cannot be undone.",
+      "delete-desc-high": "Are you absolutely sure you want to delete this category? All transactions associated with it will be deleted. This action is irreversible.",
       "icon-preview": "Category Preview",
       "icon-preview-placeholder": "Category Name",
       "button": {
         "delete": "Delete Category",
-        "create": "Create",
+        "create": "Create Category",
+        "create-simple": "Create",
         "save": "Save Changes",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "create-loading": "Creating..."
       }
     },
     "colorLabel": {
@@ -237,13 +246,174 @@
       "fetch-error": "Failed to load categories",
       "no-categories": "No categories available",
       "add-success": "Category added successfully",
-      "name-required": "Name is required",
+      "name-required": "Category name is required",
       "edit-success": "Category updated successfully",
       "delete-success": "Category deleted successfully",
       "operation-failed": "Operation failed",
       "offline-queued": "You are offline. The operation has been queued and will be processed once you are back online.",
       "offline-fetch": "You are offline. Displaying locally stored categories.",
       "foreign-key-error": "Cannot delete this category as it is referenced by other data."
+    },
+    "translation": {
+      "expense": {
+        "food": "Food & Groceries",
+        "food_desc": "Daily meals and groceries.",
+        "transportation": "Transportation",
+        "transportation_desc": "Fuel, taxi, or public transport.",
+        "housing": "Housing",
+        "housing_desc": "Rent, maintenance, and bills.",
+        "utilities": "Utilities",
+        "utilities_desc": "Electricity, water, gas, or internet.",
+        "entertainment": "Entertainment",
+        "entertainment_desc": "Movies, games, and streaming.",
+        "health": "Health",
+        "health_desc": "Medicine, insurance, or doctors.",
+        "education": "Education",
+        "education_desc": "Books, courses, or training.",
+        "clothing": "Clothing",
+        "clothing_desc": "Clothes and accessories.",
+        "travel": "Travel",
+        "travel_desc": "Trips and vacations.",
+        "subscriptions": "Subscriptions",
+        "subscriptions_desc": "Netflix, Spotify, etc.",
+        "personal_care": "Personal Care",
+        "personal_care_desc": "Beauty, haircuts, or gym.",
+        "gifts": "Gifts & Donations",
+        "gifts_desc": "Charity or presents.",
+        "taxes": "Taxes",
+        "taxes_desc": "Income or property taxes.",
+        "other": "Other Expenses",
+        "other_desc": "Miscellaneous expenses."
+      },
+
+      "income": {
+        "salary": "Salary",
+        "salary_desc": "Monthly salary or wages.",
+        "bonus": "Bonus",
+        "bonus_desc": "Performance or work bonus.",
+        "freelance": "Freelance",
+        "freelance_desc": "Income from freelance or side jobs.",
+        "investments": "Investments",
+        "investments_desc": "Dividends, stocks, etc.",
+        "rental": "Rental Income",
+        "rental_desc": "Rent payments received.",
+        "refunds": "Refunds",
+        "refunds_desc": "Tax or product refunds.",
+        "gift": "Gift",
+        "gift_desc": "Money received as a gift.",
+        "other": "Other Income",
+        "other_desc": "Any other income source."
+      },
+
+      "transfer": {
+        "bank": "Bank Transfer",
+        "bank_desc": "Between bank accounts.",
+        "savings": "Savings",
+        "savings_desc": "Money moved to savings.",
+        "credit_card": "Credit Card Payment",
+        "credit_card_desc": "Paying off a credit card.",
+        "loan": "Loan Payment",
+        "loan_desc": "Paying back a loan.",
+        "investment": "Investment Transfer",
+        "investment_desc": "Moving money to investments."
+      }
+    }
+  },
+  "Transaction": {
+    "desc": "Manage your financial transactions",
+    "add-button": "Add Transaction",
+    "edit": "Edit Transaction",
+    "update": "Update transaction details",
+    "to-account": "To Account *",
+    "info": "Transaction Information",
+    "created": "Created:",
+    "last-update": "Last Updated:",
+    "type": {
+      "income": "income",
+      "expense": "expense",
+      "transfer": "transfer"
+    },
+    "List": {
+      "showing": "Showing",
+      "no-found": "No transactions found",
+      "next-page": "Next",
+      "previous-page": "Previous"
+    },
+    "Statistics": {
+      "offline-desc": "Basic statistics - connect for advanced analytics",
+      "total-income": "Total Income",
+      "total-expense": "Total Income",
+      "total-transfer": "Total Transfers",
+      "amount-transfer": "Amount Transferred",
+      "net": "Net Cash Flow",
+      "transfert-desc": "Internal Transfers",
+      "top-categories": "Top Categories"
+    },
+    "Filter": {
+      "search-placeholder": "Search transactions...",
+      "search": "Search",
+      "type": {
+        "all": "All Types",
+        "income": "Income",
+        "expense": "Expense",
+        "transfer": "Transfer"
+      },
+      "sort": {
+        "newest": "Date: Newest First",
+        "oldest": "Date: Oldest First",
+        "hight-low": "Amount: High to Low",
+        "low-hight": "Amount: Low to High"
+      },
+      "range": "Date Range",
+      "apply": "Apply",
+      "clear": "Clear"
+    },
+    "dialog": {
+      "delete-title": "Delete Transaction?",
+      "delete-desc": "Are you sure you want to delete this transaction? This action cannot be undone.",
+      "delete-desc-high": "Are you absolutely sure you want to delete this category? All transactions associated with it will be deleted. This action is irreversible.",
+      "button": {
+        "delete": "Delete Transaction",
+        "delete-simple": "Delete",
+        "create": "Create Transaction",
+        "create-simple": "Create",
+        "create-loading": "Creating...",
+        "save": "Save Changes",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "update": "Update Transaction",
+        "updating": "Updating..."
+      }
+    },
+    "form": {
+      "create-title": "Create Transaction",
+      "add-financial": "Add a new financial transaction",
+      "amount": "Amount *",
+      "select-account-placeholder": "Select an account...",
+      "select-destination-placeholder": "Select destination account...",
+      "select-category-placeholder": "Select a category...",
+      "location-placeholder": "Transaction location",
+      "notes-placeholder": "Additional notes",
+      "category-desc": "Category automatically selected based on transaction type",
+      "location": "Location"
+    },
+    "messages": {
+      "select-account": "Please select an account",
+      "select-destination": "Please select a destination account for transfer",
+      "same-transfer-error": "Cannot transfer to the same account",
+      "not-found": "Transaction not found",
+      "not-found-local": "Transaction not found in local database",
+      "loaded-cache": "Transaction loaded from cache",
+      "back": "Back to Transactions",
+      "delete-failed": "Failed to delete transaction",
+      "delete-offline": "Transaction deleted offline and queued for sync",
+      "delete-success": "Transaction deleted successfully",
+      "create-failed": "Failed to create transaction",
+      "create-offline": "Transaction created offline and queued for sync",
+      "create-success": "Transaction created successfully",
+      "update-failed": "Failed to update transaction",
+      "update-offline": "Transaction updated offline and queued for sync",
+      "update-success": "Transaction updated successfully"
     }
   }
 }

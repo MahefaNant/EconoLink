@@ -227,19 +227,19 @@ CREATE MATERIALIZED VIEW monthly_financial_stats AS
 SELECT 
   user_id,
   DATE_TRUNC('month', date) as month,
-  COUNT(*) as transaction_count,
-  ROUND(SUM(CASE WHEN type = 'INCOME' THEN amount ELSE 0 END)::numeric, 2) as total_income,
-  ROUND(SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END)::numeric, 2) as total_expense,
-  COUNT(CASE WHEN type = 'INCOME' THEN 1 END) as income_count,
-  COUNT(CASE WHEN type = 'EXPENSE' THEN 1 END) as expense_count,
-  ROUND(AVG(CASE WHEN type = 'INCOME' THEN amount END)::numeric, 2) as avg_income,
-  ROUND(AVG(CASE WHEN type = 'EXPENSE' THEN amount END)::numeric, 2) as avg_expense,
-  ROUND(MAX(CASE WHEN type IN ('INCOME', 'EXPENSE') THEN amount END)::numeric, 2) as largest_transaction,
+  COUNT(*)::integer as transaction_count,
+  ROUND(SUM(CASE WHEN type = 'INCOME' THEN amount ELSE 0 END)::numeric, 2)::decimal as total_income,
+  ROUND(SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END)::numeric, 2)::decimal as total_expense,
+  COUNT(CASE WHEN type = 'INCOME' THEN 1 END)::integer as income_count,
+  COUNT(CASE WHEN type = 'EXPENSE' THEN 1 END)::integer as expense_count,
+  ROUND(AVG(CASE WHEN type = 'INCOME' THEN amount END)::numeric, 2)::decimal as avg_income,
+  ROUND(AVG(CASE WHEN type = 'EXPENSE' THEN amount END)::numeric, 2)::decimal as avg_expense,
+  ROUND(MAX(CASE WHEN type IN ('INCOME', 'EXPENSE') THEN amount END)::numeric, 2)::decimal as largest_transaction,
   ROUND(SUM(CASE 
     WHEN type = 'INCOME' THEN amount 
     WHEN type = 'EXPENSE' THEN -amount 
     ELSE 0 
-  END)::numeric, 2) as net_cash_flow
+  END)::numeric, 2)::decimal as net_cash_flow
 FROM transactions
 WHERE type IN ('INCOME', 'EXPENSE')
 GROUP BY user_id, DATE_TRUNC('month', date);
@@ -251,10 +251,10 @@ CREATE MATERIALIZED VIEW transfer_stats AS
 SELECT 
   user_id,
   DATE_TRUNC('month', date) as month,
-  COUNT(*) as transfer_count,
-  ROUND(SUM(amount)::numeric, 2) as total_transferred,
-  COUNT(DISTINCT account_id) as unique_from_accounts,
-  COUNT(DISTINCT to_account_id) as unique_to_accounts
+  COUNT(*)::integer as transfer_count,
+  ROUND(SUM(amount)::numeric, 2)::decimal as total_transferred,
+  COUNT(DISTINCT account_id)::integer as unique_from_accounts,
+  COUNT(DISTINCT to_account_id)::integer as unique_to_accounts
 FROM transactions
 WHERE type = 'TRANSFER'
 GROUP BY user_id, DATE_TRUNC('month', date);
@@ -268,10 +268,10 @@ SELECT
   t.category_id,
   c.name as category_name,
   t.type,
-  COUNT(*) as transaction_count,
-  ROUND(SUM(t.amount)::numeric, 2) as total_amount,
-  ROUND(AVG(t.amount)::numeric, 2) as avg_amount,
-  ROUND(MAX(t.amount)::numeric, 2) as max_amount
+  COUNT(*)::integer as transaction_count,
+  ROUND(SUM(t.amount)::numeric, 2)::decimal as total_amount,
+  ROUND(AVG(t.amount)::numeric, 2)::decimal as avg_amount,
+  ROUND(MAX(t.amount)::numeric, 2)::decimal as max_amount
 FROM transactions t
 LEFT JOIN categories c ON t.category_id = c.id
 WHERE t.type IN ('INCOME', 'EXPENSE') AND t.category_id IS NOT NULL
@@ -279,15 +279,18 @@ GROUP BY t.user_id, t.category_id, c.name, t.type;
 
 CREATE INDEX idx_category_stats_user ON category_stats (user_id);
 
+DROP TRIGGER IF EXISTS trigger_auto_refresh_stats ON transactions;
+
 -- Fonction pour rafraîchir toutes les vues
 CREATE OR REPLACE FUNCTION refresh_all_stats()
 RETURNS void AS $$
 BEGIN
-  REFRESH MATERIALIZED VIEW CONCURRENTLY monthly_financial_stats;
-  REFRESH MATERIALIZED VIEW CONCURRENTLY transfer_stats;
-  REFRESH MATERIALIZED VIEW CONCURRENTLY category_stats;
+  REFRESH MATERIALIZED VIEW monthly_financial_stats;
+  REFRESH MATERIALIZED VIEW transfer_stats;
+  REFRESH MATERIALIZED VIEW category_stats;
 END;
 $$ LANGUAGE plpgsql;
+
 
 -- =============================================
 -- VUES UTILES

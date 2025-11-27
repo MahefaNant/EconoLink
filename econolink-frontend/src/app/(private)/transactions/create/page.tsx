@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 // app/transactions/create/page.tsx
 "use client";
@@ -18,12 +17,18 @@ import type {
 } from "@/types/ITransaction";
 import { AccountSelectWithCreate } from "./components/AccountSelectWithCreate";
 import { CategorySelectWithCreate } from "./components/CategorySelectWithCreate";
-import { transactionApi } from "../lib/transaction";
 import useCategory from "../../category/hooks/useCategory";
+import useDocumentReadyState from "@/hooks/useDocumentReadyState";
+import { useCreateTransaction } from "./hooks/useCreateTransaction";
+import { useTranslations } from "next-intl";
 
 export default function CreateTransactionPage() {
+  const tTr = useTranslations("Transaction");
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+
+  const isReady = useDocumentReadyState();
+
+  const { loading, createTransaction } = useCreateTransaction();
 
   const { allCategories } = useCategory();
 
@@ -36,7 +41,7 @@ export default function CreateTransactionPage() {
     location: "",
     account_id: "",
     category_id: "",
-    to_account_id: "", // NOUVEAU: Pour TRANSFER
+    to_account_id: "",
   });
 
   const getFirstCategoryByType = (type: TransactionType): string => {
@@ -58,19 +63,17 @@ export default function CreateTransactionPage() {
     }
   }, [formData.type, allCategories]);
 
-  // Réinitialiser les champs quand le type change
+  // Reset the fields when the type changes
   useEffect(() => {
     if (formData.type === "TRANSFER") {
-      // Pour TRANSFER, on cache la catégorie et on montre to_account_id
       setFormData((prev) => ({
         ...prev,
-        category_id: "", // Catégorie vide pour TRANSFER
+        category_id: "",
       }));
     } else {
-      // Pour INCOME/EXPENSE, on cache to_account_id
       setFormData((prev) => ({
         ...prev,
-        to_account_id: "", // to_account_id vide pour INCOME/EXPENSE
+        to_account_id: "",
       }));
     }
   }, [formData.type]);
@@ -78,14 +81,13 @@ export default function CreateTransactionPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation selon le type
     if (!formData.account_id) {
-      toast.error("Please select an account");
+      toast.error(tTr("messages.select-account"));
       return;
     }
 
     if (formData.type === "TRANSFER" && !formData.to_account_id) {
-      toast.error("Please select a destination account for transfer");
+      toast.error(tTr("messages.select-destination"));
       return;
     }
 
@@ -93,11 +95,10 @@ export default function CreateTransactionPage() {
       formData.type === "TRANSFER" &&
       formData.account_id === formData.to_account_id
     ) {
-      toast.error("Cannot transfer to the same account");
+      toast.error(tTr("messages.same-transfer-error"));
       return;
     }
 
-    setLoading(true);
     try {
       const data: CreateTransactionDto = {
         amount: parseFloat(formData.amount),
@@ -105,7 +106,6 @@ export default function CreateTransactionPage() {
         type: formData.type,
         date: new Date(formData.date).toISOString(),
         account_id: formData.account_id,
-        // Gérer les champs optionnels selon le type
         notes: formData.notes || undefined,
         location: formData.location || undefined,
         category_id:
@@ -116,13 +116,10 @@ export default function CreateTransactionPage() {
           formData.type === "TRANSFER" ? formData.to_account_id : undefined,
       };
 
-      await transactionApi.create(data);
-      toast.success("Transaction created successfully");
+      await createTransaction(data);
       router.push("/transactions");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to create transaction");
-    } finally {
-      setLoading(false);
+    } catch {
+      // toast.error(error.message || "Failed to create transaction");
     }
   };
 
@@ -154,6 +151,8 @@ export default function CreateTransactionPage() {
     }));
   };
 
+  if (!isReady) return null;
+
   return (
     <div className="container mx-auto p-4 max-w-2xl">
       {/* Header */}
@@ -167,11 +166,9 @@ export default function CreateTransactionPage() {
         </Button>
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            Create Transaction
+            {tTr("form.create-title")}
           </h1>
-          <p className="text-muted-foreground">
-            Add a new financial transaction
-          </p>
+          <p className="text-muted-foreground">{tTr("form.add-financial")}</p>
         </div>
       </div>
 
@@ -182,7 +179,7 @@ export default function CreateTransactionPage() {
             {/* Amount and Type */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="amount">Amount *</Label>
+                <Label htmlFor="amount">{tTr("form.amount")}</Label>
                 <Input
                   id="amount"
                   type="number"
@@ -202,9 +199,11 @@ export default function CreateTransactionPage() {
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   required
                 >
-                  <option value="EXPENSE">Expense</option>
-                  <option value="INCOME">Income</option>
-                  <option value="TRANSFER">Transfer</option>
+                  <option value="EXPENSE">{tTr("Filter.type.expense")}</option>
+                  <option value="INCOME">{tTr("Filter.type.income")}</option>
+                  <option value="TRANSFER">
+                    {tTr("Filter.type.transfer")}
+                  </option>
                 </select>
               </div>
             </div>
@@ -214,7 +213,7 @@ export default function CreateTransactionPage() {
               <Label htmlFor="description">Description *</Label>
               <Input
                 id="description"
-                placeholder="Enter description"
+                placeholder="description ..."
                 value={formData.description}
                 onChange={(e) =>
                   handleInputChange("description", e.target.value)
@@ -244,25 +243,25 @@ export default function CreateTransactionPage() {
                 <AccountSelectWithCreate
                   value={formData.account_id}
                   onValueChange={handleAccountChange}
-                  placeholder="Select an account..."
+                  placeholder={tTr("form.select-account-placeholder")}
                 />
               </div>
             </div>
 
-            {/* To Account (seulement pour TRANSFER) */}
+            {/* To Account (Only for TRANSFER) */}
             {formData.type === "TRANSFER" && (
               <div className="space-y-2">
-                <Label htmlFor="to_account_id">To Account *</Label>
+                <Label htmlFor="to_account_id">{tTr("to-account")}</Label>
                 <AccountSelectWithCreate
                   value={formData.to_account_id}
                   onValueChange={handleToAccountChange}
-                  placeholder="Select destination account..."
-                  excludeAccount={formData.account_id} // Éviter de sélectionner le même compte
+                  placeholder={tTr("form.select-destination-placeholder")}
+                  excludeAccount={formData.account_id} // Avoid selecting the same account
                 />
               </div>
             )}
 
-            {/* Category (caché pour TRANSFER) */}
+            {/* Category (hiding for TRANSFER) */}
             {formData.type !== "TRANSFER" && (
               <div className="space-y-2">
                 <Label htmlFor="category_id">Category</Label>
@@ -270,11 +269,11 @@ export default function CreateTransactionPage() {
                   value={formData.category_id}
                   onValueChange={handleCategoryChange}
                   type={formData.type}
-                  placeholder="Select a category..."
+                  placeholder={tTr("form.select-category-placeholder")}
                   autoSelectFirst={false}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Category automatically selected based on transaction type
+                  {tTr("form.category-desc")}
                 </p>
               </div>
             )}
@@ -284,7 +283,7 @@ export default function CreateTransactionPage() {
               <Label htmlFor="notes">Notes</Label>
               <Textarea
                 id="notes"
-                placeholder="Additional notes"
+                placeholder={tTr("form.notes-placeholder")}
                 value={formData.notes}
                 onChange={(e) => handleInputChange("notes", e.target.value)}
                 rows={3}
@@ -292,10 +291,10 @@ export default function CreateTransactionPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="location">Location</Label>
+              <Label htmlFor="location">{tTr("form.location")}</Label>
               <Input
                 id="location"
-                placeholder="Transaction location"
+                placeholder={tTr("form.location-placeholder")}
                 value={formData.location}
                 onChange={(e) => handleInputChange("location", e.target.value)}
               />
@@ -309,10 +308,12 @@ export default function CreateTransactionPage() {
                 onClick={() => router.push("/transactions")}
                 disabled={loading}
               >
-                Cancel
+                {tTr("dialog.button.cancel")}
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading ? "Creating..." : "Create Transaction"}
+                {loading
+                  ? tTr("dialog.button.create-loading")
+                  : tTr("dialog.button.create")}
               </Button>
             </div>
           </form>

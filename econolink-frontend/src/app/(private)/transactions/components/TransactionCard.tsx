@@ -1,9 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { ITransaction, TransactionType } from "@/types/ITransaction";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Eye } from "lucide-react";
 import { JSX, memo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { fmtCurrency } from "@/lib/format";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { useTranslations } from "next-intl";
 
 interface TransactionCardProps {
   transaction: ITransaction;
@@ -23,7 +31,11 @@ export const TransactionCard = memo(function TransactionCard({
   getTypeVariant,
 }: TransactionCardProps) {
   const [showMenu, setShowMenu] = useState(false);
+  const [amountPopoverOpen, setAmountPopoverOpen] = useState(false);
   const router = useRouter();
+  const user = useAuthStore((s) => s.user);
+
+  const tTr = useTranslations("Transaction");
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -33,15 +45,23 @@ export const TransactionCard = memo(function TransactionCard({
     });
   };
 
-  const formatAmount = (amount: number, type: TransactionType) => {
-    const formatter = new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    });
+  const compactAmount = fmtCurrency(
+    String(Math.abs(transaction.amount)),
+    user?.currency,
+    undefined,
+    true
+  );
+  const fullAmount = fmtCurrency(
+    String(Math.abs(transaction.amount)),
+    user?.currency,
+    undefined,
+    false
+  );
 
-    const formatted = formatter.format(Math.abs(amount));
-    return type === "EXPENSE" ? `-${formatted}` : formatted;
-  };
+  const displayAmount =
+    transaction.type === "EXPENSE" ? `-${compactAmount}` : compactAmount;
+  const displayFullAmount =
+    transaction.type === "EXPENSE" ? `-${fullAmount}` : fullAmount;
 
   return (
     <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors group">
@@ -52,7 +72,7 @@ export const TransactionCard = memo(function TransactionCard({
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
             <h3 className="font-medium truncate">{transaction.description}</h3>
             <Badge variant={getTypeVariant(transaction.type)} className="w-fit">
-              {transaction.type.toLowerCase()}
+              {tTr(`type.${transaction.type.toLowerCase()}`)}
             </Badge>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-sm text-muted-foreground mt-1">
@@ -69,16 +89,36 @@ export const TransactionCard = memo(function TransactionCard({
 
       <div className="flex items-center gap-4">
         <div className="text-right">
-          <div
-            className={`font-semibold ${
-              transaction.type === "INCOME"
-                ? "text-green-600"
-                : transaction.type === "EXPENSE"
-                ? "text-red-600"
-                : "text-blue-600"
-            }`}
-          >
-            {formatAmount(transaction.amount, transaction.type)}
+          <div className="flex items-center justify-end gap-1">
+            <Popover
+              open={amountPopoverOpen}
+              onOpenChange={setAmountPopoverOpen}
+            >
+              <PopoverTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 w-6 p-0 hover:bg-transparent"
+                  aria-label="Show full amount"
+                >
+                  <Eye className="h-3 w-3" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-2 text-sm" align="end">
+                <div className="font-mono">{displayFullAmount}</div>
+              </PopoverContent>
+            </Popover>
+            <div
+              className={`font-semibold ${
+                transaction.type === "INCOME"
+                  ? "text-green-600"
+                  : transaction.type === "EXPENSE"
+                  ? "text-red-600"
+                  : "text-blue-600"
+              }`}
+            >
+              {displayAmount}
+            </div>
           </div>
           {transaction.is_recurring && (
             <Badge variant="outline" className="text-xs">
@@ -125,16 +165,16 @@ export const TransactionCard = memo(function TransactionCard({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => router.push(`/transactions/${transaction.id}/edit`)}
+            onClick={() => router.push(`/transactions/edit/${transaction.id}`)}
           >
-            Edit
+            {tTr("dialog.button.edit")}
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => onDelete(transaction)}
           >
-            Delete
+            {tTr("dialog.button.delete-simple")}
           </Button>
         </div>
       </div>

@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SetStateAction } from "react";
+import { useTranslations } from "next-intl";
 
 interface FilterTransactionProps {
   searchInput: string;
@@ -51,6 +52,7 @@ export function FilterTransaction({
   handleDateFilterApply,
   handleDateFilterClear,
 }: FilterTransactionProps) {
+  const tTr = useTranslations("Transaction.Filter");
   return (
     <Card>
       <CardContent className="p-4">
@@ -61,7 +63,7 @@ export function FilterTransaction({
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search transactions..."
+                  placeholder={tTr("search-placeholder")}
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   onKeyPress={(e) => {
@@ -86,7 +88,7 @@ export function FilterTransaction({
                 className="flex items-center gap-2"
               >
                 <Search className="h-4 w-4" />
-                Search
+                {tTr("search")}
               </Button>
             </div>
 
@@ -101,10 +103,12 @@ export function FilterTransaction({
                   <SelectValue placeholder="Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ALL">All Types</SelectItem>
-                  <SelectItem value="INCOME">Income</SelectItem>
-                  <SelectItem value="EXPENSE">Expense</SelectItem>
-                  <SelectItem value="TRANSFER">Transfer</SelectItem>
+                  <SelectItem value="ALL">{tTr("type.all")}</SelectItem>
+                  <SelectItem value="INCOME">{tTr("type.income")}</SelectItem>
+                  <SelectItem value="EXPENSE">{tTr("type.expense")}</SelectItem>
+                  <SelectItem value="TRANSFER">
+                    {tTr("type.transfer")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
 
@@ -130,13 +134,15 @@ export function FilterTransaction({
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="date-desc">Date: Newest First</SelectItem>
-                  <SelectItem value="date-asc">Date: Oldest First</SelectItem>
+                  <SelectItem value="date-desc">
+                    {tTr("sort.newest")}
+                  </SelectItem>
+                  <SelectItem value="date-asc">{tTr("sort.oldest")}</SelectItem>
                   <SelectItem value="amount-desc">
-                    Amount: High to Low
+                    {tTr("sort.hight-low")}
                   </SelectItem>
                   <SelectItem value="amount-asc">
-                    Amount: Low to High
+                    {tTr("sort.low-hight")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -152,7 +158,7 @@ export function FilterTransaction({
             <div className="flex flex-col sm:flex-row gap-4 p-4 border rounded-lg bg-muted/50">
               <div className="flex-1">
                 <label className="text-sm font-medium mb-2 block">
-                  Date Range
+                  {tTr("range")}
                 </label>
                 <div className="flex gap-2">
                   <Input
@@ -180,9 +186,9 @@ export function FilterTransaction({
                 </div>
               </div>
               <div className="flex items-end gap-2">
-                <Button onClick={handleDateFilterApply}>Apply</Button>
+                <Button onClick={handleDateFilterApply}>{tTr("apply")}</Button>
                 <Button variant="outline" onClick={handleDateFilterClear}>
-                  Clear
+                  {tTr("clear")}
                 </Button>
               </div>
             </div>

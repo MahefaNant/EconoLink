@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { dexieDb } from "@/lib/dexieDb";
@@ -198,7 +197,7 @@ export default function useAccount() {
 
       await fetchAccounts();
       setOpenDialog(false);
-      toast(
+      toast.success(
         editing ? tAcc("messages.edit-success") : tAcc("messages.add-success")
       );
     } catch {
@@ -208,6 +207,9 @@ export default function useAccount() {
 
   async function remove(id: string) {
     try {
+      if (!confirm(tAcc("dialog.delete-desc-high"))) {
+        return;
+      }
       const isApiConnected = await checkApiConnection();
 
       // ---------- OFFLINE MODE ----------
@@ -248,10 +250,6 @@ export default function useAccount() {
               method: "DELETE",
               createdAt: Date.now(),
             });
-          } else {
-            console.log(
-              "Temp account with no existing tasks - nothing to sync"
-            );
           }
         }
 

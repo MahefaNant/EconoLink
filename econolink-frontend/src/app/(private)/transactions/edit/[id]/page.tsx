@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 // app/transactions/edit/[id]/page.tsx
 "use client";
@@ -15,23 +14,32 @@ import { toast } from "sonner";
 import type {
   UpdateTransactionDto,
   TransactionType,
-  ITransaction,
 } from "@/types/ITransaction";
 import { AccountSelectWithCreate } from "../../create/components/AccountSelectWithCreate";
 import { CategorySelectWithCreate } from "../../create/components/CategorySelectWithCreate";
 import useCategory from "@/app/(private)/category/hooks/useCategory";
-import { transactionApi } from "../../lib/transaction";
+import useDocumentReadyState from "@/hooks/useDocumentReadyState";
+import { useEditTransaction } from "./hooks/useEditTransaction";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { useTranslations } from "next-intl";
 
 export default function EditTransactionPage() {
+  const tTr = useTranslations("Transaction");
+  const tAcc = useTranslations("Accounts");
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const isReady = useDocumentReadyState();
   const router = useRouter();
   const params = useParams();
   const transactionId = params.id as string;
 
-  const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(true);
-  const [transaction, setTransaction] = useState<ITransaction | null>(null);
-
   const { allCategories } = useCategory();
+  const {
+    transaction,
+    fetching,
+    loading,
+    updateTransaction,
+    deleteTransaction,
+  } = useEditTransaction(transactionId);
 
   const [formData, setFormData] = useState({
     amount: "",
@@ -42,7 +50,7 @@ export default function EditTransactionPage() {
     location: "",
     account_id: "",
     category_id: "",
-    to_account_id: "", // NOUVEAU: Pour TRANSFER
+    to_account_id: "",
   });
 
   const getFirstCategoryByType = (type: TransactionType): string => {
@@ -51,6 +59,22 @@ export default function EditTransactionPage() {
     );
     return firstCategory?.id || "";
   };
+
+  useEffect(() => {
+    if (transaction) {
+      setFormData({
+        amount: Math.abs(transaction.amount).toString(),
+        description: transaction.description,
+        type: transaction.type,
+        date: transaction.date.split("T")[0],
+        notes: transaction.notes || "",
+        location: transaction.location || "",
+        account_id: transaction.account_id,
+        category_id: transaction.category_id || "",
+        to_account_id: transaction.to_account_id || "",
+      });
+    }
+  }, [transaction]);
 
   useEffect(() => {
     if (allCategories.length > 0 && formData.type !== "TRANSFER") {
@@ -67,62 +91,31 @@ export default function EditTransactionPage() {
     }
   }, [formData.type, allCategories]);
 
-  // Réinitialiser les champs quand le type change
+  // Reset the fields when the type changes
   useEffect(() => {
     if (formData.type === "TRANSFER") {
       setFormData((prev) => ({
         ...prev,
-        category_id: "", // Catégorie vide pour TRANSFER
+        category_id: "",
       }));
     } else {
       setFormData((prev) => ({
         ...prev,
-        to_account_id: "", // to_account_id vide pour INCOME/EXPENSE
+        to_account_id: "",
       }));
     }
   }, [formData.type]);
-
-  useEffect(() => {
-    const fetchTransaction = async () => {
-      if (!transactionId) return;
-
-      try {
-        setFetching(true);
-        const data = await transactionApi.getById(transactionId);
-        setTransaction(data);
-
-        setFormData({
-          amount: Math.abs(data.amount).toString(),
-          description: data.description,
-          type: data.type,
-          date: data.date.split("T")[0],
-          notes: data.notes || "",
-          location: data.location || "",
-          account_id: data.account_id,
-          category_id: data.category_id || "",
-          to_account_id: data.to_account_id || "", // Récupérer to_account_id
-        });
-      } catch {
-        toast.error("Failed to load transaction");
-        router.push("/transactions");
-      } finally {
-        setFetching(false);
-      }
-    };
-
-    fetchTransaction();
-  }, [transactionId, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.account_id) {
-      toast.error("Please select an account");
+      toast.error(tTr("messages.select-account"));
       return;
     }
 
     if (formData.type === "TRANSFER" && !formData.to_account_id) {
-      toast.error("Please select a destination account for transfer");
+      toast.error(tTr("messages.select-destination"));
       return;
     }
 
@@ -130,7 +123,7 @@ export default function EditTransactionPage() {
       formData.type === "TRANSFER" &&
       formData.account_id === formData.to_account_id
     ) {
-      toast.error("Cannot transfer to the same account");
+      toast.error(tTr("messages.same-transfer-error"));
       return;
     }
 
@@ -139,7 +132,6 @@ export default function EditTransactionPage() {
       return;
     }
 
-    setLoading(true);
     try {
       const data: UpdateTransactionDto = {
         amount: parseFloat(formData.amount),
@@ -147,7 +139,7 @@ export default function EditTransactionPage() {
         type: formData.type,
         date: new Date(formData.date).toISOString(),
         account_id: formData.account_id,
-        // Gérer les champs optionnels selon le type
+        // Manage optional fields according to type
         notes: formData.notes || undefined,
         location: formData.location || undefined,
         category_id:
@@ -158,13 +150,10 @@ export default function EditTransactionPage() {
           formData.type === "TRANSFER" ? formData.to_account_id : undefined,
       };
 
-      await transactionApi.update(transaction.id, data);
-      toast.success("Transaction updated successfully");
+      await updateTransaction(transaction.id, data);
       router.push("/transactions");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to update transaction");
-    } finally {
-      setLoading(false);
+    } catch {
+      // toast.error(error.message || "Failed to update transaction");
     }
   };
 
@@ -199,21 +188,15 @@ export default function EditTransactionPage() {
   const handleDelete = async () => {
     if (!transaction) return;
 
-    if (!confirm("Are you sure you want to delete this transaction?")) {
-      return;
-    }
-
-    setLoading(true);
     try {
-      await transactionApi.delete(transaction.id);
-      toast.success("Transaction deleted successfully");
+      await deleteTransaction();
       router.push("/transactions");
     } catch {
       toast.error("Failed to delete transaction");
-    } finally {
-      setLoading(false);
     }
   };
+
+  if (!isReady) return null;
 
   if (fetching) {
     return (
@@ -233,10 +216,10 @@ export default function EditTransactionPage() {
       <div className="container mx-auto p-4 max-w-2xl">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-muted-foreground">
-            Transaction not found
+            {tTr("messages.not-found")}
           </h1>
           <Button onClick={() => router.push("/transactions")} className="mt-4">
-            Back to Transactions
+            {tTr("messages.back")}
           </Button>
         </div>
       </div>
@@ -255,15 +238,31 @@ export default function EditTransactionPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold tracking-tight">
-            Edit Transaction
-          </h1>
-          <p className="text-muted-foreground">Update transaction details</p>
+          <h1 className="text-3xl font-bold tracking-tight">{tTr("edit")}</h1>
+          <p className="text-muted-foreground">{tTr("update")}</p>
         </div>
-        <Button variant="destructive" onClick={handleDelete} disabled={loading}>
-          Delete
+        <Button
+          variant="destructive"
+          onClick={() => setOpenDelete(true)}
+          disabled={loading}
+        >
+          {tTr("dialog.button.delete")}
         </Button>
       </div>
+
+      <ConfirmDialog
+        open={openDelete}
+        onOpenChange={() => setOpenDelete(false)}
+        collapsible={true}
+        actionColor="red"
+        text={{
+          title: tAcc("dialog.delete-title"),
+          description: tAcc("dialog.delete-desc"),
+          cancel: tAcc("dialog.button.cancel"),
+          confirm: tAcc("dialog.button.delete"),
+        }}
+        onConfirm={handleDelete}
+      />
 
       {/* Formulaire */}
       <Card>
@@ -272,7 +271,7 @@ export default function EditTransactionPage() {
             {/* Amount and Type */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="amount">Amount *</Label>
+                <Label htmlFor="amount">{tTr("form.amount")}</Label>
                 <Input
                   id="amount"
                   type="number"
@@ -292,9 +291,11 @@ export default function EditTransactionPage() {
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   required
                 >
-                  <option value="EXPENSE">Expense</option>
-                  <option value="INCOME">Income</option>
-                  <option value="TRANSFER">Transfer</option>
+                  <option value="EXPENSE">{tTr("Filter.type.expense")}</option>
+                  <option value="INCOME">{tTr("Filter.type.income")}</option>
+                  <option value="TRANSFER">
+                    {tTr("Filter.type.transfer")}
+                  </option>
                 </select>
               </div>
             </div>
@@ -304,7 +305,7 @@ export default function EditTransactionPage() {
               <Label htmlFor="description">Description *</Label>
               <Input
                 id="description"
-                placeholder="Enter description"
+                placeholder="description..."
                 value={formData.description}
                 onChange={(e) =>
                   handleInputChange("description", e.target.value)
@@ -334,7 +335,7 @@ export default function EditTransactionPage() {
                 <AccountSelectWithCreate
                   value={formData.account_id}
                   onValueChange={handleAccountChange}
-                  placeholder="Select an account..."
+                  placeholder={tTr("form.select-account-placeholder")}
                 />
               </div>
             </div>
@@ -342,11 +343,11 @@ export default function EditTransactionPage() {
             {/* To Account (seulement pour TRANSFER) */}
             {formData.type === "TRANSFER" && (
               <div className="space-y-2">
-                <Label htmlFor="to_account_id">To Account *</Label>
+                <Label htmlFor="to_account_id">{tTr("to-account")}</Label>
                 <AccountSelectWithCreate
                   value={formData.to_account_id}
                   onValueChange={handleToAccountChange}
-                  placeholder="Select destination account..."
+                  placeholder={tTr("form.select-destination-placeholder")}
                 />
               </div>
             )}
@@ -359,11 +360,11 @@ export default function EditTransactionPage() {
                   value={formData.category_id}
                   onValueChange={handleCategoryChange}
                   type={formData.type}
-                  placeholder="Select a category..."
+                  placeholder={tTr("form.select-category-placeholder")}
                   autoSelectFirst={false}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Category automatically selected based on transaction type
+                  {tTr("form.category-desc")}
                 </p>
               </div>
             )}
@@ -381,10 +382,10 @@ export default function EditTransactionPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="location">Location</Label>
+              <Label htmlFor="location">{tTr("form.location")}</Label>
               <Input
                 id="location"
-                placeholder="Transaction location"
+                placeholder={tTr("form.location-placeholder")}
                 value={formData.location}
                 onChange={(e) => handleInputChange("location", e.target.value)}
               />
@@ -392,14 +393,16 @@ export default function EditTransactionPage() {
 
             {/* Transaction informations */}
             <div className="p-4 bg-muted rounded-lg space-y-2">
-              <h4 className="font-medium text-sm">Transaction Information</h4>
+              <h4 className="font-medium text-sm">{tTr("info")}</h4>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div>
                   <span className="text-muted-foreground">ID:</span>
                   <p className="font-mono text-xs">{transaction.id}</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Created:</span>
+                  <span className="text-muted-foreground">
+                    {tTr("created")}
+                  </span>
                   <p>
                     {transaction.created_at
                       ? new Date(transaction.created_at).toLocaleDateString()
@@ -407,7 +410,9 @@ export default function EditTransactionPage() {
                   </p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Last Updated:</span>
+                  <span className="text-muted-foreground">
+                    {tTr("last-update")}
+                  </span>
                   <p>
                     {transaction.updated_at
                       ? new Date(transaction.updated_at).toLocaleDateString()
@@ -429,16 +434,16 @@ export default function EditTransactionPage() {
                 onClick={() => router.push("/transactions")}
                 disabled={loading}
               >
-                Cancel
+                {tTr("dialog.button.cancel")}
               </Button>
               <Button type="submit" disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Updating...
+                    {tTr("dialog.button.updating")}
                   </>
                 ) : (
-                  "Update Transaction"
+                  tTr("dialog.button.update")
                 )}
               </Button>
             </div>

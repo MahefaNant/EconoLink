@@ -15,7 +15,7 @@ export function useTransactionStats() {
   const [basicStats, setBasicStats] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
-  // Calcul des stats basiques offline
+  // Calculation of basic offline statistics
   const calculateBasicOfflineStats = async () => {
     if (!userId) return null;
 
@@ -24,25 +24,25 @@ export function useTransactionStats() {
       .equals(userId)
       .toArray();
 
-    // EXCLURE LES TRANSFERS des calculs financiers
+    // EXCLUDE TRANSFERS from financial calculations
     const financialData = offlineData.filter((t) => t.type !== "TRANSFER");
     const transferData = offlineData.filter((t) => t.type === "TRANSFER");
 
-    const totalCount = financialData.length;
-    const totalIncome = financialData
+    const total_count = financialData.length;
+    const total_income = financialData
       .filter((t) => t.type === "INCOME")
       .reduce((sum, t) => sum + Number(t.amount), 0);
-    const totalExpense = financialData
+    const total_expense = financialData
       .filter((t) => t.type === "EXPENSE")
       .reduce((sum, t) => sum + Number(t.amount), 0);
 
     return {
-      totalCount,
-      totalIncome,
-      totalExpense,
-      net: totalIncome - totalExpense,
-      transferCount: transferData.length,
-      isBasic: true, // Marquer comme stats basiques
+      total_count,
+      total_income,
+      total_expense,
+      net: total_income - total_expense,
+      total_transfers: transferData.length,
+      isBasic: true,
     };
   };
 
@@ -53,12 +53,12 @@ export function useTransactionStats() {
       const isApiConnected = await checkApiConnection();
 
       if (!isApiConnected) {
-        // Mode offline - stats basiques seulement
+        // Offline mode - basic stats only
         const offlineStats = await calculateBasicOfflineStats();
         setBasicStats(offlineStats);
         setAdvancedStats(null);
       } else {
-        // Mode online - stats avancées
+        // Online mode - advanced stats
         setLoading(true);
         try {
           const [dashboardStats, basicOnlineStats] = await Promise.all([
