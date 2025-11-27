@@ -69,7 +69,7 @@ export class TransactionService {
           }>
         >`
         SELECT 
-          SUM(transfer_count) as total_transfers,
+          SUM(transfer_count)::text as total_transfers,
           SUM(total_transferred) as total_transferred
         FROM transfer_stats 
         WHERE user_id = ${userId}
