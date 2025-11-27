@@ -10,11 +10,13 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
 } from "@nestjs/common";
 import { BudgetsService } from "./budgets.service";
 import { CreateBudgetDto } from "./dto/create-budget.dto";
 import { UpdateBudgetDto } from "./dto/update-budget.dto";
 import { JwtAuthGuard } from "src/auth/jwt/jwt-auth.guard";
+import { BudgetQueryDto } from "./dto/query-budget.dto";
 
 @Controller("budgets")
 @UseGuards(JwtAuthGuard)
@@ -29,8 +31,8 @@ export class BudgetsController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Req() req: any) {
-    return this.budgetsService.findAll(req.user.id);
+  async findAll(@Req() req: any, @Query() query: BudgetQueryDto) {
+    return this.budgetsService.findPaginated(req.user.id, query);
   }
 
   @UseGuards(JwtAuthGuard)
