@@ -3,7 +3,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
 /* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateBudgetDto } from "./dto/create-budget.dto";
 import { UpdateBudgetDto } from "./dto/update-budget.dto";
@@ -17,19 +21,26 @@ export class BudgetsService {
 
   // CREATE
   async create(userId: string, dto: CreateBudgetDto) {
-    return this.prisma.budgets.create({
-      data: {
-        name: dto.name,
-        amount: dto.amount,
-        period: dto.period ?? "MONTHLY",
-        start_date: new Date(dto.start_date),
-        end_date: dto.end_date ? new Date(dto.end_date) : null,
-        alert_at: dto.alert_at ?? null,
-        category_id: dto.category_id ?? null,
-        spent: 0,
-        user_id: userId,
-      },
-    });
+    try {
+      return await this.prisma.budgets.create({
+        data: {
+          name: dto.name,
+          amount: dto.amount,
+          period: dto.period ?? "MONTHLY",
+          start_date: new Date(dto.start_date),
+          end_date: dto.end_date ? new Date(dto.end_date) : null,
+          alert_at: dto.alert_at ?? null,
+          category_id: dto.category_id ?? null,
+          spent: 0,
+          user_id: userId,
+        },
+      });
+    } catch (error: any) {
+      if (error.message?.includes("Un budget actif existe déjà")) {
+        throw new ConflictException(error.message);
+      }
+      throw error;
+    }
   }
 
   // LIST (raw SQL for view)
@@ -137,10 +148,17 @@ export class BudgetsService {
       updateData.end_date = new Date(dto.end_date);
     }
 
-    return this.prisma.budgets.update({
-      where: { id },
-      data: updateData,
-    });
+    try {
+      return await this.prisma.budgets.update({
+        where: { id },
+        data: updateData,
+      });
+    } catch (error: any) {
+      if (error.message?.includes("Un budget actif existe déjà")) {
+        throw new ConflictException(error.message);
+      }
+      throw error;
+    }
   }
 
   // DELETE

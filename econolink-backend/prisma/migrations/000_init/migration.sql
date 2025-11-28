@@ -44,6 +44,8 @@ CREATE TABLE "budgets" (
     CONSTRAINT "budgets_pkey" PRIMARY KEY ("id")
 );
 
+ALTER TABLE budgets ALTER COLUMN category_id SET NOT NULL;
+
 -- CreateTable
 CREATE TABLE "categories" (
     "id" VARCHAR(50) NOT NULL DEFAULT gen_random_uuid(),

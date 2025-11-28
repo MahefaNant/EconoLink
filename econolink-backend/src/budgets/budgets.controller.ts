@@ -59,15 +59,13 @@ export class BudgetsController {
 
   @UseGuards(JwtAuthGuard)
   @Get("/alerts/all")
-  async getAlerts() {
-    const userId = "USER_CONTEXT";
-    return this.budgetsService.getAlerts(userId);
+  async getAlerts(@Req() req: any) {
+    return this.budgetsService.getAlerts(req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get("/stats/all")
-  async getStats() {
-    const userId = "USER_CONTEXT";
-    return this.budgetsService.getStats(userId);
+  async getStats(@Req() req: any) {
+    return this.budgetsService.getStats(req.user.id);
   }
 }
