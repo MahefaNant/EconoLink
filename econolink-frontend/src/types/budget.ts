@@ -81,5 +81,5 @@ export type BudgetFormData = {
   start_date: Date;
   end_date?: Date | null;
   alert_at?: string | null; // Toujours string dans le form
-  category_id?: string | null;
+  category_id: string;
 };

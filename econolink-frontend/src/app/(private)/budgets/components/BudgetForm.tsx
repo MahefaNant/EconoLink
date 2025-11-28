@@ -5,12 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import {
-  Budget,
-  CreateBudgetDto,
-  BudgetPeriod,
-  BudgetFormData,
-} from "@/types/budget";
+import { Budget, CreateBudgetDto, BudgetFormData } from "@/types/budget";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -33,7 +28,7 @@ import { cn } from "@/lib/utils";
 import { CategorySelectWithCreate } from "../../transactions/create/components/CategorySelectWithCreate";
 import { BudgetPeriodSelect } from "./BudgetPeriodSelect";
 
-// Schema pour les données de formulaire (toujours strings)
+// plan with REQUIRED  category_id
 const budgetFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
   amount: z
@@ -59,7 +54,7 @@ const budgetFormSchema = z.object({
           parseFloat(val || "0") <= 100),
       "Alert must be between 0 and 100"
     ),
-  category_id: z.string().optional().nullable(),
+  category_id: z.string().min(1, "Category is required"),
 });
 
 interface BudgetFormProps {
@@ -86,7 +81,7 @@ export function BudgetForm({
       start_date: budget?.start_date ? new Date(budget.start_date) : new Date(),
       end_date: budget?.end_date ? new Date(budget.end_date) : null,
       alert_at: budget?.alert_at ? budget.alert_at.toString() : null,
-      category_id: budget?.category_id || null,
+      category_id: budget?.category_id || "",
     },
   });
 
@@ -106,12 +101,12 @@ export function BudgetForm({
           data.alert_at && data.alert_at !== ""
             ? parseFloat(data.alert_at)
             : undefined,
-        category_id: data.category_id || undefined,
+        category_id: data.category_id,
       };
 
       await onSubmit(submitData);
-    } catch (error) {
-      console.error("Form submission error:", error);
+    } catch {
+      //console.error("Form submission error:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -280,10 +275,10 @@ export function BudgetForm({
           name="category_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category (Optional)</FormLabel>
+              <FormLabel>Category</FormLabel>
               <FormControl>
                 <CategorySelectWithCreate
-                  value={field.value || ""}
+                  value={field.value}
                   onValueChange={field.onChange}
                   type="EXPENSE"
                   placeholder="Select a category"

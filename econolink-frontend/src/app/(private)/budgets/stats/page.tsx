@@ -1,46 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 // Version avec recharts (optionnelle)
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
 import { useBudgets } from "../hooks/useBudgets";
-
-// Types pour les données du graphique
-interface StatusDataItem extends Record<string, unknown> {
-  name: string;
-  value: number;
-}
-
-interface BudgetChartItem {
-  name: string;
-  budget: number;
-  spent: number;
-  remaining: number;
-  usage: string;
-}
-
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, PieChart as PieChartIcon } from "lucide-react";
+import Link from "next/link";
+import { toast } from "sonner";
+import { StatsOverView } from "./components/StatsOverview";
+import { StatsCharts } from "./components/StatsCharts";
+import { StatsPeriodDistribution } from "./components/StatsPeriodDistribution";
+import { TopBudgets } from "./components/TopBudgets";
+import { StatsAlertSummary } from "./components/StatsAlertSummary";
 
 export default function BudgetStatsPage() {
   const [stats, setStats] = useState({
@@ -49,7 +22,7 @@ export default function BudgetStatsPage() {
     alert_count: 0,
     exceeded_count: 0,
   });
-  const { budgets, getStats, loading } = useBudgets();
+  const { budgets, getStats, getBudgets, loading } = useBudgets();
 
   useEffect(() => {
     loadStats();
@@ -58,148 +31,49 @@ export default function BudgetStatsPage() {
   const loadStats = async () => {
     try {
       const statsData = await getStats();
+      await getBudgets();
       setStats(statsData);
-    } catch (err) {
+    } catch {
       toast.error("Failed to load statistics");
     }
   };
 
-  const budgetData: BudgetChartItem[] = budgets.map((budget) => ({
-    name: budget.name,
-    budget: budget.amount,
-    spent: budget.spent,
-    remaining: budget.amount - budget.spent,
-    usage: ((budget.spent / budget.amount) * 100).toFixed(1),
-  }));
-
-  const statusData: StatusDataItem[] = [
-    {
-      name: "Normal",
-      value: budgets.filter((b) => b.status === "NORMAL").length,
-    },
-    {
-      name: "Alert",
-      value: budgets.filter((b) => b.status === "ALERT").length,
-    },
-    {
-      name: "Exceeded",
-      value: budgets.filter((b) => b.status === "EXCEEDED").length,
-    },
-  ];
-
-  // Custom label pour le pie chart
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-  }: any) => {
-    if (!percent) return null;
-
-    const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-        fontSize={12}
-        fontWeight="bold"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
-  };
-
   return (
     <div className="container mx-auto p-6 space-y-6">
-      {/* Header et Stats Cards restent identiques à la version précédente */}
-      {/* ... */}
-
-      {/* Charts avec recharts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Budget vs Spent Chart */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Budget vs Spent</CardTitle>
-            <CardDescription>
-              Comparison of budgeted amounts vs actual spending
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <Skeleton className="h-80 w-full" />
-            ) : (
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={budgetData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="name"
-                    angle={-45}
-                    textAnchor="end"
-                    height={80}
-                    fontSize={12}
-                  />
-                  <YAxis fontSize={12} />
-                  <Tooltip
-                    formatter={(value: number) => [
-                      `$${value.toLocaleString()}`,
-                      "",
-                    ]}
-                  />
-                  <Bar dataKey="budget" fill="#0088FE" name="Budget" />
-                  <Bar dataKey="spent" fill="#00C49F" name="Spent" />
-                </BarChart>
-              </ResponsiveContainer>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Status Distribution */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Budget Status</CardTitle>
-            <CardDescription>Distribution of budget statuses</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <Skeleton className="h-80 w-full" />
-            ) : (
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={statusData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={renderCustomizedLabel}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {statusData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(value: number) => [value, "Count"]} />
-                </PieChart>
-              </ResponsiveContainer>
-            )}
-          </CardContent>
-        </Card>
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <Button variant="outline" size="icon" asChild>
+          <Link href="/budgets">
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
+        </Button>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+            <PieChartIcon className="h-8 w-8 text-primary" />
+            Budget Statistics
+          </h1>
+          <p className="text-muted-foreground">
+            Insights and analytics for your budgets
+          </p>
+        </div>
       </div>
 
-      {/* Reste du contenu... */}
+      {/* Stats Overview */}
+      <StatsOverView budgets={budgets} stats={stats} />
+
+      {/* Charts Section */}
+      <StatsCharts budgets={budgets} loading={loading} />
+
+      {/* Period Distribution */}
+      <StatsPeriodDistribution budgets={budgets} loading={loading} />
+
+      {/* Top Budgets by Usage */}
+      <TopBudgets budgets={budgets} loading={loading} />
+
+      {/* Alert Summary */}
+      {(stats.alert_count > 0 || stats.exceeded_count > 0) && (
+        <StatsAlertSummary stats={stats} />
+      )}
     </div>
   );
 }

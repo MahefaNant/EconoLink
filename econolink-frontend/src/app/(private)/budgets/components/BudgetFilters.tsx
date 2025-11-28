@@ -55,7 +55,7 @@ export function BudgetFilters({
     onFiltersChange({
       ...filters,
       [key]: value,
-      page: 1, // Reset to first page when filters change
+      page: 1,
     });
   };
 
@@ -85,7 +85,7 @@ export function BudgetFilters({
           </SheetDescription>
         </SheetHeader>
 
-        <div className="space-y-6 py-6">
+        <div className="space-y-6 py-6 m-4">
           {/* Status Filter */}
           <div className="space-y-3">
             <Label htmlFor="status">Status</Label>
@@ -199,7 +199,7 @@ export function BudgetFilters({
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 m-4">
           <Button
             variant="outline"
             onClick={handleReset}

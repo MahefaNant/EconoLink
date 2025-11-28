@@ -28,7 +28,6 @@ export class CreateBudgetDto {
   @IsNumber()
   alert_at?: number;
 
-  @IsOptional()
   @IsString()
-  category_id?: string;
+  category_id!: string;
 }

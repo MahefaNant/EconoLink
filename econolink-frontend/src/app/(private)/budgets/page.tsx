@@ -58,7 +58,7 @@ export default function BudgetsPage() {
     exceeded_count: 0,
   });
 
-  // Charger les données avec les filtres
+  // load datas with filters
   const loadData = useCallback(async () => {
     try {
       await getBudgets(filters);
@@ -67,7 +67,7 @@ export default function BudgetsPage() {
     }
   }, [getBudgets, filters]);
 
-  // Charger les stats séparément
+  // Load stats separatly
   const loadStats = async () => {
     try {
       const statsData = await getStats();
@@ -82,7 +82,7 @@ export default function BudgetsPage() {
     loadStats();
   }, [loadData]);
 
-  // Mettre à jour les filtres quand la recherche est debounced
+  // MAJ the filters when serrch is debounced
   useEffect(() => {
     setFilters((prev) => ({
       ...prev,

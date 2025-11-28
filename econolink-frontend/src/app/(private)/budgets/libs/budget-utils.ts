@@ -37,7 +37,7 @@ export const budgetPeriodOptions = Object.entries(budgetPeriodConfig).map(
   })
 );
 
-// Calculer la date de fin basée sur la période
+// Calcule the end date based on the period
 export const calculateEndDate = (
   startDate: Date,
   period: BudgetPeriod
@@ -64,7 +64,7 @@ export const calculateEndDate = (
   return endDate;
 };
 
-// Vérifier si un budget doit être reset
+// Chech if a budget have to be reset
 export const shouldResetBudget = (budget: {
   period: BudgetPeriod;
   start_date: string;

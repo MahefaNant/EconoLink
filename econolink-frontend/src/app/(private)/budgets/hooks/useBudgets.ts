@@ -30,7 +30,7 @@ export const useBudgets = () => {
       try {
         const queryString = new URLSearchParams();
 
-        // Ajouter les paramètres non-undefined
+        // add non-undefined parameter
         Object.entries(params).forEach(([key, value]) => {
           if (value !== undefined && value !== null && value !== "") {
             queryString.append(key, String(value));
@@ -44,7 +44,7 @@ export const useBudgets = () => {
 
         setBudgets(response.items);
 
-        // Calculer la pagination côté frontend
+        // paginate calculation
         const totalPages = Math.ceil(response.total / response.limit);
         setPagination({
           page: response.page,
@@ -77,7 +77,7 @@ export const useBudgets = () => {
           method: "POST",
           body: dto,
         });
-        // Recharger les budgets après création
+        // Load budgets after creation
         await getBudgets({
           page: pagination.page,
           limit: pagination.limit,
@@ -121,7 +121,7 @@ export const useBudgets = () => {
           method: "PATCH",
           body: dto,
         });
-        // Recharger les budgets après mise à jour
+        // Load budgets after update
         await getBudgets({
           page: pagination.page,
           limit: pagination.limit,
@@ -145,7 +145,7 @@ export const useBudgets = () => {
       setError(null);
       try {
         await fetcher(`/budgets/${id}`, { method: "DELETE" });
-        // Recharger les budgets après suppression
+        // Load budgets after delete
         await getBudgets({
           page: pagination.page,
           limit: pagination.limit,

@@ -45,7 +45,7 @@ export function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps) {
     ? (budget.spent / budget.amount) * 100
     : 0;
 
-  // Ou avec une sécurité supplémentaire :
+  // Or with a sup security :
   const safePercentageUsed = Math.min(
     typeof percentageUsed === "number" ? percentageUsed : 0,
     100
