@@ -26,9 +26,11 @@ import { BudgetForm } from "./components/BudgetForm";
 import { BudgetPagination } from "./components/BudgetPagination";
 import { fmtCurrency } from "@/lib/format";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { useTranslations } from "next-intl";
 
 export default function BudgetsPage() {
   const user = useAuthStore((s) => s.user);
+  const tB = useTranslations("Budgets");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingBudget, setEditingBudget] = useState<Budget | null>(null);
   const [filters, setFilters] = useState<BudgetQueryParams>({
@@ -66,7 +68,7 @@ export default function BudgetsPage() {
     try {
       await getBudgets(filters);
     } catch {
-      toast.error("Failed to load budgets");
+      toast.error(tB("messages.failed-load"));
     }
   }, [getBudgets, filters]);
 
@@ -117,9 +119,9 @@ export default function BudgetsPage() {
     try {
       await createBudget(data);
       setShowCreateForm(false);
-      toast.success("Budget created successfully");
+      toast.success(tB("messages.create-success"));
     } catch {
-      toast.error("Failed to create budget");
+      toast.error(tB("messages.create-failed"));
     }
   };
 
@@ -129,20 +131,18 @@ export default function BudgetsPage() {
     try {
       await updateBudget(editingBudget.id, data);
       setEditingBudget(null);
-      toast.success("Budget updated successfully");
+      toast.success(tB("messages.updated-success"));
     } catch {
-      toast.error("Failed to update budget");
+      toast.error(tB("messages.updated-failed"));
     }
   };
 
   const handleDeleteBudget = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this budget?")) return;
-
     try {
       await deleteBudget(id);
-      toast.success("Budget deleted successfully");
+      toast.success(tB("messages.deleted-success"));
     } catch {
-      toast.error("Failed to delete budget");
+      toast.error(tB("messages.deleted-failed"));
     }
   };
 
@@ -152,9 +152,9 @@ export default function BudgetsPage() {
     return (
       <div className="container mx-auto p-6">
         <div className="text-center text-destructive">
-          <p>Error loading budgets: {error}</p>
+          <p>{tB("messages.deleted-failed")}</p>
           <Button onClick={loadData} className="mt-4">
-            Retry
+            {tB("messages.retry")}
           </Button>
         </div>
       </div>
@@ -166,14 +166,12 @@ export default function BudgetsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Budgets</h1>
-          <p className="text-muted-foreground">
-            Manage your spending and track your budgets
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight">{tB("title")}</h1>
+          <p className="text-muted-foreground">{tB("desc")}</p>
         </div>
         <Button onClick={() => setShowCreateForm(true)} className="gap-2">
           <Plus className="h-4 w-4" />
-          Create Budget
+          {tB("dialog.button.create")}
         </Button>
       </div>
 
@@ -181,7 +179,9 @@ export default function BudgetsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Budget</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {tB("stats.total")}
+            </CardTitle>
             <Wallet className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -194,14 +194,16 @@ export default function BudgetsPage() {
               )}
             </div>
             <p className="text-xs text-muted-foreground">
-              Across {pagination.total} budgets
+              {tB("stats.across")} {pagination.total}
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Spent</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {tB("stats.total-spent")}
+            </CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -220,7 +222,7 @@ export default function BudgetsPage() {
                 undefined,
                 true
               )}{" "}
-              remaining
+              {tB("stats.remaining")}
             </p>
           </CardContent>
         </Card>
@@ -233,19 +235,21 @@ export default function BudgetsPage() {
           <CardContent>
             <div className="text-2xl font-bold">{stats.alert_count}</div>
             <p className="text-xs text-muted-foreground">
-              Budgets needing attention
+              {tB("stats.attention")}
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Exceeded</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {tB("stats.exceeded")}
+            </CardTitle>
             <AlertTriangle className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.exceeded_count}</div>
-            <p className="text-xs text-muted-foreground">Over budget limits</p>
+            <p className="text-xs text-muted-foreground">{tB("stats.limit")}</p>
           </CardContent>
         </Card>
       </div>
@@ -308,7 +312,9 @@ export default function BudgetsPage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Wallet className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No budgets found</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              {tB("messages.no-found")}
+            </h3>
             <p className="text-muted-foreground text-center mb-4">
               {filters.search
                 ? "Try adjusting your search terms"
@@ -316,7 +322,7 @@ export default function BudgetsPage() {
             </p>
             {!filters.search && (
               <Button onClick={() => setShowCreateForm(true)}>
-                Create Budget
+                {tB("dialog.button.create")}
               </Button>
             )}
           </CardContent>
@@ -347,7 +353,7 @@ export default function BudgetsPage() {
       <Dialog open={showCreateForm} onOpenChange={setShowCreateForm}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Create New Budget</DialogTitle>
+            <DialogTitle>{tB("dialog.button.create-new")}</DialogTitle>
           </DialogHeader>
           <BudgetForm
             onSubmit={handleCreateBudget}
@@ -364,7 +370,7 @@ export default function BudgetsPage() {
       >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Edit Budget</DialogTitle>
+            <DialogTitle>{tB("dialog.button.edit")}</DialogTitle>
           </DialogHeader>
           {editingBudget && (
             <BudgetForm

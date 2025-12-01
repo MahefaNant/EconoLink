@@ -1,41 +1,41 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // lib/budget-utils.ts
 import { BudgetPeriod } from "@/types/budget";
 
-export const budgetPeriodConfig = {
+export const budgetPeriodConfig = (t: any) => ({
   MONTHLY: {
-    label: "Monthly",
-    description: "Resets every month",
+    label: t("stats.periods.config.monthly-label"),
+    description: t("stats.periods.config.monthly-desc"),
     icon: "📅",
     days: 30,
   },
   WEEKLY: {
-    label: "Weekly",
-    description: "Resets every week",
+    label: t("stats.periods.config.weekly-label"),
+    description: t("stats.periods.config.weekly-desc"),
     icon: "📆",
     days: 7,
   },
   YEARLY: {
-    label: "Yearly",
-    description: "Resets every year",
+    label: t("stats.periods.config.yearly-label"),
+    description: t("stats.periods.config.yearly-label"),
     icon: "📊",
     days: 365,
   },
   DAILY: {
-    label: "Daily",
-    description: "Resets every day",
+    label: t("stats.periods.config.daily-label"),
+    description: t("stats.periods.config.daily-label"),
     icon: "☀️",
     days: 1,
   },
-} as const;
+});
 
-export const budgetPeriodOptions = Object.entries(budgetPeriodConfig).map(
-  ([value, config]) => ({
+export const budgetPeriodOptions = (t: any) =>
+  Object.entries(budgetPeriodConfig(t)).map(([value, config]) => ({
     value: value as BudgetPeriod,
     label: config.label,
     description: config.description,
     icon: config.icon,
-  })
-);
+  }));
 
 // Calcule the end date based on the period
 export const calculateEndDate = (

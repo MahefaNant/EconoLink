@@ -9,8 +9,10 @@ import {
   BudgetQueryParams,
 } from "@/types/budget";
 import { fetcher } from "@/lib/fetcher";
+import { useTranslations } from "next-intl";
 
 export const useBudgets = () => {
+  const tB = useTranslations("Budgets");
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [pagination, setPagination] = useState({
     page: 1,

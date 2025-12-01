@@ -13,8 +13,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { useBudgets } from "../hooks/useBudgets";
 import { BudgetCard } from "../components/BudgetCard";
+import { useTranslations } from "next-intl";
 
 export default function BudgetAlertsPage() {
+  const tB = useTranslations("Budgets");
   const [alerts, setAlerts] = useState<Budget[]>([]);
   const { getAlerts, deleteBudget, loading } = useBudgets();
 
@@ -27,19 +29,19 @@ export default function BudgetAlertsPage() {
       const alertBudgets = await getAlerts();
       setAlerts(alertBudgets);
     } catch (err) {
-      toast.error("Failed to load alerts");
+      toast.error(tB("messages.failed-load-alert"));
     }
   };
 
   const handleDeleteBudget = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this budget?")) return;
+    if (!confirm(tB("dialog.delete-desc"))) return;
 
     try {
       await deleteBudget(id);
-      toast.success("Budget deleted successfully");
+      toast.success(tB("messages.deleted-success"));
       await loadAlerts();
     } catch (err) {
-      toast.error("Failed to delete budget");
+      toast.error(tB("messages.deleted-failed"));
     }
   };
 
@@ -61,11 +63,9 @@ export default function BudgetAlertsPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
             <AlertTriangle className="h-8 w-8 text-warning" />
-            Budget Alerts
+            {tB("alerts.title")}
           </h1>
-          <p className="text-muted-foreground">
-            Budgets that need your attention
-          </p>
+          <p className="text-muted-foreground">{tB("stats.attention")}</p>
         </div>
       </div>
 
@@ -92,12 +92,14 @@ export default function BudgetAlertsPage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertTriangle className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No alerts found</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              {tB("messages.no-found-alert")}
+            </h3>
             <p className="text-muted-foreground text-center mb-4">
-              Great! All your budgets are within their limits.
+              {tB("alerts.limits")}
             </p>
             <Button asChild>
-              <Link href="/budgets">View All Budgets</Link>
+              <Link href="/budgets">{tB("view-all")}</Link>
             </Button>
           </CardContent>
         </Card>

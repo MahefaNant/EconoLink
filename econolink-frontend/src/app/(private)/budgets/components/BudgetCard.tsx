@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { fmtCurrency } from "@/lib/format";
+import { useTranslations } from "next-intl";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { useState } from "react";
 
 interface BudgetCardProps {
   budget: Budget;
@@ -42,6 +45,8 @@ const periodConfig = {
 
 export function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps) {
   const user = useAuthStore((s) => s.user);
+  const tB = useTranslations("Budgets");
+  const [openDeleteId, setOpenDeleteId] = useState<boolean>(false);
   const percentageUsed = budget.percentage_used
     ? Number(budget.percentage_used)
     : budget.amount > 0
@@ -127,7 +132,7 @@ export function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps) {
 
           {budget.alert_at && (
             <Badge variant="outline" className="text-xs">
-              Alert at {budget.alert_at}%
+              {tB("alerts.at")} {budget.alert_at}%
             </Badge>
           )}
         </div>
@@ -141,17 +146,31 @@ export function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps) {
             className="flex-1 gap-2"
           >
             <Edit className="h-4 w-4" />
-            Edit
+            {tB("dialog.button.edit-simple")}
           </Button>
           <Button
             variant="destructive"
             size="sm"
-            onClick={() => onDelete(budget.id)}
+            onClick={() => setOpenDeleteId(true)}
             className="flex-1 gap-2"
           >
             <Trash2 className="h-4 w-4" />
-            Delete
+            {tB("dialog.button.delete-simple")}
           </Button>
+
+          <ConfirmDialog
+            open={openDeleteId}
+            onOpenChange={() => setOpenDeleteId(false)}
+            collapsible={true}
+            actionColor="red"
+            text={{
+              title: tB("dialog.delete-title"),
+              description: tB("dialog.delete-desc"),
+              cancel: tB("dialog.button.cancel"),
+              confirm: tB("dialog.button.delete"),
+            }}
+            onConfirm={() => onDelete(budget.id)}
+          />
         </div>
       </CardContent>
     </Card>

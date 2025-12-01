@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { fmtCurrency } from "@/lib/format";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Budget, BudgetChartItem, StatusDataItem } from "@/types/budget";
+import { useTranslations } from "next-intl";
 import {
   BarChart,
   Bar,
@@ -34,6 +35,7 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
 export function StatsCharts({ loading, budgets }: IStatsChartsProps) {
   const user = useAuthStore((s) => s.user);
+  const tB = useTranslations("Budgets");
   const renderCustomizedLabel = ({
     cx,
     cy,
@@ -95,17 +97,15 @@ export function StatsCharts({ loading, budgets }: IStatsChartsProps) {
       {/* Bar Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Budget vs Spent</CardTitle>
-          <CardDescription>
-            Comparison of budgeted amounts vs actual spending
-          </CardDescription>
+          <CardTitle>{tB("stats.charts.budget-vs-spent")}</CardTitle>
+          <CardDescription>{tB("stats.charts.desc")}</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
             <Skeleton className="h-80 w-full" />
           ) : budgetData.length === 0 ? (
             <div className="h-80 flex items-center justify-center text-muted-foreground">
-              No budget data available
+              {tB("stats.charts.no-budget")}
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={300}>
@@ -151,15 +151,15 @@ export function StatsCharts({ loading, budgets }: IStatsChartsProps) {
       {/* Pie Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Budget Status</CardTitle>
-          <CardDescription>Distribution of budget statuses</CardDescription>
+          <CardTitle>{tB("stats.charts.status")}</CardTitle>
+          <CardDescription>{tB("stats.charts.status-desc")}</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
             <Skeleton className="h-80 w-full" />
           ) : statusData.length === 0 ? (
             <div className="h-80 flex items-center justify-center text-muted-foreground">
-              No status data available
+              {tB("stats.charts.no-status")}
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={300}>

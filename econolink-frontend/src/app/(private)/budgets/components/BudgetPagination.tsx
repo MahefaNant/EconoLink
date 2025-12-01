@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface BudgetPaginationProps {
   pagination: {
@@ -21,6 +22,7 @@ export function BudgetPagination({
   onPageChange,
   className,
 }: BudgetPaginationProps) {
+  const tB = useTranslations("Budgets");
   const { page, totalPages, hasNext, hasPrev, total } = pagination;
 
   if (totalPages <= 1) return null;
@@ -58,8 +60,8 @@ export function BudgetPagination({
   return (
     <div className={cn("flex items-center justify-between px-2", className)}>
       <div className="flex-1 text-sm text-muted-foreground">
-        Showing {(page - 1) * pagination.limit + 1}-
-        {Math.min(page * pagination.limit, total)} of {total} budgets
+        {tB("showing")} {(page - 1) * pagination.limit + 1}-
+        {Math.min(page * pagination.limit, total)} / {total} {tB("title")}
       </div>
 
       <div className="flex items-center space-x-1">
@@ -71,7 +73,7 @@ export function BudgetPagination({
           className="gap-1"
         >
           <ChevronLeft className="h-4 w-4" />
-          Previous
+          {tB("dialog.button.previous")}
         </Button>
 
         {getVisiblePages().map((pageNum, index) =>

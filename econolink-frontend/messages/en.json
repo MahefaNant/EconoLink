@@ -415,5 +415,146 @@
       "update-offline": "Transaction updated offline and queued for sync",
       "update-success": "Transaction updated successfully"
     }
+  },
+  "Budgets": {
+    "title": "Budgets",
+    "showing": "Showing",
+    "desc": "Manage your spending and track your budgets",
+    "view-all": "View All Budgets",
+    "stats": {
+      "title": "Budget Statistics",
+      "desc": "Insights and analytics for your budgets",
+      "total": "Total Budget",
+      "total-spent": "Total Spent",
+      "across": "Across",
+      "remaining": "remaining",
+      "attention": "Budgets needing attention",
+      "exceeded": "Exceeded",
+      "limit": "Over budget limits",
+      "attention-need": "Attention Needed",
+      "require": "Budgets that require your immediate attention",
+      "alert": "Alert Budgets",
+      "spend-limit": "Approaching spending limits",
+      "exceeded-budget": "Exceeded Budgets",
+      "over-spend-limit": "Over spending limits",
+      "all-alerts": "View All Alerts",
+      "charts": {
+        "budget-vs-spent": "Budget vs Spent",
+        "desc": "Comparison of budgeted amounts vs actual spending",
+        "no-budget": "No budget data available",
+        "status": "Budget Status",
+        "status-desc": "Distribution of budget statuses",
+        "no-status": "No status data available"
+      },
+      "overview": {
+        "total": "Total Budget",
+        "usage": "Overall Usage",
+        "active": "Active Budgets",
+        "attention": "need attention"
+      },
+      "periods": {
+        "title": "Budget Periods",
+        "desc": "Distribution by budget period",
+        "config": {
+          "monthly-label": "Monthly",
+          "monthly-desc": "Resets every month",
+          "weekly-label": "Weekly",
+          "weekly-desc": "Resets every week",
+          "yearly-label": "Yearly",
+          "yearly-desc": "Resets every year",
+          "daily-label": "Daily",
+          "daily-desc": "Resets every day"
+        }
+      },
+      "top": {
+        "title": "Top Budgets by Usage",
+        "desc": "Budgets with highest spending percentage",
+        "no-budget": "No budget data available"
+      }
+    },
+    "alerts": {
+      "title": "Budget Alerts",
+      "limits": "Great! All your budgets are within their limits.",
+      "at": "Alert at"
+    },
+    "filters": {
+      "title": "Filters",
+      "t-b": "",
+      "desc": "Refine your budget list using the filters below.",
+      "all": "All periods",
+      "status": "Status",
+      "select": {
+        "all": "All statuses",
+        "normal": "Normal",
+        "alert": "Alert",
+        "exceeded": "Exceeded",
+        "monthly": "Monthly",
+        "weekly": "Weekly",
+        "yearly": "Yearly",
+        "daily": "Daily"
+      },
+      "period": "Period",
+      "use-percentage": "Usage Percentage",
+      "date-create": "Date Created",
+      "order": "Order",
+      "ascending": "Ascending",
+      "descending": "Descending",
+      "item-per-page": "Items per page"
+    },
+    "form": {
+      "name": "Name",
+      "name-budget": "Budget Name",
+      "name-placeholder": "Enter budget name",
+      "amount": "Amount",
+      "period": "Period",
+      "alert": "Alert Threshold",
+      "start-date": "Start Date",
+      "pick-date": "Pick a date",
+      "end-date": "End Date",
+      "category": "Category",
+      "category-placeholder": "Category",
+      "name-required": "Name is required",
+      "amount-required": "Amount is required",
+      "amount-greater": "Amount must be greater than 0",
+      "alert-between": "Alert must be between 0 and 100",
+      "category-required": "Category is required"
+    },
+    "dialog": {
+      "delete-title": "Delete Budget?",
+      "delete-desc": "Are you sure you want to delete this Budget? This action cannot be undone.",
+      "delete-desc-high": "Are you absolutely sure you want to delete this Budget? All transactions associated with it will be deleted. This action is irreversible.",
+      "button": {
+        "delete": "Delete Budget",
+        "delete-simple": "Delete Budget",
+        "create": "Create Budget",
+        "create-new": "Create new Budget",
+        "create-simple": "Create",
+        "save": "Save Changes",
+        "save-loading": "Saving...",
+        "cancel": "Cancel",
+        "create-loading": "Creating...",
+        "edit": "Edit Budget",
+        "udapte": "Update Budget",
+        "edit-simple": "Edit Budget",
+        "reset": "Reset",
+        "apply": "Apply",
+        "previous": "Previous",
+        "next": "Next"
+      }
+    },
+    "messages": {
+      "failed-load": "Failed to load budgets",
+      "failed-load-alert": "Failed to load budgets",
+      "create-success": "Budget created successfully",
+      "create-failed": "Failed to create budget",
+      "updated-success": "Budget created successfully",
+      "updated-failed": "Failed to create budget",
+      "deleted-success": "Budget deleted successfully",
+      "deleted-failed": "Failed to deleted budget",
+      "retry": "retry",
+      "no-found": "No budget found",
+      "no-found-alert": "No budget found",
+      "statistic-failed": "Failed to load statistics"
+    }
   }
 }

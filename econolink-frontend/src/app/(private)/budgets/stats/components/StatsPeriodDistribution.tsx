@@ -8,6 +8,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Budget } from "@/types/budget";
+import { useTranslations } from "next-intl";
 
 interface IStatsPeriodDistributionProps {
   loading: boolean;
@@ -26,11 +27,13 @@ export function StatsPeriodDistribution({
     daily: budgets.filter((b) => b.period === "DAILY").length,
   };
 
+  const tB = useTranslations("Budgets");
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Budget Periods</CardTitle>
-        <CardDescription>Distribution by budget period</CardDescription>
+        <CardTitle>{tB("stats.periods.title")}</CardTitle>
+        <CardDescription>{tB("stats.periods.desc")}</CardDescription>
       </CardHeader>
       <CardContent>
         {loading ? (

@@ -27,35 +27,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CategorySelectWithCreate } from "../../transactions/create/components/CategorySelectWithCreate";
 import { BudgetPeriodSelect } from "./BudgetPeriodSelect";
-
-// plan with REQUIRED  category_id
-const budgetFormSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  amount: z
-    .string()
-    .min(1, "Amount is required")
-    .refine(
-      (val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0,
-      "Amount must be greater than 0"
-    ),
-  period: z.enum(["MONTHLY", "WEEKLY", "YEARLY", "DAILY"]),
-  start_date: z.date(),
-  end_date: z.date().optional().nullable(),
-  alert_at: z
-    .string()
-    .optional()
-    .nullable()
-    .refine(
-      (val) =>
-        val === null ||
-        val === "" ||
-        (!isNaN(parseFloat(val || "0")) &&
-          parseFloat(val || "0") >= 0 &&
-          parseFloat(val || "0") <= 100),
-      "Alert must be between 0 and 100"
-    ),
-  category_id: z.string().min(1, "Category is required"),
-});
+import { useTranslations } from "next-intl";
 
 interface BudgetFormProps {
   budget?: Budget;
@@ -71,6 +43,36 @@ export function BudgetForm({
   isLoading = false,
 }: BudgetFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const tB = useTranslations("Budgets");
+
+  // plan with REQUIRED  category_id
+  const budgetFormSchema = z.object({
+    name: z.string().min(1, tB("form.name-required")),
+    amount: z
+      .string()
+      .min(1, tB("form.amount-required"))
+      .refine(
+        (val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0,
+        tB("form.amount-greater")
+      ),
+    period: z.enum(["MONTHLY", "WEEKLY", "YEARLY", "DAILY"]),
+    start_date: z.date(),
+    end_date: z.date().optional().nullable(),
+    alert_at: z
+      .string()
+      .optional()
+      .nullable()
+      .refine(
+        (val) =>
+          val === null ||
+          val === "" ||
+          (!isNaN(parseFloat(val || "0")) &&
+            parseFloat(val || "0") >= 0 &&
+            parseFloat(val || "0") <= 100),
+        tB("form.alert-between")
+      ),
+    category_id: z.string().min(1, tB("form.category-required")),
+  });
 
   const form = useForm<BudgetFormData>({
     resolver: zodResolver(budgetFormSchema),
@@ -120,9 +122,9 @@ export function BudgetForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Budget Name</FormLabel>
+              <FormLabel>{tB("form.name-budget")}</FormLabel>
               <FormControl>
-                <Input placeholder="Enter budget name" {...field} />
+                <Input placeholder={tB("form.name-placeholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -134,7 +136,7 @@ export function BudgetForm({
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <FormLabel>{tB("form.amount")}</FormLabel>
               <FormControl>
                 <Input
                   type="number"
@@ -154,7 +156,7 @@ export function BudgetForm({
             name="period"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Period</FormLabel>
+                <FormLabel>{tB("form.period")}</FormLabel>
                 <FormControl>
                   <BudgetPeriodSelect
                     value={field.value}
@@ -171,7 +173,7 @@ export function BudgetForm({
             name="alert_at"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Alert Threshold (%)</FormLabel>
+                <FormLabel>{tB("form.alert")} (%)</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -194,7 +196,7 @@ export function BudgetForm({
             name="start_date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Start Date</FormLabel>
+                <FormLabel>{tB("form.start-date")}</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -208,7 +210,7 @@ export function BudgetForm({
                         {field.value ? (
                           format(field.value, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>{tB("form.pick-date")}</span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
@@ -234,7 +236,7 @@ export function BudgetForm({
             name="end_date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>End Date (Optional)</FormLabel>
+                <FormLabel>{tB("form.end-date")} (Optional)</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -248,7 +250,7 @@ export function BudgetForm({
                         {field.value ? (
                           format(field.value, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>{tB("form.pick-date")}</span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
@@ -275,13 +277,13 @@ export function BudgetForm({
           name="category_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel>{tB("form.category")}</FormLabel>
               <FormControl>
                 <CategorySelectWithCreate
                   value={field.value}
                   onValueChange={field.onChange}
                   type="EXPENSE"
-                  placeholder="Select a category"
+                  placeholder={tB("form.category-placeholder")}
                 />
               </FormControl>
               <FormMessage />
@@ -296,14 +298,14 @@ export function BudgetForm({
             onClick={onCancel}
             disabled={isSubmitting || isLoading}
           >
-            Cancel
+            {tB("dialog.button.cancel")}
           </Button>
           <Button type="submit" disabled={isSubmitting || isLoading}>
             {isSubmitting
-              ? "Saving..."
+              ? tB("dialog.button.save-loading")
               : budget
-              ? "Update Budget"
-              : "Create Budget"}
+              ? tB("dialog.button.udapte")
+              : tB("dialog.button.create")}
           </Button>
         </div>
       </form>

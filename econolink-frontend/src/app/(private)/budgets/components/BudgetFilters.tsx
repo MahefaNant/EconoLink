@@ -27,6 +27,7 @@ import {
   OrderEnum,
 } from "@/types/budget";
 import { Badge } from "@/components/ui/badge";
+import { useTranslations } from "next-intl";
 
 interface BudgetFiltersProps {
   filters: BudgetQueryParams;
@@ -40,6 +41,7 @@ export function BudgetFilters({
   onReset,
 }: BudgetFiltersProps) {
   const [open, setOpen] = useState(false);
+  const tB = useTranslations("Budgets");
 
   const activeFiltersCount = Object.values(filters).filter(
     (value) =>
@@ -69,7 +71,7 @@ export function BudgetFilters({
       <SheetTrigger asChild>
         <Button variant="outline" className="gap-2">
           <Filter className="h-4 w-4" />
-          Filters
+          {tB("filters.title")}
           {activeFiltersCount > 0 && (
             <Badge variant="secondary" className="ml-1 h-5 w-5 p-0">
               {activeFiltersCount}
@@ -79,16 +81,14 @@ export function BudgetFilters({
       </SheetTrigger>
       <SheetContent className="sm:max-w-md">
         <SheetHeader>
-          <SheetTitle>Filter Budgets</SheetTitle>
-          <SheetDescription>
-            Refine your budget list using the filters below.
-          </SheetDescription>
+          <SheetTitle>{tB("filters.t-b")}</SheetTitle>
+          <SheetDescription>{tB("filters.desc")}</SheetDescription>
         </SheetHeader>
 
         <div className="space-y-6 py-6 m-4">
           {/* Status Filter */}
           <div className="space-y-3">
-            <Label htmlFor="status">Status</Label>
+            <Label htmlFor="status">{tB("filters.status")}</Label>
             <Select
               value={filters.status || "all"}
               onValueChange={(value: BudgetStatus | "all") =>
@@ -102,17 +102,23 @@ export function BudgetFilters({
                 <SelectValue placeholder="All statuses" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All statuses</SelectItem>
-                <SelectItem value="NORMAL">Normal</SelectItem>
-                <SelectItem value="ALERT">Alert</SelectItem>
-                <SelectItem value="EXCEEDED">Exceeded</SelectItem>
+                <SelectItem value="all">{tB("filters.select.all")}</SelectItem>
+                <SelectItem value="NORMAL">
+                  {tB("filters.select.normal")}
+                </SelectItem>
+                <SelectItem value="ALERT">
+                  {tB("filters.select.alert")}
+                </SelectItem>
+                <SelectItem value="EXCEEDED">
+                  {tB("filters.select.exceeded")}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* Period Filter */}
           <div className="space-y-3">
-            <Label htmlFor="period">Period</Label>
+            <Label htmlFor="period">{tB("filters.period")}</Label>
             <Select
               value={filters.period || "all"}
               onValueChange={(value: BudgetPeriod | "all") =>
@@ -123,14 +129,22 @@ export function BudgetFilters({
               }
             >
               <SelectTrigger>
-                <SelectValue placeholder="All periods" />
+                <SelectValue placeholder={tB("filters.all")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All periods</SelectItem>
-                <SelectItem value="MONTHLY">Monthly</SelectItem>
-                <SelectItem value="WEEKLY">Weekly</SelectItem>
-                <SelectItem value="YEARLY">Yearly</SelectItem>
-                <SelectItem value="DAILY">Daily</SelectItem>
+                <SelectItem value="all">{tB("filters.all")}</SelectItem>
+                <SelectItem value="MONTHLY">
+                  {tB("filters.select.monthly")}
+                </SelectItem>
+                <SelectItem value="WEEKLY">
+                  {tB("filters.select.weekly")}
+                </SelectItem>
+                <SelectItem value="YEARLY">
+                  {tB("filters.select.yearly")}
+                </SelectItem>
+                <SelectItem value="DAILY">
+                  {tB("filters.select.daily")}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -149,17 +163,19 @@ export function BudgetFilters({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="name">Name</SelectItem>
+                  <SelectItem value="name">{tB("form.name")}</SelectItem>
                   <SelectItem value="percentage_used">
-                    Usage Percentage
+                    {tB("filters.use-percentage")}
                   </SelectItem>
-                  <SelectItem value="created_at">Date Created</SelectItem>
+                  <SelectItem value="created_at">
+                    {tB("filters.date-create")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-3">
-              <Label htmlFor="order">Order</Label>
+              <Label htmlFor="order"> {tB("filters.order")}</Label>
               <Select
                 value={filters.order || "desc"}
                 onValueChange={(value: OrderEnum) =>
@@ -170,8 +186,10 @@ export function BudgetFilters({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="asc">Ascending</SelectItem>
-                  <SelectItem value="desc">Descending</SelectItem>
+                  <SelectItem value="asc">{tB("filters.ascending")}</SelectItem>
+                  <SelectItem value="desc">
+                    {tB("filters.descending")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -179,7 +197,7 @@ export function BudgetFilters({
 
           {/* Items per page */}
           <div className="space-y-3">
-            <Label htmlFor="limit">Items per page</Label>
+            <Label htmlFor="limit">{tB("filters.item-per-page")}</Label>
             <Select
               value={String(filters.limit || 10)}
               onValueChange={(value) =>
@@ -206,10 +224,10 @@ export function BudgetFilters({
             className="flex-1 gap-2"
           >
             <X className="h-4 w-4" />
-            Reset
+            {tB("dialog.button.reset")}
           </Button>
           <Button onClick={() => setOpen(false)} className="flex-1">
-            Apply
+            {tB("dialog.button.apply")}
           </Button>
         </div>
       </SheetContent>

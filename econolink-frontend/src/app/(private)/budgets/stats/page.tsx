@@ -14,8 +14,10 @@ import { StatsCharts } from "./components/StatsCharts";
 import { StatsPeriodDistribution } from "./components/StatsPeriodDistribution";
 import { TopBudgets } from "./components/TopBudgets";
 import { StatsAlertSummary } from "./components/StatsAlertSummary";
+import { useTranslations } from "next-intl";
 
 export default function BudgetStatsPage() {
+  const tB = useTranslations("Budgets");
   const [stats, setStats] = useState({
     total_amount: 0,
     total_spent: 0,
@@ -34,7 +36,7 @@ export default function BudgetStatsPage() {
       await getBudgets();
       setStats(statsData);
     } catch {
-      toast.error("Failed to load statistics");
+      toast.error(tB("messages.statistic-failed"));
     }
   };
 
@@ -50,11 +52,9 @@ export default function BudgetStatsPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
             <PieChartIcon className="h-8 w-8 text-primary" />
-            Budget Statistics
+            {tB("stats.title")}
           </h1>
-          <p className="text-muted-foreground">
-            Insights and analytics for your budgets
-          </p>
+          <p className="text-muted-foreground">{tB("stats.desc")}</p>
         </div>
       </div>
 

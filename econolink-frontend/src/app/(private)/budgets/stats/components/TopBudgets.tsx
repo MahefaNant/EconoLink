@@ -10,6 +10,7 @@ import { Budget } from "@/types/budget";
 import { Badge } from "@/components/ui/badge";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { fmtCurrency } from "@/lib/format";
+import { useTranslations } from "next-intl";
 
 interface ITopBudgetsProps {
   budgets: Budget[];
@@ -18,6 +19,7 @@ interface ITopBudgetsProps {
 
 export function TopBudgets({ budgets, loading }: ITopBudgetsProps) {
   const user = useAuthStore((s) => s.user);
+  const tB = useTranslations("Budgets");
   // Top (5) budgets
   const topBudgetsByUsage = [...budgets]
     .sort((a, b) => {
@@ -30,10 +32,8 @@ export function TopBudgets({ budgets, loading }: ITopBudgetsProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Top Budgets by Usage</CardTitle>
-        <CardDescription>
-          Budgets with highest spending percentage
-        </CardDescription>
+        <CardTitle>{tB("stats.top.title")}</CardTitle>
+        <CardDescription>{tB("stats.top.desc")}</CardDescription>
       </CardHeader>
       <CardContent>
         {loading ? (
@@ -47,7 +47,7 @@ export function TopBudgets({ budgets, loading }: ITopBudgetsProps) {
           </div>
         ) : topBudgetsByUsage.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
-            No budget data available
+            {tB("stats.top.no-budget")}
           </div>
         ) : (
           <div className="space-y-4">
