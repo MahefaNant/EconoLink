@@ -8,6 +8,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Budget } from "@/types/budget";
 import { Badge } from "@/components/ui/badge";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { fmtCurrency } from "@/lib/format";
 
 interface ITopBudgetsProps {
   budgets: Budget[];
@@ -15,6 +17,7 @@ interface ITopBudgetsProps {
 }
 
 export function TopBudgets({ budgets, loading }: ITopBudgetsProps) {
+  const user = useAuthStore((s) => s.user);
   // Top (5) budgets
   const topBudgetsByUsage = [...budgets]
     .sort((a, b) => {
@@ -78,8 +81,19 @@ export function TopBudgets({ budgets, loading }: ITopBudgetsProps) {
                         </Badge>
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        ${budget.spent.toLocaleString()} / $
-                        {budget.amount.toLocaleString()}
+                        {fmtCurrency(
+                          String(budget.spent || "0"),
+                          user?.currency,
+                          undefined,
+                          true
+                        )}{" "}
+                        /
+                        {fmtCurrency(
+                          String(budget.amount || "0"),
+                          user?.currency,
+                          undefined,
+                          true
+                        )}
                       </div>
                     </div>
                   </div>

@@ -24,8 +24,11 @@ import { BudgetFilters } from "./components/BudgetFilters";
 import { BudgetCard } from "./components/BudgetCard";
 import { BudgetForm } from "./components/BudgetForm";
 import { BudgetPagination } from "./components/BudgetPagination";
+import { fmtCurrency } from "@/lib/format";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function BudgetsPage() {
+  const user = useAuthStore((s) => s.user);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingBudget, setEditingBudget] = useState<Budget | null>(null);
   const [filters, setFilters] = useState<BudgetQueryParams>({
@@ -183,7 +186,12 @@ export default function BudgetsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              ${stats.total_amount.toLocaleString()}
+              {fmtCurrency(
+                String(stats.total_amount || "0"),
+                user?.currency,
+                undefined,
+                true
+              )}
             </div>
             <p className="text-xs text-muted-foreground">
               Across {pagination.total} budgets
@@ -198,10 +206,21 @@ export default function BudgetsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              ${stats.total_spent.toLocaleString()}
+              {fmtCurrency(
+                String(stats.total_spent || "0"),
+                user?.currency,
+                undefined,
+                true
+              )}
             </div>
             <p className="text-xs text-muted-foreground">
-              ${totalRemaining.toLocaleString()} remaining
+              {fmtCurrency(
+                String(totalRemaining || "0"),
+                user?.currency,
+                undefined,
+                true
+              )}{" "}
+              remaining
             </p>
           </CardContent>
         </Card>

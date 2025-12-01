@@ -6,6 +6,8 @@ import { AlertTriangle, Calendar, Tag, Edit, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { fmtCurrency } from "@/lib/format";
 
 interface BudgetCardProps {
   budget: Budget;
@@ -39,6 +41,7 @@ const periodConfig = {
 };
 
 export function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps) {
+  const user = useAuthStore((s) => s.user);
   const percentageUsed = budget.percentage_used
     ? Number(budget.percentage_used)
     : budget.amount > 0
@@ -77,8 +80,19 @@ export function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps) {
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">
-              ${budget.spent.toLocaleString()} / $
-              {budget.amount.toLocaleString()}
+              {fmtCurrency(
+                String(budget.spent || "0"),
+                user?.currency,
+                undefined,
+                true
+              )}{" "}
+              /
+              {fmtCurrency(
+                String(budget.amount || "0"),
+                user?.currency,
+                undefined,
+                true
+              )}
             </span>
             <span className="font-medium">
               {safePercentageUsed.toFixed(1)}%

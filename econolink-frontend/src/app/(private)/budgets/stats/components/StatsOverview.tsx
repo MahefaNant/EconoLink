@@ -1,4 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { fmtCurrency } from "@/lib/format";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { Budget } from "@/types/budget";
 import { Progress } from "@radix-ui/react-progress";
 import { Wallet, TrendingUp, BarChart3, Target } from "lucide-react";
@@ -15,6 +17,7 @@ interface IStatsOverViewProps {
 
 export function StatsOverView({ stats, budgets }: IStatsOverViewProps) {
   // Calculate sup stats
+  const user = useAuthStore((s) => s.user);
   const totalRemaining = stats.total_amount - stats.total_spent;
   const overallUsage =
     stats.total_amount > 0 ? (stats.total_spent / stats.total_amount) * 100 : 0;
@@ -28,7 +31,12 @@ export function StatsOverView({ stats, budgets }: IStatsOverViewProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            ${stats.total_amount.toLocaleString()}
+            {fmtCurrency(
+              String(stats.total_amount || "0"),
+              user?.currency,
+              undefined,
+              true
+            )}
           </div>
           <p className="text-xs text-muted-foreground">
             Across {budgets.length} budgets
@@ -43,10 +51,21 @@ export function StatsOverView({ stats, budgets }: IStatsOverViewProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            ${stats.total_spent.toLocaleString()}
+            {fmtCurrency(
+              String(stats.total_spent || "0"),
+              user?.currency,
+              undefined,
+              true
+            )}
           </div>
           <p className="text-xs text-muted-foreground">
-            ${totalRemaining.toLocaleString()} remaining
+            {fmtCurrency(
+              String(totalRemaining || "0"),
+              user?.currency,
+              undefined,
+              true
+            )}{" "}
+            remaining
           </p>
         </CardContent>
       </Card>

@@ -9,6 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { fmtCurrency } from "@/lib/format";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { Budget, BudgetChartItem, StatusDataItem } from "@/types/budget";
 import {
   BarChart,
@@ -31,6 +33,7 @@ interface IStatsChartsProps {
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
 export function StatsCharts({ loading, budgets }: IStatsChartsProps) {
+  const user = useAuthStore((s) => s.user);
   const renderCustomizedLabel = ({
     cx,
     cy,
@@ -118,7 +121,12 @@ export function StatsCharts({ loading, budgets }: IStatsChartsProps) {
                 <YAxis fontSize={12} />
                 <Tooltip
                   formatter={(value: number) => [
-                    `$${value.toLocaleString()}`,
+                    `${fmtCurrency(
+                      String(value || "0"),
+                      user?.currency,
+                      undefined,
+                      true
+                    )}`,
                     "",
                   ]}
                 />
