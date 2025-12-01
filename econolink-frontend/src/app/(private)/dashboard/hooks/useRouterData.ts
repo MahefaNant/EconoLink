@@ -80,6 +80,30 @@ export default function useRouterData() {
           },
         ],
       },
+      {
+        title: "Budgets space",
+        isCollapsible: true,
+        items: [
+          {
+            title: "Budgets",
+            url: "/budgets",
+            isActive: pathname === "/budgets",
+            icon: PieChart,
+          },
+          {
+            title: "Stats",
+            url: "/budgets/stats",
+            isActive: pathname === "/budgets/stats",
+            icon: PieChart,
+          },
+          {
+            title: "Alerts",
+            url: "/budgets/alerts",
+            isActive: pathname.startsWith("/budgets/settings"),
+            icon: User,
+          },
+        ],
+      },
     ],
   };
   return { data };

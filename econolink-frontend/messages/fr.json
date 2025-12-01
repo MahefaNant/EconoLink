@@ -415,5 +415,159 @@
       "update-offline": "Transaction mise à jour hors ligne et en file d'attente pour la synchronisation",
       "update-success": "Transaction mise à jour avec succès"
     }
+  },
+  "Budgets": {
+    "title": "Budgets",
+    "showing": "Affichage",
+    "desc": "Gérez vos dépenses et suivez vos budgets",
+    "view-all": "Voir tous les budgets",
+
+    "stats": {
+      "title": "Statistiques des budgets",
+      "desc": "Aperçus et analyses de vos budgets",
+      "total": "Budget total",
+      "total-spent": "Total dépensé",
+      "across": "Sur",
+      "remaining": "restant",
+      "attention": "Budgets nécessitant une attention",
+      "exceeded": "Dépassés",
+      "limit": "Au-delà des limites",
+      "attention-need": "Attention requise",
+      "require": "Budgets nécessitant votre attention immédiate",
+      "alert": "Budgets en alerte",
+      "spend-limit": "Dépenses proches des limites",
+      "exceeded-budget": "Budgets dépassés",
+      "over-spend-limit": "Au-dessus des limites",
+      "all-alerts": "Voir toutes les alertes",
+
+      "charts": {
+        "budget-vs-spent": "Budget vs Dépenses",
+        "desc": "Comparaison entre les montants budgétés et les dépenses réelles",
+        "no-budget": "Aucune donnée de budget disponible",
+        "status": "État du budget",
+        "status-desc": "Répartition des états des budgets",
+        "no-status": "Aucune donnée d'état disponible"
+      },
+
+      "overview": {
+        "total": "Budget total",
+        "usage": "Utilisation globale",
+        "active": "Budgets actifs",
+        "attention": "nécessitent une attention"
+      },
+
+      "periods": {
+        "title": "Périodes de budget",
+        "desc": "Répartition par période de budget",
+        "config": {
+          "monthly-label": "Mensuel",
+          "monthly-desc": "Se réinitialise chaque mois",
+          "weekly-label": "Hebdomadaire",
+          "weekly-desc": "Se réinitialise chaque semaine",
+          "yearly-label": "Annuel",
+          "yearly-desc": "Se réinitialise chaque année",
+          "daily-label": "Quotidien",
+          "daily-desc": "Se réinitialise chaque jour"
+        }
+      },
+
+      "top": {
+        "title": "Top budgets par utilisation",
+        "desc": "Budgets avec le plus fort pourcentage de dépenses",
+        "no-budget": "Aucune donnée de budget disponible"
+      }
+    },
+
+    "alerts": {
+      "title": "Alertes budgets",
+      "limits": "Super ! Tous vos budgets sont dans leurs limites.",
+      "at": "Alerte à"
+    },
+
+    "filters": {
+      "title": "Filtres",
+      "t-b": "",
+      "desc": "Affinez votre liste de budgets grâce aux filtres ci-dessous.",
+      "all": "Toutes les périodes",
+      "status": "Statut",
+
+      "select": {
+        "all": "Tous les statuts",
+        "normal": "Normal",
+        "alert": "Alerte",
+        "exceeded": "Dépassé",
+        "monthly": "Mensuel",
+        "weekly": "Hebdomadaire",
+        "yearly": "Annuel",
+        "daily": "Quotidien"
+      },
+
+      "period": "Période",
+      "use-percentage": "Pourcentage d'utilisation",
+      "date-create": "Date de création",
+      "order": "Ordre",
+      "ascending": "Croissant",
+      "descending": "Décroissant",
+      "item-per-page": "Éléments par page"
+    },
+
+    "form": {
+      "name": "Nom",
+      "name-budget": "Nom du budget",
+      "name-placeholder": "Entrez le nom du budget",
+      "amount": "Montant",
+      "period": "Période",
+      "alert": "Seuil d'alerte",
+      "start-date": "Date de début",
+      "pick-date": "Choisissez une date",
+      "end-date": "Date de fin",
+      "category": "Catégorie",
+      "category-placeholder": "Catégorie",
+      "name-required": "Le nom est requis",
+      "amount-required": "Le montant est requis",
+      "amount-greater": "Le montant doit être supérieur à 0",
+      "alert-between": "L’alerte doit être entre 0 et 100",
+      "category-required": "La catégorie est requise"
+    },
+
+    "dialog": {
+      "delete-title": "Supprimer le budget ?",
+      "delete-desc": "Voulez-vous vraiment supprimer ce budget ? Cette action est irréversible.",
+      "delete-desc-high": "Êtes-vous absolument sûr de vouloir supprimer ce budget ? Toutes les transactions associées seront supprimées. Cette action est irréversible.",
+
+      "button": {
+        "delete": "Supprimer le budget",
+        "delete-simple": "Supprimer le budget",
+        "create": "Créer un budget",
+        "create-new": "Créer un nouveau budget",
+        "create-simple": "Créer",
+        "save": "Enregistrer les modifications",
+        "save-loading": "Enregistrement…",
+        "cancel": "Annuler",
+        "create-loading": "Création…",
+        "edit": "Modifier le budget",
+        "udapte": "Mettre à jour le budget",
+        "edit-simple": "Modifier le budget",
+        "reset": "Réinitialiser",
+        "apply": "Appliquer",
+        "previous": "Précédent",
+        "next": "Suivant"
+      }
+    },
+
+    "messages": {
+      "failed-load": "Échec du chargement des budgets",
+      "failed-load-alert": "Échec du chargement des budgets",
+      "create-success": "Budget créé avec succès",
+      "create-failed": "Échec de la création du budget",
+      "updated-success": "Budget mis à jour avec succès",
+      "updated-failed": "Échec de la mise à jour du budget",
+      "deleted-success": "Budget supprimé avec succès",
+      "deleted-failed": "Échec de la suppression du budget",
+      "retry": "réessayer",
+      "no-found": "Aucun budget trouvé",
+      "no-found-alert": "Aucun budget trouvé",
+      "statistic-failed": "Échec du chargement des statistiques"
+    }
   }
 }

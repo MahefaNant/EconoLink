@@ -291,26 +291,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
--- =============================================
--- VUES UTILES
--- =============================================
-
--- Vue pour le statut des budgets
-CREATE VIEW budget_status AS
-SELECT 
-    b.*,
-    c.name as category_name,
-    (b.spent / b.amount * 100) as percentage_used,
-    CASE 
-        WHEN (b.spent / b.amount * 100) >= 100 THEN 'EXCEEDED'
-        WHEN (b.spent / b.amount * 100) >= b.alert_at THEN 'ALERT'
-        ELSE 'NORMAL'
-    END as status
-FROM budgets b
-LEFT JOIN categories c ON b.category_id = c.id
-WHERE b.end_date IS NULL OR b.end_date >= CURRENT_DATE;
-
 -- =============================================
 -- RECALCUL COMPLET DE TOUTES LES BALANCES
 -- =============================================
