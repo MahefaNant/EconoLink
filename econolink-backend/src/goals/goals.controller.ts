@@ -10,6 +10,7 @@ import {
   Body,
   Req,
   UseGuards,
+  Query,
 } from "@nestjs/common";
 import { GoalsService } from "./goals.service";
 import { CreateGoalDto } from "./dto/create-goal.dto";
@@ -28,8 +29,21 @@ export class GoalsController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Req() req: any) {
-    return this.goalsService.findAll(req.user.id);
+  findAll(
+    @Req() req: any,
+    @Query("page") page?: string,
+    @Query("limit") limit?: string,
+    @Query("search") search?: string,
+    @Query("orderBy") orderBy?: string,
+    @Query("order") order?: "asc" | "desc",
+  ) {
+    return this.goalsService.findAll(req.user.id, {
+      page,
+      limit,
+      search,
+      orderBy,
+      order,
+    });
   }
 
   @UseGuards(JwtAuthGuard)

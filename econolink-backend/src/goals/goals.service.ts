@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Injectable,
   NotFoundException,
@@ -6,6 +8,7 @@ import {
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateGoalDto } from "./dto/create-goal.dto";
 import { UpdateGoalDto } from "./dto/update-goal.dto";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class GoalsService {
@@ -20,11 +23,42 @@ export class GoalsService {
     });
   }
 
-  async findAll(userId: string) {
-    return this.prisma.goals.findMany({
-      where: { user_id: userId },
-      orderBy: { created_at: "desc" },
-    });
+  async findAll(userId: string, filters: any) {
+    const page = Number(filters.page) || 1;
+    const limit = Number(filters.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const where = {
+      user_id: userId,
+      ...(filters.search && {
+        name: {
+          contains: filters.search,
+          mode: "insensitive",
+        },
+      }),
+    };
+
+    const orderBy = filters.orderBy
+      ? { [filters.orderBy]: filters.order || ("desc" as Prisma.SortOrder) }
+      : { created_at: "desc" as Prisma.SortOrder };
+
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.goals.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy,
+      }),
+      this.prisma.goals.count({ where }),
+    ]);
+
+    return {
+      page,
+      limit,
+      total,
+      pages: Math.ceil(total / limit),
+      data: items,
+    };
   }
 
   async findOne(id: string, userId: string) {
