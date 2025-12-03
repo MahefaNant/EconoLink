@@ -81,26 +81,38 @@ export default function useRouterData() {
         ],
       },
       {
-        title: "Budgets space",
+        title: t("budgets-space.title"),
         isCollapsible: true,
         items: [
           {
-            title: "Budgets",
+            title: t("budgets-space.budgets"),
             url: "/budgets",
             isActive: pathname === "/budgets",
             icon: PieChart,
           },
           {
-            title: "Stats",
+            title: t("budgets-space.stats"),
             url: "/budgets/stats",
             isActive: pathname === "/budgets/stats",
             icon: PieChart,
           },
           {
-            title: "Alerts",
+            title: t("budgets-space.alerts"),
             url: "/budgets/alerts",
             isActive: pathname.startsWith("/budgets/settings"),
             icon: User,
+          },
+        ],
+      },
+      {
+        title: t("goals-space.title"),
+        isCollapsible: true,
+        items: [
+          {
+            title: t("goals-space.goals"),
+            url: "/goals",
+            isActive: pathname === "/goals",
+            icon: PieChart,
           },
         ],
       },

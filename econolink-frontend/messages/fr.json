@@ -91,6 +91,16 @@
           "title": "Espace des transactions",
           "transactions": "Transactions",
           "add": "Ajouter une transaction"
+        },
+        "budgets-space": {
+          "title": "Espace budgets",
+          "budgets": "Budgets",
+          "stats": "Statistiques",
+          "alerts": "Alertes"
+        },
+        "goals-space": {
+          "title": "Espace objectifs",
+          "goals": "Objectifs"
         }
       }
     }
@@ -547,7 +557,7 @@
         "create-loading": "Création…",
         "edit": "Modifier le budget",
         "udapte": "Mettre à jour le budget",
-        "edit-simple": "Modifier le budget",
+        "edit-simple": "Modifier",
         "reset": "Réinitialiser",
         "apply": "Appliquer",
         "previous": "Précédent",
@@ -568,6 +578,105 @@
       "no-found": "Aucun budget trouvé",
       "no-found-alert": "Aucun budget trouvé",
       "statistic-failed": "Échec du chargement des statistiques"
+    }
+  },
+  "Goals": {
+    "title": "Mes Objectifs",
+    "title-simple": "objectifs",
+    "common": {
+      "obj": "Objectif",
+      "collect": "Collecté",
+      "du-date": "Échéance"
+    },
+    "desc": "Suivez et gérez vos objectifs financiers",
+    "stats": {
+      "obj-tot": "Objectifs totaux",
+      "finish": "Terminés",
+      "colect-total": "Total collecté",
+      "progress-global": "Progression globale"
+    },
+    "colors": {
+      "emerald": "Émeraude",
+      "blue": "Bleu",
+      "purple": "Violet",
+      "red": "Rouge",
+      "amber": "Ambre",
+      "pink": "Rose"
+    },
+    "icons": {
+      "target": "Cible",
+      "money": "Argent",
+      "house": "Maison",
+      "car": "Voiture",
+      "travel": "Voyage",
+      "education": "Éducation",
+      "jewelry": "Bijou",
+      "phone": "Téléphone"
+    },
+    "dialog": {
+      "delete": "Supprimer l'objectif",
+      "new": "Nouvel objectif",
+      "new-progress": "Nouvel progression",
+      "new-total": "Nouveau total",
+      "rest": "Reste à collecter",
+      "delete-ireversible": "Cette action est irréversible",
+      "delete-desc": "Êtes-vous sûr de vouloir supprimer l objectif",
+      "delete-desc-high": "Toutes les données associées à cet objectif seront définitivement supprimées. Cette action ne peut pas être annulée.",
+      "progress": "Progression",
+      "no-icon": "Aucune icône trouvée.",
+      "no-color": "Aucune couleur trouvée.",
+      "progress-now": "Progression actuelle",
+      "obj-tot": "Objectifs totaux",
+      "collected": "Collecté",
+      "congrats": "Félicitations ! Cet objectif sera complété après cet ajout.",
+      "quick-amount": "Montants rapides",
+      "amount-to-add": "Montant à ajouter",
+      "until": "Jusqu à",
+      "it-rest": "Il Reste",
+      "to-collect": "à collecter pour atteindre l objectif",
+      "no-objectif-found": "Aucun objectif trouvé",
+      "no-objectif": "Aucun objectif",
+      "no-objectif-search": "Aucun objectif ne correspond à votre recherche.",
+      "start-to-create": "Commencez par créer votre premier objectif financier.",
+      "display-of": "Affichage de",
+      "button": {
+        "create": "Créer un objectif",
+        "create-progress": "Créer un progrès",
+        "delete": "Supprimer l' objectif",
+        "delete-simple": "Supprimer le objectif",
+        "delete-loading": "Suppression...",
+        "create-new": "Créer un nouveau objectif",
+        "create-simple": "Créer",
+        "save": "Enregistrer les modifications",
+        "save-loading": "Enregistrement…",
+        "cancel": "Annuler",
+        "create-loading": "Création…",
+        "edit": "Modifier l' objectif",
+        "edit-loading": "Modification...",
+        "udapte": "Mettre à jour l' objectif",
+        "edit-simple": "Modifier",
+        "reset": "Réinitialiser",
+        "apply": "Appliquer",
+        "previous": "Précédent",
+        "next": "Suivant"
+      }
+    },
+    "form": {
+      "name": "Nom de l objectif *",
+      "desc": "Description",
+      "name-placeholder": "Ex: Achat voiture",
+      "desc-placeholder": "Décrivez votre objectif...",
+      "search-placeholder": "Rechercher un objectif...",
+      "amount-target": "Montant cible *",
+      "date-limit": "Date limite",
+      "select-date": "Sélectionner une date",
+      "filter-status": "Filtrer par statut",
+      "obj-all": "Tous les objectifs",
+      "in-progress": "En cours",
+      "finish": "Terminés",
+      "new-obj": "Nouvel objectif",
+      "name-required": "Le nom est requis",
+      "amount-positive": "Le montant doit être positif"
     }
   }
 }

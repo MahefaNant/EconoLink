@@ -91,6 +91,16 @@
           "title": "Transaction space",
           "transactions": "Transactions",
           "add": "Add Transaction"
+        },
+        "budgets-space": {
+          "title": "Budgets space",
+          "budgets": "Budgets",
+          "stats": "Stats",
+          "alerts": "Alerts"
+        },
+        "goals-space": {
+          "title": "Goals space",
+          "goals": "Goals"
         }
       }
     }
@@ -555,6 +565,106 @@
       "no-found": "No budget found",
       "no-found-alert": "No budget found",
       "statistic-failed": "Failed to load statistics"
+    }
+  },
+  "Goals": {
+    "title": "My Goals",
+    "title-simple": "goals",
+    "common": {
+      "obj": "Goal",
+      "collect": "Collected",
+      "du-date": "Due date"
+    },
+
+    "desc": "Track and manage your financial goals",
+    "stats": {
+      "obj-tot": "Total Goals",
+      "finish": "Completed",
+      "colect-total": "Total Collected",
+      "progress-global": "Overall Progress"
+    },
+    "colors": {
+      "emerald": "Emerald",
+      "blue": "Blue",
+      "purple": "Purple",
+      "red": "Red",
+      "amber": "Amber",
+      "pink": "Pink"
+    },
+
+    "icons": {
+      "target": "Target",
+      "money": "Money",
+      "house": "House",
+      "car": "Car",
+      "travel": "Travel",
+      "education": "Education",
+      "jewelry": "Jewelry",
+      "phone": "Phone"
+    },
+    "dialog": {
+      "delete": "Delete goal",
+      "new": "New goal",
+      "new-progress": "New progress",
+      "new-total": "New total",
+      "rest": "Remaining to collect",
+      "delete-ireversible": "This action is irreversible",
+      "delete-desc": "Are you sure you want to delete the goal?",
+      "delete-desc-high": "All data associated with this goal will be permanently deleted. This action cannot be undone.",
+      "progress": "Progress",
+      "no-icon": "No icon found.",
+      "no-color": "No color found.",
+      "progress-now": "Current progress",
+      "obj-tot": "Total goals",
+      "collected": "Collected",
+      "congrats": "Congratulations! This goal will be completed after this addition.",
+      "quick-amount": "Quick amounts",
+      "amount-to-add": "Amount to add",
+      "until": "Until",
+      "it-rest": "It remains",
+      "to-collect": "To collect to reach the goal",
+      "no-objectif-found": "No objective found",
+      "no-objectif": "No objective",
+      "no-objectif-search": "No objectives match your search.",
+      "start-to-create": "Start by creating your first financial objective.",
+      "display-of": "Display of",
+      "button": {
+        "create": "Create a goal",
+        "create-progress": "Create progress",
+        "delete": "Delete the goal",
+        "delete-simple": "Delete...",
+        "create-new": "Create a new goal",
+        "create-simple": "Create",
+        "save": "Save changes",
+        "save-loading": "Save...",
+        "cancel": "Cancel",
+        "create-loading": "Creating...",
+        "edit": "Edit the goal",
+        "edit-loading": "Modifying...",
+        "update": "Update goal",
+        "edit-simple": "Edit",
+        "reset": "Reset",
+        "apply": "Apply",
+        "previous": "Previous",
+        "next": "Next"
+      }
+    },
+    "form": {
+      "name": "Goal Name *",
+      "desc": "Description",
+      "name-placeholder": "Example: Car Purchase",
+      "desc-placeholder": "Describe your goal...",
+      "search-placeholder": "Search for a goal...",
+      "amount-target": "Target Amount *",
+      "date-limit": "Deadline Date",
+      "select-date": "Select a Date",
+      "filter-status": "Filter by Status",
+      "obj-all": "All Goals",
+      "in-progress": "In Progress",
+      "finish": "Completed",
+      "new-obj": "New objective",
+      "name-required": "Name is required",
+      "amount-positive": "Amount must be positive"
     }
   }
 }

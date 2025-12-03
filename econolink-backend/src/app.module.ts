@@ -9,9 +9,10 @@ import { AccountModule } from './account/account.module';
 import { UserModule } from './user/user.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { BudgetsModule } from './budgets/budgets.module';
+import { GoalsModule } from './goals/goals.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, CategorieModule, AccountModule, UserModule, TransactionModule, BudgetsModule],
+  imports: [AuthModule, PrismaModule, CategorieModule, AccountModule, UserModule, TransactionModule, BudgetsModule, GoalsModule],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })

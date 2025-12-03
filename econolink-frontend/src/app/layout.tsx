@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactNode } from "react";
+import { Providers } from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,7 +47,7 @@ export default async function RootLayout({ children }: Props) {
           disableTransitionOnChange
         >
           <NextIntlClientProvider>
-            {children}
+            <Providers>{children}</Providers>
             <Toaster richColors position="top-center" />
           </NextIntlClientProvider>
         </ThemeProvider>

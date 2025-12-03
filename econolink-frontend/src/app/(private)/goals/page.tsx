@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 "use client";
 
 import { useState } from "react";
@@ -21,7 +20,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useDeleteGoal, useGoals } from "./hooks/use-goals";
 import { Progress } from "@/components/ui/progress";
+import { GoalCard } from "./components/goal-card";
 import {
   Pagination,
   PaginationContent,
@@ -30,20 +31,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { DeleteDialog } from "../goals/components/delete-dialog";
-import { GoalCard } from "../goals/components/goal-card";
-import { GoalDialog } from "../goals/components/goal-dialog";
-import { ProgressDialog } from "../goals/components/progress-dialog";
-import { useGoals, useDeleteGoal } from "../goals/hooks/use-goals";
+import { GoalDialog } from "./components/goal-dialog";
+import { ProgressDialog } from "./components/progress-dialog";
+import { DeleteDialog } from "./components/delete-dialog";
+import { useTranslations } from "next-intl";
 
 export default function GoalsPage() {
+  const tG = useTranslations("Goals");
   const [filters, setFilters] = useState<GoalFilters>({
     page: 1,
     limit: 9,
@@ -143,98 +137,77 @@ export default function GoalsPage() {
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold">Mes Objectifs</h1>
-          <p className="text-muted-foreground mt-2">
-            Suivez et gérez vos objectifs financiers
-          </p>
+          <h1 className="text-3xl font-bold">{tG("title")}</h1>
+          <p className="text-muted-foreground mt-2">{tG("desc")}</p>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardDescription>Objectifs totaux</CardDescription>
-              <CardTitle className="text-2xl">{totalGoals}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between">
-                <Target className="h-4 w-4 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground">
-                  {completedGoals} terminés
-                </span>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div className="p-6 rounded-xl shadow-sm border">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500">{tG("stats.obj-tot")}</p>
+                <p className="text-2xl font-bold mt-2">{totalGoals}</p>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardDescription>Terminés</CardDescription>
-              <CardTitle className="text-2xl">{completedGoals}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between">
-                <CheckCircle className="h-4 w-4 text-emerald-500" />
-                <span className="text-xs text-muted-foreground">
-                  {totalGoals > 0
-                    ? `${Math.round(
-                        (completedGoals / totalGoals) * 100
-                      )}% du total`
-                    : "Aucun objectif"}
-                </span>
+              <div className="p-3 bg-blue-50 rounded-lg">
+                <Target className="h-6 w-6 text-blue-600" />
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Card>
-            <CardHeader className="pb-2">
-              <CardDescription>Total collecté</CardDescription>
-              <CardTitle className="text-2xl">
-                {new Intl.NumberFormat("fr-FR", {
-                  style: "currency",
-                  currency: "EUR",
-                }).format(totalCurrent)}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between">
-                <TrendingUp className="h-4 w-4 text-amber-500" />
-                <span className="text-xs text-muted-foreground">
-                  sur{" "}
+          <div className="p-6 rounded-xl shadow-sm border">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500">{tG("stats.finish")}</p>
+                <p className="text-2xl font-bold mt-2">{completedGoals}</p>
+              </div>
+              <div className="p-3 bg-emerald-50 rounded-lg">
+                <CheckCircle className="h-6 w-6 text-emerald-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6 rounded-xl shadow-sm border">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500">
+                  {tG("stats.colect-total")}
+                </p>
+                <p className="text-2xl font-bold mt-2">
                   {new Intl.NumberFormat("fr-FR", {
                     style: "currency",
                     currency: "EUR",
-                  }).format(totalTarget)}
+                  }).format(totalCurrent)}
+                </p>
+              </div>
+              <div className="p-3 bg-amber-50 rounded-lg">
+                <TrendingUp className="h-6 w-6 text-amber-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6 rounded-xl shadow-sm border">
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <p className="text-sm text-gray-500">
+                  {tG("stats.progress-global")}
+                </p>
+                <span className="text-sm font-semibold">
+                  {overallProgress.toFixed(1)}%
                 </span>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardDescription>Progression globale</CardDescription>
-              <CardTitle className="text-2xl">
-                {overallProgress.toFixed(1)}%
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-1">
-                <Progress value={overallProgress} className="h-2" />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>0%</span>
-                  <span>100%</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              <Progress value={overallProgress} className="h-2" />
+            </div>
+          </div>
         </div>
 
         {/* Controls */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
           <div className="flex-1 flex gap-3">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
-                placeholder="Rechercher un objectif..."
+                placeholder={tG("form.search-placeholder")}
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyPress={handleKeyPress}
@@ -254,12 +227,14 @@ export default function GoalsPage() {
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px]">
                 <Filter className="mr-2 h-4 w-4" />
-                <SelectValue placeholder="Filtrer par statut" />
+                <SelectValue placeholder={tG("form.filter-status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tous les objectifs</SelectItem>
-                <SelectItem value="in-progress">En cours</SelectItem>
-                <SelectItem value="completed">Terminés</SelectItem>
+                <SelectItem value="all">{tG("form.obj-all")}</SelectItem>
+                <SelectItem value="in-progress">
+                  {tG("form.in-progress")}
+                </SelectItem>
+                <SelectItem value="completed">{tG("form.finish")}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -270,10 +245,10 @@ export default function GoalsPage() {
 
             <Button
               onClick={() => setShowCreateDialog(true)}
-              className="shrink-0"
+              className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 shrink-0"
             >
               <Plus className="mr-2 h-4 w-4" />
-              Nouvel objectif
+              {tG("form.new-obj")}
             </Button>
           </div>
         </div>
@@ -282,16 +257,9 @@ export default function GoalsPage() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: filters.limit || 9 }).map((_, i) => (
-              <Card key={i} className="animate-pulse">
-                <CardHeader className="pb-3">
-                  <div className="h-4 bg-muted rounded w-3/4"></div>
-                  <div className="h-3 bg-muted rounded w-1/2 mt-2"></div>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-2 bg-muted rounded w-full mb-4"></div>
-                  <div className="h-3 bg-muted rounded w-1/2"></div>
-                </CardContent>
-              </Card>
+              <div key={i} className="animate-pulse">
+                <div className="bg-gray-200 rounded-xl h-64"></div>
+              </div>
             ))}
           </div>
         ) : filteredGoals.length > 0 ? (
@@ -369,33 +337,34 @@ export default function GoalsPage() {
             )}
           </>
         ) : (
-          <Card className="text-center py-16">
-            <CardContent className="pt-6">
-              <div className="w-16 h-16 mx-auto bg-muted rounded-full flex items-center justify-center mb-4">
-                <Target className="h-8 w-8 text-muted-foreground" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">
-                {filters.search ? "Aucun objectif trouvé" : "Aucun objectif"}
-              </h3>
-              <p className="text-muted-foreground mb-6">
-                {filters.search
-                  ? "Aucun objectif ne correspond à votre recherche."
-                  : "Commencez par créer votre premier objectif financier."}
-              </p>
-              <Button onClick={() => setShowCreateDialog(true)}>
-                <Plus className="mr-2 h-4 w-4" />
-                Créer un objectif
-              </Button>
-            </CardContent>
-          </Card>
+          <div className="text-center py-16 rounded-xl border">
+            <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+              <Target className="h-8 w-8 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-semibold mb-2">
+              {filters.search
+                ? tG("dialog.no-objectif-found")
+                : tG("dialog.no-objectif")}
+            </h3>
+            <p className="text-gray-500 mb-6">
+              {filters.search
+                ? tG("dialog.no-objectif-search")
+                : tG("dialog.start-to-create")}
+            </p>
+            <Button onClick={() => setShowCreateDialog(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              {tG("dialog.button.create")}
+            </Button>
+          </div>
         )}
 
         {/* Pagination Info */}
         {total > 0 && (
-          <div className="mt-6 text-sm text-muted-foreground text-center">
-            Affichage de {(currentPage - 1) * (filters.limit || 10) + 1} à{" "}
+          <div className="mt-6 text-sm text-gray-500 text-center">
+            {tG("dialog.display-of")}{" "}
+            {(currentPage - 1) * (filters.limit || 10) + 1} à{" "}
             {Math.min(currentPage * (filters.limit || 10), total)} sur {total}{" "}
-            objectifs
+            {tG("title-simple")}
           </div>
         )}
 
