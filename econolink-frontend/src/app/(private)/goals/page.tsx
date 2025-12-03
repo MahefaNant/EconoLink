@@ -364,7 +364,7 @@ export default function GoalsPage() {
             {tG("dialog.display-of")}{" "}
             {(currentPage - 1) * (filters.limit || 10) + 1} à{" "}
             {Math.min(currentPage * (filters.limit || 10), total)} sur {total}{" "}
-            {tG("dialog.title-simple")}
+            {tG("title-simple")}
           </div>
         )}
 

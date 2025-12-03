@@ -130,7 +130,7 @@ export function ProgressDialog({
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">
-                {tG("dialog.button.progress-now")}
+                {tG("dialog.progress-now")}
               </span>
               <span className="font-semibold">
                 {currentProgress.toFixed(1)}%
