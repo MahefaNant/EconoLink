@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 // components/budget/BudgetCard.tsx
 import { Budget } from "@/types/budget";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // lib/budget-utils.ts
 import { BudgetPeriod } from "@/types/budget";
