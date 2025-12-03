@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, Loader2, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface DeleteDialogProps {
   open: boolean;
@@ -26,6 +27,7 @@ export function DeleteDialog({
   goalName,
   isLoading = false,
 }: DeleteDialogProps) {
+  const tG = useTranslations("Goals");
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -36,10 +38,10 @@ export function DeleteDialog({
             </div>
             <div>
               <DialogTitle className="text-xl">
-                Supprimer l objectif
+                {tG("dialog.delete")}
               </DialogTitle>
               <DialogDescription className="mt-1">
-                Cette action est irréversible
+                {tG("dialog.delete-ireversible")}
               </DialogDescription>
             </div>
           </div>
@@ -47,7 +49,7 @@ export function DeleteDialog({
 
         <div className="py-4">
           <p className="text-gray-700">
-            Êtes-vous sûr de vouloir supprimer l objectif{" "}
+            {tG("dialog.delete-desc")}{" "}
             <span className="font-semibold text-gray-900">
               {goalName || "cet objectif"}
             </span>{" "}
@@ -57,9 +59,7 @@ export function DeleteDialog({
             <div className="flex items-start gap-2">
               <AlertTriangle className="h-4 w-4 text-red-600 mt-0.5 flex-shrink-0" />
               <p className="text-sm text-red-700">
-                Toutes les données associées à cet objectif seront
-                définitivement supprimées. Cette action ne peut pas être
-                annulée.
+                {tG("dialog.delete-desc-high")}
               </p>
             </div>
           </div>
@@ -73,7 +73,7 @@ export function DeleteDialog({
             disabled={isLoading}
             className="flex-1"
           >
-            Annuler
+            {tG("dialog.button.cancel")}
           </Button>
           <Button
             type="button"
@@ -85,12 +85,12 @@ export function DeleteDialog({
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Suppression...
+                {tG("dialog.button.delete-loading")}
               </>
             ) : (
               <>
                 <Trash2 className="mr-2 h-4 w-4" />
-                Supprimer
+                {tG("dialog.button.delete-simple")}
               </>
             )}
           </Button>

@@ -40,36 +40,7 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { useCreateGoal, useUpdateGoal } from "../hooks/use-goals";
-
-const formSchema = z.object({
-  name: z.string().min(1, "Le nom est requis"),
-  description: z.string().optional(),
-  target: z.coerce.number().positive("Le montant doit être positif"),
-  deadline: z.date().optional(),
-  color: z.string().default("#10B981"),
-  icon: z.string().default("🎯"),
-  auto_transfer: z.boolean().default(false),
-});
-
-const colors = [
-  { value: "#10B981", label: "Émeraude" },
-  { value: "#3B82F6", label: "Bleu" },
-  { value: "#8B5CF6", label: "Violet" },
-  { value: "#EF4444", label: "Rouge" },
-  { value: "#F59E0B", label: "Ambre" },
-  { value: "#EC4899", label: "Rose" },
-];
-
-const icons = [
-  { value: "🎯", label: "Cible" },
-  { value: "💰", label: "Argent" },
-  { value: "🏠", label: "Maison" },
-  { value: "🚗", label: "Voiture" },
-  { value: "✈️", label: "Voyage" },
-  { value: "🎓", label: "Éducation" },
-  { value: "💎", label: "Bijou" },
-  { value: "📱", label: "Téléphone" },
-];
+import { useTranslations } from "next-intl";
 
 interface GoalDialogProps {
   open: boolean;
@@ -78,9 +49,40 @@ interface GoalDialogProps {
 }
 
 export function GoalDialog({ open, onOpenChange, goal }: GoalDialogProps) {
+  const tG = useTranslations("Goals");
   const isEditing = !!goal;
   const createMutation = useCreateGoal();
   const updateMutation = useUpdateGoal();
+
+  const formSchema = z.object({
+    name: z.string().min(1, tG("form.name-required")),
+    description: z.string().optional(),
+    target: z.coerce.number().positive(tG("form.amount-positive")),
+    deadline: z.date().optional(),
+    color: z.string().default("#10B981"),
+    icon: z.string().default("🎯"),
+    auto_transfer: z.boolean().default(false),
+  });
+
+  const colors = [
+    { value: "#10B981", label: tG("colors.emerald") },
+    { value: "#3B82F6", label: tG("colors.blue") },
+    { value: "#8B5CF6", label: tG("colors.purple") },
+    { value: "#EF4444", label: tG("colors.red") },
+    { value: "#F59E0B", label: tG("colors.amber") },
+    { value: "#EC4899", label: tG("colors.pink") },
+  ];
+
+  const icons = [
+    { value: "🎯", label: tG("icons.target") },
+    { value: "💰", label: tG("icons.money") },
+    { value: "🏠", label: tG("icons.house") },
+    { value: "🚗", label: tG("icons.car") },
+    { value: "✈️", label: tG("icons.travel") },
+    { value: "🎓", label: tG("icons.education") },
+    { value: "💎", label: tG("icons.jewelry") },
+    { value: "📱", label: tG("icons.phone") },
+  ];
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema) as any,
@@ -118,7 +120,7 @@ export function GoalDialog({ open, onOpenChange, goal }: GoalDialogProps) {
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? "Modifier l'objectif" : "Nouvel objectif"}
+            {isEditing ? tG("dialog.button.edit") : tG("dialog.new")}
           </DialogTitle>
         </DialogHeader>
 
@@ -147,7 +149,7 @@ export function GoalDialog({ open, onOpenChange, goal }: GoalDialogProps) {
                       <PopoverContent className="w-[200px] p-0">
                         <Command>
                           <CommandInput placeholder="Rechercher une icône..." />
-                          <CommandEmpty>Aucune icône trouvée.</CommandEmpty>
+                          <CommandEmpty>{tG("dialog.no-icon")}</CommandEmpty>
                           <CommandGroup>
                             <div className="grid grid-cols-4 gap-2 p-2">
                               {icons.map((icon) => (
@@ -211,7 +213,7 @@ export function GoalDialog({ open, onOpenChange, goal }: GoalDialogProps) {
                       <PopoverContent className="w-[200px] p-0">
                         <Command>
                           <CommandInput placeholder="Rechercher une couleur..." />
-                          <CommandEmpty>Aucune couleur trouvée.</CommandEmpty>
+                          <CommandEmpty>{tG("dialog.no-color")}</CommandEmpty>
                           <CommandGroup>
                             {colors.map((color) => (
                               <CommandItem
@@ -247,9 +249,12 @@ export function GoalDialog({ open, onOpenChange, goal }: GoalDialogProps) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nom de l objectif *</FormLabel>
+                  <FormLabel>{tG("form.name")}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Ex: Achat voiture" />
+                    <Input
+                      {...field}
+                      placeholder={tG("form.name-placeholder")}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -261,11 +266,11 @@ export function GoalDialog({ open, onOpenChange, goal }: GoalDialogProps) {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>{tG("form.desc")}</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
-                      placeholder="Décrivez votre objectif..."
+                      placeholder={tG("form.desc-placeholder")}
                       rows={3}
                     />
                   </FormControl>
@@ -280,7 +285,7 @@ export function GoalDialog({ open, onOpenChange, goal }: GoalDialogProps) {
                 name="target"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Montant cible *</FormLabel>
+                    <FormLabel>{tG("form.amount-target")}</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -299,7 +304,7 @@ export function GoalDialog({ open, onOpenChange, goal }: GoalDialogProps) {
                 name="deadline"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date limite</FormLabel>
+                    <FormLabel>{tG("form.date-limit")}</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -314,7 +319,7 @@ export function GoalDialog({ open, onOpenChange, goal }: GoalDialogProps) {
                             {field.value ? (
                               format(field.value, "PPP", { locale: fr })
                             ) : (
-                              <span>Sélectionner une date</span>
+                              <span>{tG("form.select-date")}</span>
                             )}
                           </Button>
                         </FormControl>
@@ -341,7 +346,7 @@ export function GoalDialog({ open, onOpenChange, goal }: GoalDialogProps) {
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
-                Annuler
+                {tG("dialog.button.cancel")}
               </Button>
               <Button
                 type="submit"
@@ -351,10 +356,16 @@ export function GoalDialog({ open, onOpenChange, goal }: GoalDialogProps) {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {isEditing ? "Modification..." : "Création..."}
+                    {isEditing
+                      ? tG("dialog.button.edit-loading")
+                      : tG("dialog.button.create-loading")}
                   </>
                 ) : (
-                  <>{isEditing ? "Modifier" : "Créer"}</>
+                  <>
+                    {isEditing
+                      ? tG("dialog.button.edit-simple")
+                      : tG("dialog.button.create-simple")}
+                  </>
                 )}
               </Button>
             </div>

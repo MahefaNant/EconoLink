@@ -34,8 +34,10 @@ import {
 import { GoalDialog } from "./components/goal-dialog";
 import { ProgressDialog } from "./components/progress-dialog";
 import { DeleteDialog } from "./components/delete-dialog";
+import { useTranslations } from "next-intl";
 
 export default function GoalsPage() {
+  const tG = useTranslations("Goals");
   const [filters, setFilters] = useState<GoalFilters>({
     page: 1,
     limit: 9,
@@ -135,10 +137,8 @@ export default function GoalsPage() {
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold">Mes Objectifs</h1>
-          <p className="text-muted-foreground mt-2">
-            Suivez et gérez vos objectifs financiers
-          </p>
+          <h1 className="text-3xl font-bold">{tG("title")}</h1>
+          <p className="text-muted-foreground mt-2">{tG("desc")}</p>
         </div>
 
         {/* Stats */}
@@ -146,7 +146,7 @@ export default function GoalsPage() {
           <div className="p-6 rounded-xl shadow-sm border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Objectifs totaux</p>
+                <p className="text-sm text-gray-500">{tG("stats.obj-tot")}</p>
                 <p className="text-2xl font-bold mt-2">{totalGoals}</p>
               </div>
               <div className="p-3 bg-blue-50 rounded-lg">
@@ -158,7 +158,7 @@ export default function GoalsPage() {
           <div className="p-6 rounded-xl shadow-sm border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Terminés</p>
+                <p className="text-sm text-gray-500">{tG("stats.finish")}</p>
                 <p className="text-2xl font-bold mt-2">{completedGoals}</p>
               </div>
               <div className="p-3 bg-emerald-50 rounded-lg">
@@ -170,7 +170,9 @@ export default function GoalsPage() {
           <div className="p-6 rounded-xl shadow-sm border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Total collecté</p>
+                <p className="text-sm text-gray-500">
+                  {tG("stats.colect-total")}
+                </p>
                 <p className="text-2xl font-bold mt-2">
                   {new Intl.NumberFormat("fr-FR", {
                     style: "currency",
@@ -187,7 +189,9 @@ export default function GoalsPage() {
           <div className="p-6 rounded-xl shadow-sm border">
             <div className="space-y-2">
               <div className="flex justify-between">
-                <p className="text-sm text-gray-500">Progression globale</p>
+                <p className="text-sm text-gray-500">
+                  {tG("stats.progress-global")}
+                </p>
                 <span className="text-sm font-semibold">
                   {overallProgress.toFixed(1)}%
                 </span>
@@ -203,7 +207,7 @@ export default function GoalsPage() {
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
-                placeholder="Rechercher un objectif..."
+                placeholder={tG("form.search-placeholder")}
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyPress={handleKeyPress}
@@ -223,12 +227,14 @@ export default function GoalsPage() {
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px]">
                 <Filter className="mr-2 h-4 w-4" />
-                <SelectValue placeholder="Filtrer par statut" />
+                <SelectValue placeholder={tG("form.filter-status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tous les objectifs</SelectItem>
-                <SelectItem value="in-progress">En cours</SelectItem>
-                <SelectItem value="completed">Terminés</SelectItem>
+                <SelectItem value="all">{tG("form.obj-all")}</SelectItem>
+                <SelectItem value="in-progress">
+                  {tG("form.in-progress")}
+                </SelectItem>
+                <SelectItem value="completed">{tG("form.finish")}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -242,7 +248,7 @@ export default function GoalsPage() {
               className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 shrink-0"
             >
               <Plus className="mr-2 h-4 w-4" />
-              Nouvel objectif
+              {tG("form.new-obj")}
             </Button>
           </div>
         </div>
@@ -336,16 +342,18 @@ export default function GoalsPage() {
               <Target className="h-8 w-8 text-gray-400" />
             </div>
             <h3 className="text-lg font-semibold mb-2">
-              {filters.search ? "Aucun objectif trouvé" : "Aucun objectif"}
+              {filters.search
+                ? tG("dialog.no-objectif-found")
+                : tG("dialog.no-objectif")}
             </h3>
             <p className="text-gray-500 mb-6">
               {filters.search
-                ? "Aucun objectif ne correspond à votre recherche."
-                : "Commencez par créer votre premier objectif financier."}
+                ? tG("dialog.no-objectif-search")
+                : tG("dialog.start-to-create")}
             </p>
             <Button onClick={() => setShowCreateDialog(true)}>
               <Plus className="mr-2 h-4 w-4" />
-              Créer un objectif
+              {tG("dialog.button.create")}
             </Button>
           </div>
         )}
@@ -353,9 +361,10 @@ export default function GoalsPage() {
         {/* Pagination Info */}
         {total > 0 && (
           <div className="mt-6 text-sm text-gray-500 text-center">
-            Affichage de {(currentPage - 1) * (filters.limit || 10) + 1} à{" "}
+            {tG("dialog.display-of")}{" "}
+            {(currentPage - 1) * (filters.limit || 10) + 1} à{" "}
             {Math.min(currentPage * (filters.limit || 10), total)} sur {total}{" "}
-            objectifs
+            {tG("dialog.title-simple")}
           </div>
         )}
 

@@ -22,6 +22,7 @@ import {
 import { cn } from "@/lib/utils";
 import { fmtCurrency, fmtDate } from "@/lib/format";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { useTranslations } from "next-intl";
 
 interface GoalCardProps {
   goal: Goal;
@@ -36,6 +37,7 @@ export function GoalCard({
   onDelete,
   onAddProgress,
 }: GoalCardProps) {
+  const tG = useTranslations("Goals");
   const progress = goal.current > 0 ? (goal.current / goal.target) * 100 : 0;
   //   const remaining = goal.target - goal.current;
   const isCompleted = goal.current >= goal.target;
@@ -72,21 +74,21 @@ export function GoalCard({
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => onEdit(goal)}>
                 <Edit2 className="mr-2 h-4 w-4" />
-                Modifier
+                {tG("dialog.button.edit-simple")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => onAddProgress(goal)}
                 className="text-emerald-600"
               >
                 <TrendingUp className="mr-2 h-4 w-4" />
-                Ajouter un progrès
+                {tG("dialog.button.create-progress")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => onDelete(goal)}
                 className="text-red-600"
               >
                 <Trash2 className="mr-2 h-4 w-4" />
-                Supprimer
+                {tG("dialog.button.delete-simple")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -96,7 +98,9 @@ export function GoalCard({
         <div className="space-y-4">
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Progression</span>
+              <span className="text-muted-foreground">
+                {tG("dialog.progress")}
+              </span>
               <span className="font-semibold">{progress.toFixed(1)}%</span>
             </div>
             <Progress
@@ -112,7 +116,7 @@ export function GoalCard({
             <div className="space-y-1">
               <div className="flex items-center gap-1 text-muted-foreground">
                 <Target className="h-3 w-3" />
-                <span>Objectif</span>
+                <span>{tG("common.obj")}</span>
               </div>
               <p className="font-semibold">
                 {fmtCurrency(
@@ -126,7 +130,7 @@ export function GoalCard({
             <div className="space-y-1">
               <div className="flex items-center gap-1 text-muted-foreground">
                 <TrendingUp className="h-3 w-3" />
-                <span>Collecté</span>
+                <span>{tG("common.collect")}</span>
               </div>
               <p className="font-semibold text-emerald-600">
                 {fmtCurrency(
@@ -143,7 +147,7 @@ export function GoalCard({
             <div className="flex items-center justify-between pt-2 border-t">
               <div className="flex items-center gap-1 text-sm text-muted-foreground">
                 <Calendar className="h-3 w-3" />
-                <span>Échéance</span>
+                <span>{tG("common.du-date")}</span>
               </div>
               <Badge variant={isCompleted ? "default" : "outline"}>
                 {fmtDate(goal.deadline)}
@@ -159,7 +163,7 @@ export function GoalCard({
               onClick={() => onAddProgress(goal)}
             >
               <TrendingUp className="mr-2 h-4 w-4" />
-              Ajouter
+              {tG("dialog.button.create-simple")}
             </Button>
             <Button
               variant="outline"
@@ -168,7 +172,7 @@ export function GoalCard({
               onClick={() => onEdit(goal)}
             >
               <Edit2 className="mr-2 h-4 w-4" />
-              Modifier
+              {tG("dialog.button.edit-simple")}
             </Button>
           </div>
         </div>

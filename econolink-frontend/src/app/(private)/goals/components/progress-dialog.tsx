@@ -39,6 +39,7 @@ import { useAddProgress } from "../hooks/use-goals";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { fmtCurrency } from "@/lib/format";
 import { Slider } from "@/components/ui/slider";
+import { useTranslations } from "next-intl";
 
 const formSchema = z.object({
   amount: z.coerce
@@ -60,6 +61,7 @@ export function ProgressDialog({
   onOpenChange,
   goal,
 }: ProgressDialogProps) {
+  const tG = useTranslations("Goals");
   const [quickAmounts] = useState([10, 50, 100, 500, 1000]);
   const addProgressMutation = useAddProgress();
   const user = useAuthStore((s) => s.user);
@@ -115,7 +117,9 @@ export function ProgressDialog({
               {goal.icon}
             </div>
             <div>
-              <DialogTitle className="text-xl">Ajouter un progrès</DialogTitle>
+              <DialogTitle className="text-xl">
+                {tG("dialog.button.create-progress")}
+              </DialogTitle>
               <DialogDescription>{goal.name}</DialogDescription>
             </div>
           </div>
@@ -126,7 +130,7 @@ export function ProgressDialog({
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">
-                Progression actuelle
+                {tG("dialog.button.progress-now")}
               </span>
               <span className="font-semibold">
                 {currentProgress.toFixed(1)}%
@@ -138,7 +142,7 @@ export function ProgressDialog({
               <div className="space-y-1">
                 <div className="flex items-center gap-1 text-muted-foreground">
                   <Target className="h-3 w-3" />
-                  <span>Objectif total</span>
+                  <span>{tG("dialog.obj-tot")}</span>
                 </div>
                 <p className="font-semibold">
                   {fmtCurrency(
@@ -152,7 +156,7 @@ export function ProgressDialog({
               <div className="space-y-1">
                 <div className="flex items-center gap-1 text-muted-foreground">
                   <TrendingUp className="h-3 w-3" />
-                  <span>Collecté</span>
+                  <span>{tG("dialog.collected")}</span>
                 </div>
                 <p className="font-semibold text-emerald-600">
                   {fmtCurrency(
@@ -172,7 +176,7 @@ export function ProgressDialog({
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium text-emerald-800">
-                    Nouvelle progression
+                    {tG("dialog.new-progress")}
                   </span>
                   <Badge
                     variant={willComplete ? "default" : "outline"}
@@ -188,7 +192,7 @@ export function ProgressDialog({
 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-emerald-700">Nouveau total</p>
+                    <p className="text-emerald-700">{tG("dialog.new-total")}</p>
                     <p className="font-semibold text-emerald-900">
                       {fmtCurrency(
                         String(goal.current + amount || 0),
@@ -199,7 +203,7 @@ export function ProgressDialog({
                     </p>
                   </div>
                   <div>
-                    <p className="text-emerald-700">Reste à collecter</p>
+                    <p className="text-emerald-700">{tG("dialog.rest")}</p>
                     <p className="font-semibold text-emerald-900">
                       {fmtCurrency(
                         String(
@@ -218,8 +222,7 @@ export function ProgressDialog({
                   <div className="flex items-center gap-2 p-3 bg-emerald-100 rounded border border-emerald-200">
                     <AlertCircle className="h-4 w-4 text-emerald-600 flex-shrink-0" />
                     <p className="text-sm text-emerald-800">
-                      Félicitations ! Cet objectif sera complété après cet
-                      ajout.
+                      {tG("dialog.congrats")}
                     </p>
                   </div>
                 )}
@@ -231,7 +234,7 @@ export function ProgressDialog({
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               {/* Quick Amounts */}
               <div className="space-y-3">
-                <FormLabel>Montants rapides</FormLabel>
+                <FormLabel>{tG("dialog.quick-amount")}</FormLabel>
                 <div className="flex flex-wrap gap-2">
                   {quickAmounts.map((quickAmount) => (
                     <Button
@@ -265,7 +268,7 @@ export function ProgressDialog({
                   <FormItem>
                     <FormLabel className="flex items-center gap-2">
                       <DollarSign className="h-4 w-4" />
-                      Montant à ajouter
+                      {tG("dialog.amount-to-add")}
                     </FormLabel>
                     <FormControl>
                       <div className="space-y-4">
@@ -299,7 +302,7 @@ export function ProgressDialog({
                           <div className="flex justify-between text-xs text-muted-foreground mt-2">
                             <span>0 €</span>
                             <span>
-                              Jusqu à{" "}
+                              {tG("dialog.until")}{" "}
                               {fmtCurrency(
                                 String(goal.target - goal.current || 0),
                                 user?.currency,
@@ -312,14 +315,14 @@ export function ProgressDialog({
                       </div>
                     </FormControl>
                     <FormDescription>
-                      Il reste{" "}
+                      {tG("dialog.it-rest")}{" "}
                       {fmtCurrency(
                         String(remaining || 0),
                         user?.currency,
                         undefined,
                         true
                       )}{" "}
-                      à collecter pour atteindre l objectif
+                      {tG("dialog.to-collect")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -334,7 +337,7 @@ export function ProgressDialog({
                   disabled={isLoading}
                   className="flex-1"
                 >
-                  Annuler
+                  {tG("dialog.button.cancel")}
                 </Button>
                 <Button
                   type="submit"
@@ -344,7 +347,7 @@ export function ProgressDialog({
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Ajout en cours...
+                      {tG("dialog.button.create-loading")}
                     </>
                   ) : (
                     <>
