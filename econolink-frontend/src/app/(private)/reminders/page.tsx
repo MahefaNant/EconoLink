@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/no-unescaped-entities */
+
 "use client";
 
 import { useState } from "react";
@@ -27,8 +27,10 @@ import {
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Reminder, RemindersFilters } from "./types/reminder";
+import { useTranslations } from "next-intl";
 
 export default function RemindersPage() {
+  const tR = useTranslations("Reminders");
   const [filters, setFilters] = useState<RemindersFilters>({
     page: 1,
     limit: 12,
@@ -79,11 +81,7 @@ export default function RemindersPage() {
   };
 
   const handleDelete = (reminder: Reminder) => {
-    if (
-      confirm(
-        `Êtes-vous sûr de vouloir supprimer le rappel "${reminder.title}" ?`
-      )
-    ) {
+    if (confirm(`${tR("dialog.delete")} "${reminder.title}" ?`)) {
       deleteMutation.mutate(reminder.id);
     }
   };
@@ -125,15 +123,13 @@ export default function RemindersPage() {
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-2">
               <Bell className="h-8 w-8" />
-              Mes Rappels
+              {tR("title")}
             </h1>
-            <p className="text-muted-foreground mt-2">
-              Gérez vos rappels et ne manquez plus rien d'important
-            </p>
+            <p className="text-muted-foreground mt-2">{tR("desc")}</p>
           </div>
           <Button onClick={() => setShowCreateDialog(true)}>
             <Plus className="mr-2 h-4 w-4" />
-            Nouveau rappel
+            {tR("dialog.button.create")}
           </Button>
         </div>
 
@@ -142,7 +138,7 @@ export default function RemindersPage() {
           <RemindersStats reminders={reminders} />
         </div>
 
-        {/* Filtres et Tabs */}
+        {/* Filters and Tabs */}
         <Card className="p-6 mb-8">
           <Tabs
             defaultValue="list"
@@ -151,17 +147,21 @@ export default function RemindersPage() {
           >
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <TabsList>
-                <TabsTrigger value="list">Tous les rappels</TabsTrigger>
-                <TabsTrigger value="today">Aujourd'hui</TabsTrigger>
-                <TabsTrigger value="upcoming">À venir</TabsTrigger>
+                <TabsTrigger value="list">
+                  {tR("filter.all-appeals")}
+                </TabsTrigger>
+                <TabsTrigger value="today">{tR("filter.today")}</TabsTrigger>
+                <TabsTrigger value="upcoming">
+                  {tR("filter.upcoming")}
+                </TabsTrigger>
               </TabsList>
 
               <div className="flex items-center gap-2">
                 {selectedReminders.length > 0 && (
                   <Button variant="outline" size="sm" onClick={handleSelectAll}>
                     {selectedReminders.length === filteredReminders.length
-                      ? "Tout désélectionner"
-                      : "Tout sélectionner"}
+                      ? tR("filter.clear")
+                      : tR("filter.all-selected")}
                   </Button>
                 )}
               </div>
@@ -263,7 +263,9 @@ export default function RemindersPage() {
             <div className="w-16 h-16 mx-auto bg-muted rounded-full flex items-center justify-center mb-4">
               <Bell className="h-8 w-8 text-muted-foreground" />
             </div>
-            <h3 className="text-lg font-semibold mb-2">Aucun rappel trouvé</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              {tR("filter.no-appeals")}
+            </h3>
             <p className="text-muted-foreground mb-6">
               {filters.search
                 ? "Aucun rappel ne correspond à votre recherche."
@@ -275,7 +277,7 @@ export default function RemindersPage() {
             </p>
             <Button className="mx-4" onClick={() => setShowCreateDialog(true)}>
               <Plus className="mr-2 h-4 w-4" />
-              Créer un rappel
+              {tR("dialog.button.create")}
             </Button>
           </Card>
         )}
@@ -283,9 +285,10 @@ export default function RemindersPage() {
         {/* Pagination Info */}
         {total > 0 && (
           <div className="mt-6 text-sm text-muted-foreground text-center">
-            Affichage de {(currentPage - 1) * (filters.limit || 12) + 1} à{" "}
+            {tR("common.show-of")}{" "}
+            {(currentPage - 1) * (filters.limit || 12) + 1} à{" "}
             {Math.min(currentPage * (filters.limit || 12), total)} sur {total}{" "}
-            rappels
+            {tR("common.appeals")}
           </div>
         )}
 

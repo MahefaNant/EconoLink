@@ -27,6 +27,7 @@ import { useState } from "react";
 import { Reminder } from "../types/reminder";
 import { fmtDate, formatTime, getRemainingTime } from "@/lib/format";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useTranslations } from "next-intl";
 
 interface ReminderCardProps {
   reminder: Reminder;
@@ -45,6 +46,7 @@ export function ReminderCard({
   isSelected = false,
   onSelect,
 }: ReminderCardProps) {
+  const tR = useTranslations("Reminders");
   const [isHovered, setIsHovered] = useState(false);
 
   const isOverdue =
@@ -107,25 +109,25 @@ export function ReminderCard({
                 {reminder.is_completed ? (
                   <>
                     <RefreshCw className="mr-2 h-4 w-4" />
-                    Réactiver
+                    {tR("common.reactive")}
                   </>
                 ) : (
                   <>
                     <Check className="mr-2 h-4 w-4" />
-                    Marquer comme complété
+                    {tR("bulk.mark-complete")}
                   </>
                 )}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onEdit(reminder)}>
                 <Edit2 className="mr-2 h-4 w-4" />
-                Modifier
+                {tR("dialog.button.edit-simple")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => onDelete(reminder)}
                 className="text-destructive"
               >
                 <Trash2 className="mr-2 h-4 w-4" />
-                Supprimer
+                {tR("dialog.button.delete-simple")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -133,7 +135,7 @@ export function ReminderCard({
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {/* Date et heure */}
+          {/* Date and Time */}
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1">
@@ -150,7 +152,7 @@ export function ReminderCard({
               {reminder.is_recurring && (
                 <Badge variant="outline" className="gap-1">
                   <RefreshCw className="h-3 w-3" />
-                  Récurrent
+                  {tR("common.recurent")}
                 </Badge>
               )}
 
@@ -171,12 +173,12 @@ export function ReminderCard({
                 {reminder.is_completed ? (
                   <>
                     <CheckCircle className="mr-1 h-3 w-3" />
-                    Terminé
+                    {tR("common.ended")}
                   </>
                 ) : isOverdue ? (
                   <>
                     <Bell className="mr-1 h-3 w-3" />
-                    En retard
+                    {tR("common.late")}
                   </>
                 ) : (
                   <>
@@ -188,7 +190,7 @@ export function ReminderCard({
             </div>
           </div>
 
-          {/* Actions rapides */}
+          {/* Quick Actions */}
           <div className="flex gap-2 pt-2">
             <Button
               variant="outline"
@@ -199,12 +201,12 @@ export function ReminderCard({
               {reminder.is_completed ? (
                 <>
                   <RefreshCw className="mr-2 h-4 w-4" />
-                  Réactiver
+                  {tR("common.reactive")}
                 </>
               ) : (
                 <>
                   <Check className="mr-2 h-4 w-4" />
-                  Marquer comme fait
+                  {tR("bulk.mark-done")}
                 </>
               )}
             </Button>
@@ -215,7 +217,7 @@ export function ReminderCard({
               onClick={() => onEdit(reminder)}
             >
               <Edit2 className="mr-2 h-4 w-4" />
-              Modifier
+              {tR("dialog.button.edit-simple")}
             </Button>
           </div>
         </div>

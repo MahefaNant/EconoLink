@@ -20,6 +20,7 @@ import {
   useBulkUpdateReminders,
   useBulkDeleteReminders,
 } from "../hooks/use-reminder-mutations";
+import { useTranslations } from "next-intl";
 
 interface ReminderBulkActionsProps {
   selectedIds: string[];
@@ -30,6 +31,7 @@ export function ReminderBulkActions({
   selectedIds,
   onSelectionChange,
 }: ReminderBulkActionsProps) {
+  const tR = useTranslations("Reminders");
   const bulkUpdate = useBulkUpdateReminders();
   const bulkDelete = useBulkDeleteReminders();
 
@@ -78,31 +80,32 @@ export function ReminderBulkActions({
         <DropdownMenuTrigger asChild>
           <Button size="lg" className="rounded-full shadow-lg">
             <MoreHorizontal className="mr-2 h-4 w-4" />
-            {selectedIds.length} sélectionné{selectedIds.length > 1 ? "s" : ""}
+            {selectedIds.length} {tR("common.select")}
+            {selectedIds.length > 1 ? "s" : ""}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuItem onClick={handleMarkAsCompleted}>
             <Check className="mr-2 h-4 w-4" />
-            Marquer comme complété
+            {tR("bulk.mark-complete")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleMarkAsPending}>
             <RefreshCw className="mr-2 h-4 w-4" />
-            Marquer comme en attente
+            {tR("bulk.mark-waiting")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleSetRecurring}>
             <Bell className="mr-2 h-4 w-4" />
-            Définir comme récurrent
+            {tR("bulk.define-rec")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleSetNonRecurring}>
             <Archive className="mr-2 h-4 w-4" />
-            Définir comme non récurrent
+            {tR("bulk.define-no-rec")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleDelete} className="text-destructive">
             <Trash2 className="mr-2 h-4 w-4" />
-            Supprimer
+            {tR("dialog.button.delete-simple")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

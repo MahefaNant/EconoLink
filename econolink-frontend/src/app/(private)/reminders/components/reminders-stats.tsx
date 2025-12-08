@@ -16,12 +16,14 @@ import {
   Calendar,
 } from "lucide-react";
 import { Reminder } from "../types/reminder";
+import { useTranslations } from "next-intl";
 
 interface RemindersStatsProps {
   reminders: Reminder[];
 }
 
 export function RemindersStats({ reminders }: RemindersStatsProps) {
+  const tR = useTranslations("Reminders");
   const total = reminders.length;
   const completed = reminders.filter((r) => r.is_completed).length;
   const pending = total - completed;
@@ -50,56 +52,58 @@ export function RemindersStats({ reminders }: RemindersStatsProps) {
 
   const stats = [
     {
-      title: "Total",
+      title: tR("stats.total"),
       value: total,
       icon: Bell,
       color: "text-blue-500",
       bgColor: "bg-blue-50",
-      description: `${pending} en attente, ${completed} terminés`,
+      description: `${pending} ${tR("common.waiting")} ${completed} ${tR(
+        "common.ended-mini"
+      )}`,
     },
     {
-      title: "Aujourd'hui",
+      title: tR("stats.today"),
       value: todayReminders.length,
       icon: Calendar,
       color: "text-emerald-500",
       bgColor: "bg-emerald-50",
-      description: "Échéance aujourd'hui",
+      description: tR("stats.today-desc"),
     },
     {
-      title: "En retard",
+      title: tR("stats.late"),
       value: overdueReminders.length,
       icon: AlertCircle,
       color: "text-red-500",
       bgColor: "bg-red-50",
-      description: "À traiter rapidement",
+      description: tR("stats.late-desc"),
     },
     {
-      title: "À venir",
+      title: tR("stats.upcoming"),
       value: upcomingReminders.length,
       icon: Clock,
       color: "text-amber-500",
       bgColor: "bg-amber-50",
-      description: "Échéance demain",
+      description: tR("stats.upcoming-desc"),
     },
     {
-      title: "Récurrents",
+      title: tR("stats.recurring"),
       value: recurringReminders.length,
       icon: TrendingUp,
       color: "text-purple-500",
       bgColor: "bg-purple-50",
       description: `${
         Math.round((recurringReminders.length / total) * 100) || 0
-      }% du total`,
+      }% ${tR("stats.recurring-desc")}`,
     },
     {
-      title: "Complétés",
+      title: tR("stats.completed"),
       value: completed,
       icon: CheckCircle,
       color: "text-green-500",
       bgColor: "bg-green-50",
       description: `${
         total > 0 ? Math.round((completed / total) * 100) : 0
-      }% du total`,
+      }% ${tR("stats.completed-desc")}`,
     },
   ];
 

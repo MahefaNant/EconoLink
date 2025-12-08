@@ -1,4 +1,5 @@
-/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
@@ -43,19 +44,7 @@ import { Switch } from "@/components/ui/switch";
 import { CreateReminderDto, Reminder } from "../types/reminder";
 import { TimePicker } from "@/components/ui/time-picker";
 import { Alert, AlertDescription } from "./alert";
-
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(1, "Le titre est requis")
-    .max(200, "Le titre ne doit pas dépasser 200 caractères"),
-  description: z.string().optional(),
-  due_date: z.date({
-    error: "La date est requise",
-  }),
-  is_recurring: z.boolean().default(false),
-  recurring_rule: z.any().optional(),
-});
+import { useTranslations } from "next-intl";
 
 interface ReminderDialogProps {
   open: boolean;
@@ -68,20 +57,34 @@ export function ReminderDialog({
   onOpenChange,
   reminder,
 }: ReminderDialogProps) {
+  const tR = useTranslations("Reminders");
   const isEditing = !!reminder;
   const createMutation = useCreateReminder();
   const updateMutation = useUpdateReminder();
 
-  // Initialiser le time avec l'heure par défaut
+  // Initiat the time with the time by default
   const [time, setTime] = useState<Date>(() => {
     if (reminder?.due_date) {
       return new Date(reminder.due_date);
     }
 
-    // Par défaut, aujourd'hui dans 1 heure
+    // By default, today in 1 hour
     const oneHourLater = addHours(new Date(), 1);
-    oneHourLater.setMinutes(0, 0, 0); // Arrondir à l'heure
+    oneHourLater.setMinutes(0, 0, 0); // Round to the hour
     return oneHourLater;
+  });
+
+  const formSchema = z.object({
+    title: z
+      .string()
+      .min(1, tR("form.message.title-required"))
+      .max(200, tR("form.message.title-error")),
+    description: z.string().optional(),
+    due_date: z.date({
+      error: tR("form.message.date-required"),
+    }),
+    is_recurring: z.boolean().default(false),
+    recurring_rule: z.any().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -95,29 +98,24 @@ export function ReminderDialog({
     },
   });
 
-  // Surveiller la date sélectionnée
   const selectedDate = form.watch("due_date");
   const [dateTimeError, setDateTimeError] = useState<string | null>(null);
 
-  // Vérifier si la date/heure est dans le passé
+  // Check if the date/time is in the past
   useEffect(() => {
     if (selectedDate && time) {
-      // Créer la date complète avec l'heure sélectionnée
+      // Create the full date with the selected time
       const fullDateTime = new Date(selectedDate);
       fullDateTime.setHours(time.getHours(), time.getMinutes(), 0, 0);
 
       const now = new Date();
 
-      // Vérifier si la date/heure est dans le passé
+      // Check if the date/time is in the past
       if (isBefore(fullDateTime, now)) {
         if (isToday(selectedDate)) {
-          setDateTimeError(
-            "L'heure sélectionnée est déjà passée pour aujourd'hui. Veuillez choisir une heure future."
-          );
+          setDateTimeError(tR("form.message.time-past-error"));
         } else {
-          setDateTimeError(
-            "La date et l'heure sélectionnées sont déjà passées."
-          );
+          setDateTimeError(tR("form.message.date-time-past"));
         }
       } else {
         setDateTimeError(null);
@@ -126,13 +124,13 @@ export function ReminderDialog({
   }, [selectedDate, time]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // Vérifier une dernière fois avant soumission
+    // Check one last time before submission
     const fullDateTime = new Date(values.due_date);
     fullDateTime.setHours(time.getHours(), time.getMinutes(), 0, 0);
 
     const now = new Date();
     if (isBefore(fullDateTime, now)) {
-      setDateTimeError("Impossible de créer un rappel dans le passé.");
+      setDateTimeError(tR("form.message.create-impossible"));
       return;
     }
 
@@ -152,32 +150,32 @@ export function ReminderDialog({
       form.reset();
       setDateTimeError(null);
     } catch {
-      // Gérer l'erreur
+      // Handle the error
     }
   };
 
   const isLoading = createMutation.isPending || updateMutation.isPending;
 
-  // Fonction pour sélectionner aujourd'hui
+  // Function to select today
   const handleSelectToday = () => {
     const today = startOfDay(new Date());
     const now = new Date();
     const currentHour = now.getHours();
 
-    // Toujours garder aujourd'hui comme date
+    // Always keep today as the date
     form.setValue("due_date", today);
 
-    // Ajuster seulement l'heure si nécessaire
+    // Adjust only the hour if necessary
     if (time.getHours() <= currentHour) {
-      // Si l'heure actuelle du time picker est passée, proposer une heure future
+      // If the current hour of the time picker has passed, propose a future hour
       const oneHourLater = addHours(now, 1);
       oneHourLater.setMinutes(0, 0, 0);
       setTime(oneHourLater);
     }
-    // Sinon, garder l'heure actuellement sélectionnée dans le time picker
+    // Otherwise, keep the currently selected hour in the time picker
   };
 
-  // Fonction simple pour sélectionner une date
+  // Simple function to select a date
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
       form.setValue("due_date", date);
@@ -189,12 +187,10 @@ export function ReminderDialog({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? "Modifier le rappel" : "Nouveau rappel"}
+            {isEditing ? tR("dialog.button.edit") : tR("dialog.button.create")}
           </DialogTitle>
           <DialogDescription>
-            {isEditing
-              ? "Modifiez les détails de votre rappel."
-              : "Créez un nouveau rappel pour ne rien oublier."}
+            {isEditing ? tR("dialog.edit") : tR("dialog.create")}
           </DialogDescription>
         </DialogHeader>
 
@@ -207,7 +203,10 @@ export function ReminderDialog({
                 <FormItem>
                   <FormLabel>Titre *</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Ex: Réunion d'équipe" />
+                    <Input
+                      {...field}
+                      placeholder={tR("form.title-placeholder")}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -219,11 +218,11 @@ export function ReminderDialog({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>{tR("form.description")}</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
-                      placeholder="Détails supplémentaires..."
+                      placeholder={tR("form.desc-placeholder")}
                       rows={3}
                     />
                   </FormControl>
@@ -253,7 +252,7 @@ export function ReminderDialog({
                             {field.value ? (
                               format(field.value, "PPP", { locale: fr })
                             ) : (
-                              <span>Sélectionner une date</span>
+                              <span>{tR("form.select-date")}</span>
                             )}
                           </Button>
                         </FormControl>
@@ -262,7 +261,7 @@ export function ReminderDialog({
                         <div className="p-3 border-b bg-muted/50">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium">
-                              Sélectionnez une date
+                              {tR("form.select-date")}
                             </span>
                             <Button
                               type="button"
@@ -271,7 +270,7 @@ export function ReminderDialog({
                               onClick={handleSelectToday}
                               className="text-xs"
                             >
-                              Aujourd'hui
+                              {tR("form.today")}
                             </Button>
                           </div>
                         </div>
@@ -300,13 +299,13 @@ export function ReminderDialog({
                 <TimePicker date={time} setDate={setTime} />
                 {selectedDate && isToday(selectedDate) && dateTimeError && (
                   <p className="text-xs text-destructive mt-1">
-                    Choisissez une heure future
+                    {tR("form.select-time")}
                   </p>
                 )}
               </FormItem>
             </div>
 
-            {/* Afficher l'erreur de date/heure */}
+            {/* Display date/time error */}
             {dateTimeError && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
@@ -314,15 +313,15 @@ export function ReminderDialog({
               </Alert>
             )}
 
-            {/* Affichage de la date/heure sélectionnée */}
+            {/* Display selected date/time */}
             {selectedDate && time && (
               <div className="bg-muted p-3 rounded-md">
                 <div className="text-sm font-medium text-muted-foreground">
-                  Rappel programmé pour :
+                  {tR("form.appel-programme")}
                 </div>
                 <div className="text-lg font-semibold mt-1">
-                  {format(selectedDate, "EEEE d MMMM yyyy", { locale: fr })} à{" "}
-                  {format(time, "HH:mm")}
+                  {format(selectedDate, "EEEE d MMMM yyyy", { locale: fr })}{" "}
+                  {tR("form.at")} {format(time, "HH:mm")}
                 </div>
                 {isBefore(
                   new Date(selectedDate).setHours(
@@ -335,11 +334,11 @@ export function ReminderDialog({
                 ) ? (
                   <div className="text-sm text-destructive mt-1 flex items-center gap-1">
                     <AlertCircle className="h-3 w-3" />
-                    Cette date/heure est dans le passé
+                    {tR("form.message.date-time-past")}
                   </div>
                 ) : (
                   <div className="text-sm text-green-600 mt-1">
-                    ✓ Date/heure valide
+                    {tR("form.message.date-time-valide")}
                   </div>
                 )}
               </div>
@@ -352,10 +351,10 @@ export function ReminderDialog({
                 <FormItem className="flex items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">
-                      Rappel récurrent
+                      {tR("form.appeall-rec")}
                     </FormLabel>
                     <p className="text-sm text-muted-foreground">
-                      Ce rappel se répètera automatiquement
+                      {tR("form.message.appeall-repeat-auto")}
                     </p>
                   </div>
                   <FormControl>
@@ -375,7 +374,7 @@ export function ReminderDialog({
                 onClick={() => onOpenChange(false)}
                 disabled={isLoading}
               >
-                Annuler
+                {tR("dialog.button.cancel")}
               </Button>
               <Button
                 type="submit"
@@ -385,12 +384,16 @@ export function ReminderDialog({
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {isEditing ? "Modification..." : "Création..."}
+                    {isEditing
+                      ? tR("dialog.button.editing")
+                      : tR("dialog.button.creating")}
                   </>
                 ) : (
                   <>
                     <Check className="mr-2 h-4 w-4" />
-                    {isEditing ? "Modifier" : "Créer"}
+                    {isEditing
+                      ? tR("dialog.button.edit-simple")
+                      : tR("dialog.button.create-simple")}
                   </>
                 )}
               </Button>

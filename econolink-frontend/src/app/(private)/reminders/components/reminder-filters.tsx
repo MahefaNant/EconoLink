@@ -22,6 +22,7 @@ import { fr } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { RemindersFilters } from "../types/reminder";
 import { Badge } from "@/components/ui/badge";
+import { useTranslations } from "next-intl";
 
 interface ReminderFiltersProps {
   filters: RemindersFilters;
@@ -32,6 +33,7 @@ export function ReminderFilters({
   filters,
   onFiltersChange,
 }: ReminderFiltersProps) {
+  const tR = useTranslations("Reminders");
   const handleSearch = (search: string) => {
     onFiltersChange({ ...filters, search, page: 1 });
   };
@@ -86,12 +88,12 @@ export function ReminderFilters({
 
   return (
     <div className="space-y-4">
-      {/* Barre de recherche */}
+      {/* search Bar */}
       <div className="flex gap-3">
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder="Rechercher un rappel..."
+            placeholder={tR("form.search-placeholder")}
             value={filters.search || ""}
             onChange={(e) => handleSearch(e.target.value)}
             className="pl-10"
@@ -102,7 +104,7 @@ export function ReminderFilters({
         </Button>
       </div>
 
-      {/* Filtres avancés */}
+      {/* Advanced Filters */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
         <Select
           value={
@@ -118,9 +120,9 @@ export function ReminderFilters({
             <SelectValue placeholder="Statut" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tous les statuts</SelectItem>
-            <SelectItem value="pending">En attente</SelectItem>
-            <SelectItem value="completed">Complétés</SelectItem>
+            <SelectItem value="all">{tR("filter.all-status")}</SelectItem>
+            <SelectItem value="pending">{tR("filter.waiting")}</SelectItem>
+            <SelectItem value="completed">{tR("filter.completed")}</SelectItem>
           </SelectContent>
         </Select>
 
@@ -138,9 +140,11 @@ export function ReminderFilters({
             <SelectValue placeholder="Type" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tous les types</SelectItem>
-            <SelectItem value="recurring">Récurrents</SelectItem>
-            <SelectItem value="non-recurring">Non récurrents</SelectItem>
+            <SelectItem value="all">{tR("filter.all-type")}</SelectItem>
+            <SelectItem value="recurring">{tR("filter.recurring")}</SelectItem>
+            <SelectItem value="non-recurring">
+              {tR("filter.non-recurring")}
+            </SelectItem>
           </SelectContent>
         </Select>
 
@@ -156,7 +160,7 @@ export function ReminderFilters({
               <CalendarIcon className="mr-2 h-4 w-4" />
               {filters.date_from
                 ? format(new Date(filters.date_from), "dd/MM/yyyy")
-                : "Du"}
+                : tR("common.from")}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
@@ -184,7 +188,7 @@ export function ReminderFilters({
               <CalendarIcon className="mr-2 h-4 w-4" />
               {filters.date_to
                 ? format(new Date(filters.date_to), "dd/MM/yyyy")
-                : "Au"}
+                : tR("common.to")}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
@@ -199,16 +203,16 @@ export function ReminderFilters({
         </Popover>
       </div>
 
-      {/* Filtres actifs */}
+      {/* Active Filters */}
       {hasActiveFilters && (
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
-            Filtres actifs :
+            {tR("filter.filter-active")}
           </span>
           <div className="flex flex-wrap gap-2">
             {filters.search && (
               <Badge variant="secondary" className="gap-1">
-                Recherche: {filters.search}
+                {tR("filter.search")} {filters.search}
                 <button onClick={() => handleSearch("")} className="ml-1">
                   <X className="h-3 w-3" />
                 </button>
@@ -216,7 +220,8 @@ export function ReminderFilters({
             )}
             {filters.is_completed !== undefined && (
               <Badge variant="secondary" className="gap-1">
-                Statut: {filters.is_completed ? "Complétés" : "En attente"}
+                {tR("filter.status")}{" "}
+                {filters.is_completed ? "Complétés" : "En attente"}
                 <button
                   onClick={() => handleStatusChange("all")}
                   className="ml-1"
@@ -227,7 +232,10 @@ export function ReminderFilters({
             )}
             {filters.is_recurring !== undefined && (
               <Badge variant="secondary" className="gap-1">
-                Type: {filters.is_recurring ? "Récurrents" : "Non récurrents"}
+                {tR("filter.type")}{" "}
+                {filters.is_recurring
+                  ? tR("filter.recurring")
+                  : tR("filter.non-recurring")}
                 <button
                   onClick={() => handleRecurringChange("all")}
                   className="ml-1"
@@ -238,7 +246,8 @@ export function ReminderFilters({
             )}
             {(filters.date_from || filters.date_to) && (
               <Badge variant="secondary" className="gap-1">
-                Période: {filters.date_from || "∞"} - {filters.date_to || "∞"}
+                {tR("filter.period")} {filters.date_from || "∞"} -{" "}
+                {filters.date_to || "∞"}
                 <button
                   onClick={() => {
                     handleDateFromChange(undefined);
@@ -252,7 +261,7 @@ export function ReminderFilters({
             )}
             <Button variant="ghost" size="sm" onClick={clearFilters}>
               <X className="mr-1 h-3 w-3" />
-              Tout effacer
+              {tR("dialog.delete-all-simple")}
             </Button>
           </div>
         </div>

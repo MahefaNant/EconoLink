@@ -678,5 +678,115 @@
       "name-required": "Le nom est requis",
       "amount-positive": "Le montant doit être positif"
     }
+  },
+  "Reminders": {
+    "title": "Mes Rappels",
+    "desc": "Gérez vos rappels et ne manquez plus rien d'important",
+    "common": {
+      "select": "sélectionné",
+      "reactive": "Réactiver",
+      "recurent": "Récurrent",
+      "ended": "Terminé",
+      "ended-mini": "terminé",
+      "late": "En retard",
+      "to": "Au",
+      "show-of": "Affichage de",
+      "appeals": "rappels",
+      "waiting": "en attente",
+      "from": "Du"
+    },
+    "stats": {
+      "total": "Total",
+      "today": "Aujourd'hui",
+      "today-desc": "Échéance aujourd'hui",
+      "upcoming": "À venir",
+      "upcoming-desc": "Échéance demain",
+      "completed": "Complétés",
+      "completed-desc": "du total",
+      "late": "En retard",
+      "late-desc": "À traiter rapidement",
+      "recurring": "Récurrents",
+      "recurring-desc": "du total"
+    },
+    "bulk": {
+      "mark-complete": " Marquer comme complété",
+      "mark-waiting": " Marquer comme en attente",
+      "mark-done": "Marquer comme fait",
+      "define-rec": "Définir comme récurrent",
+      "define-no-rec": " Définir comme non récurrent"
+    },
+    "filter": {
+      "all-status": "Tous les statuts",
+      "waiting": "En attente",
+      "completed": "Complétés",
+      "all-type": "Tous les types",
+      "recurring": "Récurrents",
+      "non-recurring": "Non récurrents",
+      "filter-active": " Filtres actifs :",
+      "search": "Recherche:",
+      "status": "Statut:",
+      "type": "Type: ",
+      "period": "Période:",
+      "all-appeals": "Tous les rappels",
+      "today": "Aujourd'hui",
+      "upcoming": "À venir",
+      "all-selected": "Tous sélectionnés",
+      "clear": "Tout désélectionner",
+      "no-appeals": "Aucun rappel trouvé"
+    },
+    "form": {
+      "today": "Aujourd'hui",
+      "description": "Description",
+      "desc-placeholder": "Détails supplémentaires...",
+      "title-placeholder": "Ex: Réunion d'équipe",
+      "select-date": "Sélectionner une date",
+      "select-time": "Choisissez une heure future",
+      "appel-programme": "Appel programmé pour :",
+      "at": "à",
+      "search-placeholder": "Rechercher un rappel...",
+      "appeall-rec": "Rappel récurrent",
+      "message": {
+        "title-required": "Le titre est requis",
+        "title-error": "Le titre ne doit pas dépasser 200 caractères",
+        "date-required": "La date est requise",
+        "time-past-error": "L'heure sélectionnée est déjà passée pour aujourd'hui. Veuillez choisir une heure future.",
+        "date-time-past": "La date et l'heure sélectionnées sont déjà passées.",
+        "create-impossible": "Impossible de créer un rappel dans le passé.",
+        "date-time-valide": "✓ Date/heure valide",
+        "appeall-repeat-auto": "Ce rappel se répètera automatiquement"
+      }
+    },
+    "dialog": {
+      "edit": "Modifiez les détails de votre rappel.",
+      "create": "Créez un nouveau rappel pour ne rien oublier.",
+      "detete": "Êtes-vous sûr de vouloir supprimer le rappel",
+      "button": {
+        "create-simple": "Créer",
+        "create": "Nouveau rappel",
+        "delete-simple": "Supprimer",
+        "edit-simple": "Modifier",
+        "edit": "Modifier le rappel",
+        "cancel": "Annuler",
+        "editing": "Modification...",
+        "creating": "Création...",
+        "delete-all-simple": "Tout effacer"
+      }
+    },
+    "message": {
+      "create": "Nouveau rappel",
+      "create-success": "Votre rappel a été créé avec succès.",
+      "create-failed": "Impossible de créer le rappel.",
+      "edit-success": "Votre rappel a été mis à jour avec succès.",
+      "edit-failed": "Impossible de mettre à jour le rappel.",
+      "delete-success": "Votre rappel a été supprimé avec succès.",
+      "delete-failed": "Impossible de supprimer le rappel.",
+      "appeall-complete": "Le rappel a été marqué comme complété.",
+      "appeall-reactive": "Le rappel a été réactivé.",
+      "appeall-failed": "Impossible de modifier le statut du rappel.",
+      "bulk-update-success": "Les rappels sélectionnés ont été mis à jour.",
+      "bulk-update-failed": "Impossible de mettre à jour les rappels sélectionnés.",
+      "bulk-delete-success": "Les rappels sélectionnés ont été supprimés.",
+      "bulk-delete-failed": "Impossible de supprimer les rappels sélectionnés."
+    }
   }
 }

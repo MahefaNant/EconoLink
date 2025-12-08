@@ -666,5 +666,115 @@
       "name-required": "Name is required",
       "amount-positive": "Amount must be positive"
     }
+  },
+  "Reminders": {
+    "title": "My Reminders",
+    "desc": "Manage your reminders and never miss anything important",
+    "common": {
+      "select": "selected",
+      "reactive": "Reactivate",
+      "recurent": "Recurring",
+      "ended": "Completed",
+      "ended-mini": "completed",
+      "late": "Overdue",
+      "to": "To",
+      "show-of": "Showing",
+      "appeals": "reminders",
+      "waiting": "pending",
+      "from": "From"
+    },
+    "stats": {
+      "total": "Total",
+      "today": "Today",
+      "today-desc": "Due today",
+      "upcoming": "Upcoming",
+      "upcoming-desc": "Due tomorrow",
+      "completed": "Completed",
+      "completed-desc": "of total",
+      "late": "Overdue",
+      "late-desc": "Needs attention",
+      "recurring": "Recurring",
+      "recurring-desc": "of total"
+    },
+    "bulk": {
+      "mark-complete": "Mark as completed",
+      "mark-waiting": "Mark as pending",
+      "mark-done": "Mark as done",
+      "define-rec": "Set as recurring",
+      "define-no-rec": "Set as non-recurring"
+    },
+    "filter": {
+      "all-status": "All statuses",
+      "waiting": "Pending",
+      "completed": "Completed",
+      "all-type": "All types",
+      "recurring": "Recurring",
+      "non-recurring": "Non-recurring",
+      "filter-active": "Active filters:",
+      "search": "Search:",
+      "status": "Status:",
+      "type": "Type:",
+      "period": "Period:",
+      "all-appeals": "All reminders",
+      "today": "Today",
+      "upcoming": "Upcoming",
+      "all-selected": "All selected",
+      "clear": "Clear selection",
+      "no-appeals": "No reminders found"
+    },
+    "form": {
+      "today": "Today",
+      "description": "Description",
+      "desc-placeholder": "Additional details...",
+      "title-placeholder": "Ex: Team meeting",
+      "select-date": "Select a date",
+      "select-time": "Choose a future time",
+      "appel-programme": "Reminder scheduled for:",
+      "at": "at",
+      "search-placeholder": "Search for a reminder...",
+      "appeall-rec": "Recurring reminder",
+      "message": {
+        "title-required": "Title is required",
+        "title-error": "Title must not exceed 200 characters",
+        "date-required": "Date is required",
+        "time-past-error": "The selected time has already passed for today. Please choose a future time.",
+        "date-time-past": "The selected date and time have already passed.",
+        "create-impossible": "Cannot create a reminder in the past.",
+        "date-time-valide": "✓ Valid date/time",
+        "appeall-repeat-auto": "This reminder will repeat automatically"
+      }
+    },
+    "dialog": {
+      "edit": "Edit the details of your reminder.",
+      "create": "Create a new reminder so you don't forget anything.",
+      "detete": "Are you sure you want to delete the reminder",
+      "button": {
+        "create-simple": "Create",
+        "create": "New reminder",
+        "delete-simple": "Delete",
+        "edit-simple": "Edit",
+        "edit": "Edit reminder",
+        "cancel": "Cancel",
+        "editing": "Saving changes...",
+        "creating": "Creating...",
+        "delete-all-simple": "Clear all"
+      }
+    },
+    "message": {
+      "create": "New reminder",
+      "create-success": "Your reminder has been successfully created.",
+      "create-failed": "Failed to create the reminder.",
+      "edit-success": "Your reminder has been successfully updated.",
+      "edit-failed": "Failed to update the reminder.",
+      "delete-success": "Your reminder has been successfully deleted.",
+      "delete-failed": "Failed to delete the reminder.",
+      "appeall-complete": "The reminder has been marked as completed.",
+      "appeall-reactive": "The reminder has been reactivated.",
+      "appeall-failed": "Failed to change the reminder status.",
+      "bulk-update-success": "The selected reminders have been updated.",
+      "bulk-update-failed": "Failed to update the selected reminders.",
+      "bulk-delete-success": "The selected reminders have been deleted.",
+      "bulk-delete-failed": "Failed to delete the selected reminders."
+    }
   }
 }

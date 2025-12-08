@@ -4,8 +4,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetcher } from "@/lib/fetcher";
 import { CreateReminderDto, UpdateReminderDto } from "../types/reminder";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export const useCreateReminder = () => {
+  const tR = useTranslations("Reminders");
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -13,16 +15,17 @@ export const useCreateReminder = () => {
       fetcher("/reminders", { method: "POST", body: data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reminders"] });
-      toast.success("Votre rappel a été créé avec succès.");
+      toast.success(tR("message.create-success"));
     },
     onError: (error) => {
-      toast.error(error.message || "Impossible de créer le rappel.");
+      toast.error(error.message || tR("message.create-failed"));
     },
   });
 };
 
 export const useUpdateReminder = () => {
   const queryClient = useQueryClient();
+  const tR = useTranslations("Reminders");
 
   return useMutation({
     mutationFn: ({ id, ...data }: { id: string } & UpdateReminderDto) =>
@@ -30,33 +33,33 @@ export const useUpdateReminder = () => {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["reminders"] });
       queryClient.invalidateQueries({ queryKey: ["reminder", variables.id] });
-      toast.success("Votre rappel a été mis à jour avec succès.");
+      toast.success(tR("message.edit-success"));
     },
     onError: (error) => {
-      toast.warning(error.message || "Impossible de mettre à jour le rappel.");
+      toast.warning(error.message || tR("message.edit-failed"));
     },
   });
 };
 
 export const useDeleteReminder = () => {
   const queryClient = useQueryClient();
-
+  const tR = useTranslations("Reminders");
   return useMutation({
     mutationFn: (id: string) =>
       fetcher(`/reminders/${id}`, { method: "DELETE" }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reminders"] });
-      toast("Votre rappel a été supprimé avec succès.");
+      toast.success(tR("message.delete-success"));
     },
     onError: (error) => {
-      toast.warning(error.message || "Impossible de supprimer le rappel.");
+      toast.warning(error.message || tR("message.delete-failed"));
     },
   });
 };
 
 export const useToggleReminder = () => {
   const queryClient = useQueryClient();
-
+  const tR = useTranslations("Reminders");
   return useMutation({
     mutationFn: ({ id, is_completed }: { id: string; is_completed: boolean }) =>
       fetcher(`/reminders/${id}`, {
@@ -68,48 +71,44 @@ export const useToggleReminder = () => {
       queryClient.invalidateQueries({ queryKey: ["reminder", variables.id] });
       toast.info(
         variables.is_completed
-          ? "Le rappel a été marqué comme complété."
-          : "Le rappel a été réactivé."
+          ? tR("message.appeall-complete")
+          : tR("message.appeall-reactive")
       );
     },
     onError: (error) => {
-      toast.warning(
-        error.message || "Impossible de modifier le statut du rappel."
-      );
+      toast.warning(error.message || tR("message.appeall-failed"));
     },
   });
 };
 
 export const useBulkUpdateReminders = () => {
   const queryClient = useQueryClient();
-
+  const tR = useTranslations("Reminders");
   return useMutation({
     mutationFn: ({ ids, data }: { ids: string[]; data: UpdateReminderDto }) =>
       fetcher("/reminders/bulk", { method: "PATCH", body: { ids, data } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reminders"] });
-      toast.info("Les rappels sélectionnés ont été mis à jour.");
+      toast.info(tR("message.bulk-update-success"));
     },
     onError: (error) => {
-      toast.warning(
-        error.message || "Impossible de mettre à jour les rappels."
-      );
+      toast.warning(error.message || tR("message.bulk-update-failed"));
     },
   });
 };
 
 export const useBulkDeleteReminders = () => {
   const queryClient = useQueryClient();
-
+  const tR = useTranslations("Reminders");
   return useMutation({
     mutationFn: (ids: string[]) =>
       fetcher("/reminders/bulk", { method: "DELETE", body: { ids } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reminders"] });
-      toast("Les rappels sélectionnés ont été supprimés.");
+      toast.success(tR("message.bulk-delete-success"));
     },
     onError: (error) => {
-      toast.warning(error.message || "Impossible de supprimer les rappels.");
+      toast.warning(error.message || tR("message.bulk-delete-failed"));
     },
   });
 };
