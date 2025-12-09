@@ -101,6 +101,10 @@
         "goals-space": {
           "title": "Goals space",
           "goals": "Goals"
+        },
+        "reminders-space": {
+          "title": "Reminders space",
+          "reminders": "Reminders"
         }
       }
     }

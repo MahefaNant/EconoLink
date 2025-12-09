@@ -116,6 +116,18 @@ export default function useRouterData() {
           },
         ],
       },
+      {
+        title: t("reminders-space.title"),
+        isCollapsible: true,
+        items: [
+          {
+            title: t("reminders-space.reminders"),
+            url: "/reminders",
+            isActive: pathname === "/reminders",
+            icon: PieChart,
+          },
+        ],
+      },
     ],
   };
   return { data };
