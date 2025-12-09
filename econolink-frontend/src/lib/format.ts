@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { format, formatDistanceToNow, isToday, isTomorrow } from "date-fns";
+import { fr } from "date-fns/locale";
+
 export const currenciesList = ["AR", "EUR", "USD", "GBP", "JPY"];
 
 export function formatMoney(val: number | string | null) {
@@ -60,3 +64,66 @@ export const fmtDate = (iso?: string) => {
   const d = new Date(iso);
   return d.toLocaleString();
 };
+
+export function formatTime(dateString: string): string {
+  const date = new Date(dateString);
+  return format(date, "HH:mm", { locale: fr });
+}
+
+export function formatDateTime(dateString: string): string {
+  const date = new Date(dateString);
+  return format(date, "dd/MM/yyyy HH:mm", { locale: fr });
+}
+
+export function getRemainingTime(dateString: string): string {
+  const date = new Date(dateString);
+
+  if (isToday(date)) {
+    return `Aujourd'hui à ${format(date, "HH:mm")}`;
+  }
+
+  if (isTomorrow(date)) {
+    return `Demain à ${format(date, "HH:mm")}`;
+  }
+
+  return formatDistanceToNow(date, {
+    addSuffix: true,
+    locale: fr,
+  });
+}
+
+export function groupRemindersByDate(reminders: any[]) {
+  const groups: Record<string, any[]> = {
+    today: [],
+    tomorrow: [],
+    upcoming: [],
+    overdue: [],
+    completed: [],
+  };
+
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  reminders.forEach((reminder) => {
+    const dueDate = new Date(reminder.due_date);
+
+    if (reminder.is_completed) {
+      groups.completed.push(reminder);
+    } else if (dueDate < now) {
+      groups.overdue.push(reminder);
+    } else if (dueDate >= today && dueDate < tomorrow) {
+      groups.today.push(reminder);
+    } else if (
+      dueDate >= tomorrow &&
+      dueDate < new Date(tomorrow.getTime() + 86400000 * 7)
+    ) {
+      groups.upcoming.push(reminder);
+    } else {
+      groups.upcoming.push(reminder);
+    }
+  });
+
+  return groups;
+}
