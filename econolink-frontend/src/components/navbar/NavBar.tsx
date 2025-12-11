@@ -48,8 +48,8 @@ export function NavBar() {
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
-                    <Link href="/docs" className="font-medium hover:underline">
-                      Documentation
+                    <Link href="#" className="font-medium hover:underline">
+                      {""}
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
