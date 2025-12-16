@@ -1,28 +1,31 @@
 "use client";
-import MyAccountBtn from "@/components/home/MyAccountBtn";
-import InstallAppCard from "@/components/InstallAppCard";
+import CTASection from "@/components/home/CTASection";
+import FAQSection from "@/components/home/FAQSection";
+import FeaturesSection from "@/components/home/FeaturesSection";
+import HeroSection from "@/components/home/HeroSection";
+import HowItWorks from "@/components/home/HowItWorks";
+import PricingSection from "@/components/home/PricingSection";
+import Testimonials from "@/components/home/Testimonials";
 import { NavBar } from "@/components/navbar/NavBar";
 
-import { useTranslations } from "next-intl";
+import { Footer } from "react-day-picker";
 
 export default function Home() {
-  const t = useTranslations("HomePage");
-
   return (
-    <div>
-      <NavBar />
-      <div className="container mx-auto p-4 flex flex-col items-center gap-10">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">{t("title")}</h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
-            {t("about")}
-          </p>
-        </div>
-
-        <MyAccountBtn />
-
-        <InstallAppCard />
+    <>
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
+        <NavBar />
+        <main>
+          <HeroSection />
+          <FeaturesSection />
+          <HowItWorks />
+          <Testimonials />
+          {/* <PricingSection /> */}
+          <FAQSection />
+          <CTASection />
+        </main>
+        <Footer />
       </div>
-    </div>
+    </>
   );
 }

@@ -35,7 +35,246 @@
       }
     },
     "title": "EconoLink",
-    "about": "Bienvenue sur EconoLink, votre passerelle vers les insights et données économiques."
+    "about": "Bienvenue sur EconoLink, votre passerelle vers les insights et données économiques.",
+    "hero": {
+      "badge": "NOUVEAU : Gestion financière intelligente",
+      "title": {
+        "line1": "Prenez le contrôle de votre",
+        "line2": "Avenir financier"
+      },
+      "description": "EconoLink vous aide à suivre vos dépenses, fixer des objectifs financiers et gérer vos rappels — le tout dans une interface belle et intuitive.",
+      "stats": {
+        "accuracy": "Taux de précision",
+        "availability": "Disponibilité",
+        "users": "Utilisateurs actifs"
+      },
+      "cta": {
+        "primary": "Commencer gratuitement",
+        "secondary": "Se connecter"
+      },
+      "trust": "Sécurité et chiffrement de niveau bancaire"
+    },
+
+    "features": {
+      "badge": "Tout ce dont vous avez besoin",
+      "title": "Des fonctionnalités puissantes pour votre réussite financière",
+      "subtitle": "Du budget simple à la planification financière avancée",
+      "tracking": {
+        "title": "Suivi des dépenses",
+        "description": "Catégorisez et suivez automatiquement toutes vos dépenses"
+      },
+      "goals": {
+        "title": "Objectifs financiers",
+        "description": "Fixez et suivez vos progrès vers vos objectifs financiers"
+      },
+      "reminders": {
+        "title": "Rappels intelligents",
+        "description": "Ne manquez plus aucun paiement ni échéance importante"
+      },
+      "analytics": {
+        "title": "Analyses avancées",
+        "description": "Des rapports et des analyses pour optimiser vos finances"
+      },
+      "security": {
+        "title": "Sécurité bancaire",
+        "description": "Vos données sont chiffrées et protégées 24h/24 et 7j/7"
+      },
+      "mobile": {
+        "title": "Application mobile",
+        "description": "Gérez vos finances où que vous soyez avec notre application"
+      },
+      "securityBadge": "Chiffrement 256 bits & conformité RGPD"
+    },
+
+    "howItWorks": {
+      "title": "Comment fonctionne EconoLink",
+      "subtitle": "Commencez en quelques minutes, atteignez la liberté financière pour la vie",
+      "steps": {
+        "register": {
+          "title": "Inscription gratuite",
+          "description": "Créez votre compte en 30 secondes"
+        },
+        "setup": {
+          "title": "Configurez votre profil",
+          "description": "Connectez vos comptes ou ajoutez des entrées manuellement"
+        },
+        "track": {
+          "title": "Suivre & analyser",
+          "description": "Surveillez vos dépenses et fixez vos objectifs financiers"
+        },
+        "achieve": {
+          "title": "Atteindre vos objectifs",
+          "description": "Voyez vos rêves financiers devenir réalité"
+        }
+      },
+      "cta": "Commencez votre aventure aujourd’hui"
+    },
+
+    "testimonials": {
+      "badge": "Approuvé par des milliers",
+      "title": "Apprécié par les utilisateurs du monde entier",
+      "subtitle": "Découvrez ce que notre communauté pense de sa transformation financière",
+      "items": [
+        {
+          "content": "EconoLink m’a aidé à économiser 5 000 $ en seulement 6 mois. Le suivi des objectifs est incroyable !"
+        },
+        {
+          "content": "En tant que freelance, gérer mes factures et dépenses était chaotique. EconoLink a tout simplifié."
+        },
+        {
+          "content": "Le système de rappels vaut à lui seul l’abonnement. Je n’ai plus jamais manqué un paiement."
+        }
+      ],
+      "stats": {
+        "rating": "Note des utilisateurs",
+        "users": "Utilisateurs satisfaits",
+        "satisfaction": "Taux de satisfaction",
+        "support": "Support disponible"
+      }
+    },
+
+    "pricing": {
+      "title": "Tarification simple et transparente",
+      "subtitle": "Choisissez l’offre qui vous convient",
+      "mostPopular": "Le plus populaire",
+
+      "free": {
+        "name": "Gratuit",
+        "description": "Parfait pour débuter",
+        "features": [
+          "Suivi jusqu’à 50 transactions/mois",
+          "Catégories de dépenses basiques",
+          "Support par e-mail",
+          "Accès à l’application mobile"
+        ],
+        "excluded": ["Analyses avancées", "Support prioritaire"],
+        "cta": "Commencer gratuitement"
+      },
+
+      "pro": {
+        "name": "Pro",
+        "description": "Pour une gestion financière sérieuse",
+        "features": [
+          "Transactions illimitées",
+          "Analyses et rapports avancés",
+          "Support e-mail prioritaire",
+          "Catégories et tags personnalisés",
+          "Suivi des objectifs financiers",
+          "Rappels intelligents"
+        ],
+        "cta": "Démarrer l’essai Pro"
+      },
+
+      "business": {
+        "name": "Business",
+        "description": "Pour les équipes et les professionnels",
+        "features": [
+          "Tout ce qui est inclus dans Pro",
+          "Collaboration en équipe",
+          "Facturation personnalisée",
+          "Gestionnaire de compte dédié",
+          "Accès API",
+          "Intégrations personnalisées",
+          "Options en marque blanche"
+        ],
+        "cta": "Contacter l’équipe commerciale"
+      },
+
+      "note": "Tous les plans incluent un essai gratuit de 14 jours. Aucune carte bancaire requise."
+    },
+
+    "faq": {
+      "title": "Questions fréquentes",
+      "subtitle": "Tout ce que vous devez savoir sur EconoLink",
+      "items": [
+        {
+          "question": "Mes données financières sont-elles sécurisées ?",
+          "answer": "Oui ! Nous utilisons un chiffrement 256 bits de niveau bancaire et ne stockons jamais vos identifiants bancaires."
+        },
+        {
+          "question": "Puis-je annuler à tout moment ?",
+          "answer": "Oui, absolument. Vous pouvez annuler à tout moment depuis vos paramètres."
+        },
+        {
+          "question": "Proposez-vous une application mobile ?",
+          "answer": "Oui ! EconoLink est disponible sur iOS et Android."
+        },
+        {
+          "question": "Comment gagnez-vous de l’argent ?",
+          "answer": "Nous proposons une version gratuite et des abonnements premium. Nous ne revendons jamais vos données."
+        },
+        {
+          "question": "Puis-je importer mes données d'autres applications ?",
+          "answer": "Oui, vous pouvez importer des fichiers CSV depuis la plupart des applications financières."
+        },
+        {
+          "question": "Quels pays sont pris en charge ?",
+          "answer": "EconoLink est disponible dans plus de 50 pays avec plusieurs devises."
+        }
+      ],
+      "help": {
+        "title": "Encore des questions ?",
+        "description": "Notre équipe est là pour vous aider",
+        "contact": "Contacter le support",
+        "docs": "Voir la documentation"
+      }
+    },
+
+    "cta": {
+      "badge": "Offre limitée",
+      "title": {
+        "line1": "Prêt à transformer votre",
+        "line2": "Vie financière ?"
+      },
+      "description": "Rejoignez des milliers d’utilisateurs qui ont déjà repris le contrôle de leurs finances avec EconoLink.",
+      "benefits": {
+        "1": "Aucune carte bancaire requise",
+        "2": "Essai gratuit de 14 jours",
+        "3": "Annulation à tout moment",
+        "4": "Sécurité bancaire"
+      },
+      "primary": "Commencer l’essai gratuit",
+      "secondary": "Planifier une démo",
+      "trust": "Rejoignez plus de 5 000 utilisateurs satisfaits dans le monde"
+    },
+
+    "footer": {
+      "description": "La plateforme tout-en-un pour une gestion financière intelligente. Suivez vos dépenses, fixez vos objectifs et atteignez la liberté financière.",
+      "categories": {
+        "product": "Produit",
+        "company": "Entreprise",
+        "support": "Support",
+        "legal": "Légal"
+      },
+      "links": {
+        "product": {
+          "features": "Fonctionnalités",
+          "pricing": "Tarifs",
+          "updates": "Mises à jour",
+          "api": "API"
+        },
+        "company": {
+          "about": "À propos",
+          "blog": "Blog",
+          "careers": "Carrières",
+          "press": "Presse"
+        },
+        "support": {
+          "docs": "Documentation",
+          "help": "Centre d’aide",
+          "community": "Communauté",
+          "contact": "Nous contacter"
+        },
+        "legal": {
+          "privacy": "Politique de confidentialité",
+          "terms": "Conditions d’utilisation",
+          "cookies": "Politique des cookies",
+          "security": "Sécurité"
+        }
+      },
+      "copyright": "Tous droits réservés.",
+      "status": "Tous les systèmes sont opérationnels"
+    }
   },
   "Auth": {
     "common": {

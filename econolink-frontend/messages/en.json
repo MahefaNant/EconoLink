@@ -35,7 +35,235 @@
       }
     },
     "title": "EconoLink",
-    "about": "Welcome to EconoLink, your gateway to economic insights and data."
+    "about": "Welcome to EconoLink, your gateway to economic insights and data.",
+    "hero": {
+      "badge": "NEW: Smart Financial Management",
+      "title": {
+        "line1": "Take Control of Your",
+        "line2": "Financial Future"
+      },
+      "description": "EconoLink helps you track expenses, set financial goals, and manage reminders—all in one beautiful, intuitive interface.",
+      "stats": {
+        "accuracy": "Accuracy Rate",
+        "availability": "Availability",
+        "users": "Active Users"
+      },
+      "cta": {
+        "primary": "Get Started Free",
+        "secondary": "Sign In"
+      },
+      "trust": "Bank-level security & encryption"
+    },
+    "features": {
+      "badge": "Everything you need",
+      "title": "Powerful Features for Financial Success",
+      "subtitle": "From basic budgeting to advanced financial planning",
+      "tracking": {
+        "title": "Expense Tracking",
+        "description": "Automatically categorize and track all your expenses"
+      },
+      "goals": {
+        "title": "Financial Goals",
+        "description": "Set and track progress toward your financial objectives"
+      },
+      "reminders": {
+        "title": "Smart Reminders",
+        "description": "Never miss bill payments or important deadlines"
+      },
+      "analytics": {
+        "title": "Advanced Analytics",
+        "description": "Insights and reports to optimize your finances"
+      },
+      "security": {
+        "title": "Bank-Level Security",
+        "description": "Your data is encrypted and protected 24/7"
+      },
+      "mobile": {
+        "title": "Mobile App",
+        "description": "Manage your finances on the go with our mobile app"
+      },
+      "securityBadge": "256-bit encryption & GDPR compliant"
+    },
+    "howItWorks": {
+      "title": "How EconoLink Works",
+      "subtitle": "Get started in minutes, achieve financial freedom for life",
+      "steps": {
+        "register": {
+          "title": "Sign Up Free",
+          "description": "Create your account in 30 seconds"
+        },
+        "setup": {
+          "title": "Set Up Your Profile",
+          "description": "Connect accounts or add manual entries"
+        },
+        "track": {
+          "title": "Track & Analyze",
+          "description": "Monitor expenses and set financial goals"
+        },
+        "achieve": {
+          "title": "Achieve Goals",
+          "description": "Watch your financial dreams become reality"
+        }
+      },
+      "cta": "Start Your Journey Today"
+    },
+    "testimonials": {
+      "badge": "Trusted by thousands",
+      "title": "Loved by Users Worldwide",
+      "subtitle": "See what our community says about their financial transformation",
+      "items": [
+        {
+          "content": "EconoLink helped me save $5,000 in just 6 months. The goal tracking feature is a game-changer!"
+        },
+        {
+          "content": "As a freelancer, keeping track of invoices and expenses was chaotic. EconoLink simplified everything."
+        },
+        {
+          "content": "The reminder system alone is worth the subscription. Never missed a bill payment since I started using it."
+        }
+      ],
+      "stats": {
+        "rating": "User Rating",
+        "users": "Happy Users",
+        "satisfaction": "Satisfaction Rate",
+        "support": "Support Available"
+      }
+    },
+    "pricing": {
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "Choose the plan that's right for you",
+      "mostPopular": "Most Popular",
+      "free": {
+        "name": "Free",
+        "description": "Perfect for getting started",
+        "features": [
+          "Track up to 50 transactions/month",
+          "Basic expense categories",
+          "Email support",
+          "Mobile app access"
+        ],
+        "excluded": ["Advanced analytics", "Priority support"],
+        "cta": "Get Started Free"
+      },
+      "pro": {
+        "name": "Pro",
+        "description": "For serious financial management",
+        "features": [
+          "Unlimited transactions",
+          "Advanced analytics & reports",
+          "Priority email support",
+          "Custom categories & tags",
+          "Financial goal tracking",
+          "Smart reminders"
+        ],
+        "cta": "Start Pro Trial"
+      },
+      "business": {
+        "name": "Business",
+        "description": "For teams & professionals",
+        "features": [
+          "Everything in Pro",
+          "Team collaboration",
+          "Custom billing & invoicing",
+          "Dedicated account manager",
+          "API access",
+          "Custom integrations",
+          "White-label options"
+        ],
+        "cta": "Contact Sales"
+      },
+      "note": "All plans include 14-day free trial. No credit card required."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know about EconoLink",
+      "items": [
+        {
+          "question": "Is my financial data secure?",
+          "answer": "Yes! We use bank-level 256-bit encryption and never store your banking credentials. Your data is protected 24/7."
+        },
+        {
+          "question": "Can I cancel anytime?",
+          "answer": "Absolutely. You can cancel your subscription at any time from your account settings. No hidden fees."
+        },
+        {
+          "question": "Do you offer a mobile app?",
+          "answer": "Yes! EconoLink is available on both iOS and Android. Download from the App Store or Google Play."
+        },
+        {
+          "question": "How do you make money?",
+          "answer": "We offer a free tier and premium subscriptions. We never sell your data to third parties."
+        },
+        {
+          "question": "Can I import data from other apps?",
+          "answer": "Yes, you can import CSV files from most financial apps. We also offer direct integrations."
+        },
+        {
+          "question": "What countries do you support?",
+          "answer": "EconoLink is available worldwide in 50+ countries with support for multiple currencies."
+        }
+      ],
+      "help": {
+        "title": "Still have questions?",
+        "description": "Our support team is here to help you",
+        "contact": "Contact Support",
+        "docs": "View Documentation"
+      }
+    },
+    "cta": {
+      "badge": "Limited Time Offer",
+      "title": {
+        "line1": "Ready to Transform Your",
+        "line2": "Financial Life?"
+      },
+      "description": "Join thousands of users who have taken control of their finances with EconoLink.",
+      "benefits": {
+        "1": "No credit card required",
+        "2": "14-day free trial",
+        "3": "Cancel anytime",
+        "4": "Bank-level security"
+      },
+      "primary": "Start Free Trial",
+      "secondary": "Schedule a Demo",
+      "trust": "Join 5,000+ satisfied users worldwide"
+    },
+    "footer": {
+      "description": "The all-in-one platform for intelligent financial management. Track expenses, set goals, and achieve financial freedom.",
+      "categories": {
+        "product": "Product",
+        "company": "Company",
+        "support": "Support",
+        "legal": "Legal"
+      },
+      "links": {
+        "product": {
+          "features": "Features",
+          "pricing": "Pricing",
+          "updates": "Updates",
+          "api": "API"
+        },
+        "company": {
+          "about": "About",
+          "blog": "Blog",
+          "careers": "Careers",
+          "press": "Press"
+        },
+        "support": {
+          "docs": "Documentation",
+          "help": "Help Center",
+          "community": "Community",
+          "contact": "Contact Us"
+        },
+        "legal": {
+          "privacy": "Privacy Policy",
+          "terms": "Terms of Service",
+          "cookies": "Cookie Policy",
+          "security": "Security"
+        }
+      },
+      "copyright": "All rights reserved.",
+      "status": "All systems operational"
+    }
   },
   "Auth": {
     "common": {
