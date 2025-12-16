@@ -308,6 +308,28 @@
     }
   },
   "Dashboard": {
+    "common": {
+      "welcome": "Bienvenue",
+      "desc": "Voici un aperçu de vos finances aujourd'hui",
+      "budget-total": "Budget total",
+      "category-all": "Toutes catégories confondues",
+      "spent-total": "Total des dépenses",
+      "reminders": "Rappels",
+      "urgent": "Urgent",
+      "budget-alert": "Alertes budgétaires",
+      "exceeded": "Dépassé",
+      "overview": "Aperçu",
+      "transactions": "Transactions",
+      "budgets": "Budgets",
+      "reminders-upcoming": "Rappels à venir",
+      "total": "Total",
+      "transactions-recent": "Transactions récentes",
+      "budget-overview": "Aperçu du budget",
+      "categories": "Catégories",
+      "transaction-details": "Détails des transactions",
+      "budget-analytics": "Analyse budgétaire",
+      "last-updated": "Dernière mise à jour"
+    },
     "SideBar": {
       "home": "Retour à l'accueil",
       "Route": {

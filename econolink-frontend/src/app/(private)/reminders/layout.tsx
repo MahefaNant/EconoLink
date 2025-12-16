@@ -2,14 +2,14 @@
 import useDocumentReadyState from "@/hooks/useDocumentReadyState";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
 import { ReactNode } from "react";
-import BudgetStatsPageSkeleton from "./stats/components/BudgetStatsPageSkeleton";
+import RemindersPageSkeleton from "./components/RemindersPageSkeleton";
 
-export default function StatsLayout({ children }: { children: ReactNode }) {
+export default function RemindersLayout({ children }: { children: ReactNode }) {
   const isOnline = useOnlineStatus();
   const isReady = useDocumentReadyState();
 
   if (!isOnline && !isReady) {
-    return <BudgetStatsPageSkeleton />;
+    return <RemindersPageSkeleton />;
   }
 
   return <>{children}</>;

@@ -9,13 +9,11 @@ import { toast } from "sonner";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "./dashboard/components/app-sidebar";
 import NavBar from "./dashboard/components/nav-bar";
-import useDocumentReadyState from "@/hooks/useDocumentReadyState";
 // import { processSyncQueue } from "@/lib/sync";
 
 const user_info = "user_info";
 
 export default function PrivateLayout({ children }: { children: ReactNode }) {
-  const isReady = useDocumentReadyState();
   const setUser = useAuthStore((s) => s.setUser);
   const router = useRouter();
 
@@ -50,7 +48,7 @@ export default function PrivateLayout({ children }: { children: ReactNode }) {
     go();
   }, []);
 
-  if (!isReady) return null;
+  // if (!isReady) return null;
 
   return (
     <>

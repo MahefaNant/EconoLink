@@ -22,6 +22,7 @@ import useDocumentReadyState from "@/hooks/useDocumentReadyState";
 import { useEditTransaction } from "./hooks/useEditTransaction";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useTranslations } from "next-intl";
+import CreateTransactionSkeleton from "../../create/components/CreateTransactionSkeleton";
 
 export default function EditTransactionPage() {
   const tTr = useTranslations("Transaction");
@@ -196,7 +197,7 @@ export default function EditTransactionPage() {
     }
   };
 
-  if (!isReady) return null;
+  if (!isReady) return <CreateTransactionSkeleton />;
 
   if (fetching) {
     return (

@@ -26,6 +26,7 @@ import { AccountStateSwitch } from "./components/AccountStateSwitch";
 import { useTranslations } from "next-intl";
 import { accountTypesData } from "./lib/account.lib";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AccountsPage() {
   const user = useAuthStore((s) => s.user);
@@ -77,7 +78,7 @@ export default function AccountsPage() {
     { label: tAcc("colorLabel.black"), value: "#000000" },
   ];
 
-  if (!isDocumentReady) return null;
+  if (!isDocumentReady) return AccountSkeleton();
 
   return (
     <div className="p-4 md:p-6">
@@ -321,3 +322,45 @@ export default function AccountsPage() {
     </div>
   );
 }
+
+const AccountSkeleton = () => {
+  return (
+    <div className="p-4 md:p-6">
+      <div className="flex items-center justify-between mb-6">
+        <Skeleton className="h-8 w-40" />
+        <Skeleton className="h-10 w-32" />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
+        {[32, 28, 36, 30, 34, 26].map((width, index) => (
+          <div key={index} className="rounded-2xl bg-card border shadow-sm p-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <Skeleton className="w-12 h-12 rounded-xl" />
+                <div>
+                  <Skeleton className={`h-5 w-${width} mb-2`} />
+                  <Skeleton className={`h-4 w-${width - 8}`} />
+                </div>
+              </div>
+              <div className="flex gap-1">
+                <Skeleton className="h-9 w-9 rounded-full" />
+                <Skeleton className="h-9 w-9 rounded-full" />
+              </div>
+            </div>
+            <div className="mb-4">
+              <Skeleton className="h-4 w-16 mb-2" />
+              <div className="flex items-center gap-1">
+                <Skeleton className="h-6 w-6 rounded-full" />
+                <Skeleton className={`h-8 w-${width}`} />
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-5 w-24" />
+              <Skeleton className="h-6 w-12 rounded-full" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};

@@ -297,6 +297,28 @@
     }
   },
   "Dashboard": {
+    "common": {
+      "welcome": " Welcome back",
+      "desc": "Here's what's happening with your finances today",
+      "budget-total": "Total Budget",
+      "category-all": " Across all categories",
+      "spent-total": "Total Spent",
+      "reminders": "Reminders",
+      "urgent": "urgent",
+      "budget-alert": "Budget Alerts",
+      "exceeded": "exceeded",
+      "overview": "Overview",
+      "transactions": "Transactions",
+      "budgets": "Budgets",
+      "reminders-upcoming": "Upcoming Reminders",
+      "total": "total",
+      "transactions-recent": "Recent Transactions",
+      "budget-overview": "Budget Overview",
+      "categories": "categories",
+      "transaction-details": "Transaction Details",
+      "budget-analytics": "Budget Analytics",
+      "last-updated": "Last updated"
+    },
     "SideBar": {
       "home": "Return Home",
       "Route": {

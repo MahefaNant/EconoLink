@@ -4,7 +4,6 @@ import FAQSection from "@/components/home/FAQSection";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import HeroSection from "@/components/home/HeroSection";
 import HowItWorks from "@/components/home/HowItWorks";
-import PricingSection from "@/components/home/PricingSection";
 import Testimonials from "@/components/home/Testimonials";
 import { NavBar } from "@/components/navbar/NavBar";
 

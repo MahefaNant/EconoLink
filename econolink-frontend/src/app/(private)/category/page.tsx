@@ -19,8 +19,10 @@ import { Edit, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import useCategory from "./hooks/useCategory";
 import { categoryIcons, getTranslatedCategorie } from "./lib/category";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CategoriesPage() {
+  const isDocumentReady = useDocumentReadyState();
   const tCat = useTranslations("Category");
   const t = useTranslations();
   const [openDeleteId, setOpenDeleteId] = useState<string | null>(null);
@@ -39,8 +41,6 @@ export default function CategoriesPage() {
     remove,
   } = useCategory();
 
-  const isDocumentReady = useDocumentReadyState();
-
   const typeOptions = [
     { value: "INCOME", label: tCat("type.income") },
     { value: "EXPENSE", label: tCat("type.expense") },
@@ -57,7 +57,7 @@ export default function CategoriesPage() {
     { label: tCat("colorLabel.black"), value: "#000000" },
   ];
 
-  if (!isDocumentReady) return null;
+  if (!isDocumentReady) return <CategorySkeleton full={true} />;
 
   return (
     <div className="p-4 md:p-6">
@@ -165,13 +165,7 @@ export default function CategoriesPage() {
 
       {loading && <div className="p-4 text-center">Loading...</div>}
 
-      {categories.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">
-            {tCat("messages.no-categories")}
-          </p>
-        </div>
-      )}
+      {categories.length === 0 && !loading && <CategorySkeleton full={false} />}
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent className="max-w-lg rounded-2xl p-6">
@@ -344,3 +338,49 @@ export default function CategoriesPage() {
     </div>
   );
 }
+
+const CategorySkeleton = ({ full }: { full: boolean }) => {
+  return (
+    <div className="p-4 md:p-6">
+      {full && (
+        <>
+          <div className="flex items-center justify-between mb-6">
+            <Skeleton className="h-8 w-40" />
+            <Skeleton className="h-10 w-32" />
+          </div>
+
+          <div className="mb-6">
+            <Skeleton className="h-10 w-48" />
+          </div>
+        </>
+      )}
+
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
+        {[32, 28, 36, 30, 34, 26].map((width, index) => (
+          <div key={index} className="rounded-2xl bg-card border shadow-sm p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Skeleton className="w-12 h-12 rounded-xl" />
+                <div>
+                  <Skeleton className={`h-5 w-${width} mb-2`} />
+                  <Skeleton className={`h-4 w-${width - 12}`} />
+                </div>
+              </div>
+              <div className="flex gap-1">
+                <Skeleton className="h-9 w-9 rounded-full" />
+                <Skeleton className="h-9 w-9 rounded-full" />
+              </div>
+            </div>
+            {index % 2 === 0 && (
+              <div className="mt-3">
+                <Skeleton
+                  className={`h-4 ${index % 3 === 0 ? "w-full" : "w-3/4"}`}
+                />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};

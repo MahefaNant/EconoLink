@@ -21,6 +21,7 @@ import useCategory from "../../category/hooks/useCategory";
 import useDocumentReadyState from "@/hooks/useDocumentReadyState";
 import { useCreateTransaction } from "./hooks/useCreateTransaction";
 import { useTranslations } from "next-intl";
+import CreateTransactionSkeleton from "./components/CreateTransactionSkeleton";
 
 export default function CreateTransactionPage() {
   const tTr = useTranslations("Transaction");
@@ -151,7 +152,9 @@ export default function CreateTransactionPage() {
     }));
   };
 
-  if (!isReady) return null;
+  if (!isReady) {
+    return <CreateTransactionSkeleton />;
+  }
 
   return (
     <div className="container mx-auto p-4 max-w-2xl">
