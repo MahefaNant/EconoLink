@@ -15,8 +15,12 @@ import Image from "next/image";
 import useUserProfile from "../hooks/useUserProfile";
 import { useTranslations } from "next-intl";
 import { Save } from "lucide-react";
+import useDocumentReadyState from "@/hooks/useDocumentReadyState";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function UserProfile() {
+  const isDocumentReady = useDocumentReadyState();
+
   const {
     avatars,
     currencies,
@@ -30,11 +34,61 @@ export default function UserProfile() {
   } = useUserProfile();
 
   const t = useTranslations("Settings.Profile");
-  if (!user)
+
+  if (!user && !isDocumentReady)
     return (
-      <p className="text-center text-sm text-muted-foreground py-10">
-        {t("loading")}
-      </p>
+      <div className="flex justify-center py-10 px-4">
+        <Card className="w-full max-w-3xl shadow-lg border rounded-2xl">
+          <CardHeader className="text-center space-y-2">
+            <Skeleton className="h-8 w-48 mx-auto" />
+            <Skeleton className="h-4 w-64 mx-auto" />
+          </CardHeader>
+
+          <CardContent className="grid gap-6 md:grid-cols-2">
+            {/* Email */}
+            <div className="md:col-span-2">
+              <Skeleton className="h-5 w-16 mb-2" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+
+            {/* Name */}
+            <div>
+              <Skeleton className="h-5 w-16 mb-2" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+
+            {/* Avatar */}
+            <div>
+              <Skeleton className="h-5 w-20 mb-2" />
+              <Skeleton className="h-10 w-full mb-2" />
+              <Skeleton className="h-12 w-12 rounded-full mx-auto" />
+            </div>
+
+            {/* Currency */}
+            <div>
+              <Skeleton className="h-5 w-20 mb-2" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+
+            {/* Created At */}
+            <div>
+              <Skeleton className="h-5 w-24 mb-2" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+
+            {/* Updated At */}
+            <div>
+              <Skeleton className="h-5 w-20 mb-2" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+
+            {/* Button */}
+            <div className="md:col-span-2 text-center pt-4">
+              <Skeleton className="h-10 w-32 mx-auto" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     );
 
   return (
@@ -133,13 +187,13 @@ export default function UserProfile() {
           <div>
             <Label>{t("Form.create-on")}</Label>
             <div className="mt-1 rounded-md border px-3 py-2 bg-muted/10 text-sm">
-              {new Date(user.created_at).toLocaleString()}
+              {user ? new Date(user.created_at).toLocaleString() : ""}
             </div>
           </div>
           <div>
             <Label>{t("Form.maj")}</Label>
             <div className="mt-1 rounded-md border px-3 py-2 bg-muted/10 text-sm">
-              {new Date(user.updated_at).toLocaleString()}
+              {user ? new Date(user.updated_at).toLocaleString() : ""}
             </div>
           </div>
 

@@ -17,8 +17,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { CalendarDays, TrendingUp, Wallet, BellRing } from "lucide-react";
 import { useTranslations } from "next-intl";
+import useDocumentReadyState from "@/hooks/useDocumentReadyState";
+import DashboardSkeleton from "./components/skeletons/DashboardSkeleton";
 
 export default function Dashboard() {
+  const isReady = useDocumentReadyState();
   const user = useAuthStore((s) => s.user);
   const { stats: transactionStats } = useTransactionPage();
   const tD = useTranslations("Dashboard");
@@ -66,6 +69,10 @@ export default function Dashboard() {
     (r) =>
       new Date(r.due_date) <= new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
   ).length;
+
+  if (!isReady) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950">

@@ -42,8 +42,11 @@ import { GoalCard } from "../goals/components/goal-card";
 import { GoalDialog } from "../goals/components/goal-dialog";
 import { ProgressDialog } from "../goals/components/progress-dialog";
 import { useGoals, useDeleteGoal } from "../goals/hooks/use-goals";
+import useDocumentReadyState from "@/hooks/useDocumentReadyState";
+import BudgetsPageSkeleton from "./components/BudgetPageSkeleton";
 
-export default function GoalsPage() {
+export default function BudgetsPage() {
+  const isReady = useDocumentReadyState();
   const [filters, setFilters] = useState<GoalFilters>({
     page: 1,
     limit: 9,
@@ -137,6 +140,10 @@ export default function GoalsPage() {
     const newOrder = filters.order === "asc" ? "desc" : "asc";
     handleOrderChange(filters.orderBy || "created_at", newOrder);
   };
+
+  if (!isReady) {
+    return <BudgetsPageSkeleton />;
+  }
 
   return (
     <div className="min-h-screen">

@@ -20,6 +20,7 @@ import { Statistics } from "./components/Statistics";
 import { FilterTransaction } from "./components/FilterTransaction";
 import { useTranslations } from "next-intl";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
+import TransactionsPageSkeleton from "./components/skeletons/TransactionsPageSkeleton";
 
 export default function TransactionsPage() {
   const {
@@ -68,13 +69,10 @@ export default function TransactionsPage() {
   };
 
   const getTypeVariant = (type: TransactionType) => typeVariants[type];
+  const verifyLoading = loading && transactions.length === 0;
 
-  if (loading && transactions.length === 0) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>
-    );
+  if (verifyLoading) {
+    return <TransactionsPageSkeleton />;
   }
 
   return (
