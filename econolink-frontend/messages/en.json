@@ -1,0 +1,1034 @@
+{
+  "install": {
+    "description": "Manage your personal finances wherever you are — even without an internet connection.",
+    "head": "Install the app",
+    "desc2": "Install EconoLink for fast, seamless, and offline access to your financial data.",
+    "desc3": "Quickly access your financial manager, even offline.",
+    "text-button": "Install EconoLink",
+    "rights": "All rights reserved."
+  },
+  "offline": {
+    "text1": "You are offline",
+    "text2": "This page is not available in offline mode. Please check your internet connection or return to the home page.",
+    "text3": "This feature cannot work offline.",
+    "home": "Return to home"
+  },
+  "Dialog": {
+    "confirm": "Yes",
+    "cancel": "Cancel",
+    "LogOut": {
+      "text": "LogOut",
+      "title": "Confirm Logout",
+      "description": "Are you sure you want to log out?",
+      "cancel": "No, stay",
+      "confirm": "Yes, log out"
+    }
+  },
+  "HomePage": {
+    "NavBar": {
+      "sign-up": "Sign Up",
+      "sign-in": "Sign In",
+      "my-account": "My account",
+      "my-account-long": "Access my account",
+      "routes": {
+        "home": "Home"
+      }
+    },
+    "title": "EconoLink",
+    "about": "Welcome to EconoLink, your gateway to economic insights and data.",
+    "hero": {
+      "badge": "NEW: Smart Financial Management",
+      "title": {
+        "line1": "Take Control of Your",
+        "line2": "Financial Future"
+      },
+      "description": "EconoLink helps you track expenses, set financial goals, and manage reminders—all in one beautiful, intuitive interface.",
+      "stats": {
+        "accuracy": "Accuracy Rate",
+        "availability": "Availability",
+        "users": "Active Users"
+      },
+      "cta": {
+        "primary": "Get Started Free",
+        "secondary": "Sign In"
+      },
+      "trust": "Bank-level security & encryption"
+    },
+    "features": {
+      "badge": "Everything you need",
+      "title": "Powerful Features for Financial Success",
+      "subtitle": "From basic budgeting to advanced financial planning",
+      "tracking": {
+        "title": "Expense Tracking",
+        "description": "Automatically categorize and track all your expenses"
+      },
+      "goals": {
+        "title": "Financial Goals",
+        "description": "Set and track progress toward your financial objectives"
+      },
+      "reminders": {
+        "title": "Smart Reminders",
+        "description": "Never miss bill payments or important deadlines"
+      },
+      "analytics": {
+        "title": "Advanced Analytics",
+        "description": "Insights and reports to optimize your finances"
+      },
+      "security": {
+        "title": "Bank-Level Security",
+        "description": "Your data is encrypted and protected 24/7"
+      },
+      "mobile": {
+        "title": "Mobile App",
+        "description": "Manage your finances on the go with our mobile app"
+      },
+      "securityBadge": "256-bit encryption & GDPR compliant"
+    },
+    "howItWorks": {
+      "title": "How EconoLink Works",
+      "subtitle": "Get started in minutes, achieve financial freedom for life",
+      "steps": {
+        "register": {
+          "title": "Sign Up Free",
+          "description": "Create your account in 30 seconds"
+        },
+        "setup": {
+          "title": "Set Up Your Profile",
+          "description": "Connect accounts or add manual entries"
+        },
+        "track": {
+          "title": "Track & Analyze",
+          "description": "Monitor expenses and set financial goals"
+        },
+        "achieve": {
+          "title": "Achieve Goals",
+          "description": "Watch your financial dreams become reality"
+        }
+      },
+      "cta": "Start Your Journey Today"
+    },
+    "testimonials": {
+      "badge": "Trusted by thousands",
+      "title": "Loved by Users Worldwide",
+      "subtitle": "See what our community says about their financial transformation",
+      "items": [
+        {
+          "content": "EconoLink helped me save $5,000 in just 6 months. The goal tracking feature is a game-changer!"
+        },
+        {
+          "content": "As a freelancer, keeping track of invoices and expenses was chaotic. EconoLink simplified everything."
+        },
+        {
+          "content": "The reminder system alone is worth the subscription. Never missed a bill payment since I started using it."
+        }
+      ],
+      "stats": {
+        "rating": "User Rating",
+        "users": "Happy Users",
+        "satisfaction": "Satisfaction Rate",
+        "support": "Support Available"
+      }
+    },
+    "pricing": {
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "Choose the plan that's right for you",
+      "mostPopular": "Most Popular",
+      "free": {
+        "name": "Free",
+        "description": "Perfect for getting started",
+        "features": [
+          "Track up to 50 transactions/month",
+          "Basic expense categories",
+          "Email support",
+          "Mobile app access"
+        ],
+        "excluded": ["Advanced analytics", "Priority support"],
+        "cta": "Get Started Free"
+      },
+      "pro": {
+        "name": "Pro",
+        "description": "For serious financial management",
+        "features": [
+          "Unlimited transactions",
+          "Advanced analytics & reports",
+          "Priority email support",
+          "Custom categories & tags",
+          "Financial goal tracking",
+          "Smart reminders"
+        ],
+        "cta": "Start Pro Trial"
+      },
+      "business": {
+        "name": "Business",
+        "description": "For teams & professionals",
+        "features": [
+          "Everything in Pro",
+          "Team collaboration",
+          "Custom billing & invoicing",
+          "Dedicated account manager",
+          "API access",
+          "Custom integrations",
+          "White-label options"
+        ],
+        "cta": "Contact Sales"
+      },
+      "note": "All plans include 14-day free trial. No credit card required."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know about EconoLink",
+      "items": [
+        {
+          "question": "Is my financial data secure?",
+          "answer": "Yes! We use bank-level 256-bit encryption and never store your banking credentials. Your data is protected 24/7."
+        },
+        {
+          "question": "Can I cancel anytime?",
+          "answer": "Absolutely. You can cancel your subscription at any time from your account settings. No hidden fees."
+        },
+        {
+          "question": "Do you offer a mobile app?",
+          "answer": "Yes! EconoLink is available on both iOS and Android. Download from the App Store or Google Play."
+        },
+        {
+          "question": "How do you make money?",
+          "answer": "We offer a free tier and premium subscriptions. We never sell your data to third parties."
+        },
+        {
+          "question": "Can I import data from other apps?",
+          "answer": "Yes, you can import CSV files from most financial apps. We also offer direct integrations."
+        },
+        {
+          "question": "What countries do you support?",
+          "answer": "EconoLink is available worldwide in 50+ countries with support for multiple currencies."
+        }
+      ],
+      "help": {
+        "title": "Still have questions?",
+        "description": "Our support team is here to help you",
+        "contact": "Contact Support",
+        "docs": "View Documentation"
+      }
+    },
+    "cta": {
+      "badge": "Limited Time Offer",
+      "title": {
+        "line1": "Ready to Transform Your",
+        "line2": "Financial Life?"
+      },
+      "description": "Join thousands of users who have taken control of their finances with EconoLink.",
+      "benefits": {
+        "1": "No credit card required",
+        "2": "14-day free trial",
+        "3": "Cancel anytime",
+        "4": "Bank-level security"
+      },
+      "primary": "Start Free Trial",
+      "secondary": "Schedule a Demo",
+      "trust": "Join 5,000+ satisfied users worldwide"
+    },
+    "footer": {
+      "description": "The all-in-one platform for intelligent financial management. Track expenses, set goals, and achieve financial freedom.",
+      "categories": {
+        "product": "Product",
+        "company": "Company",
+        "support": "Support",
+        "legal": "Legal"
+      },
+      "links": {
+        "product": {
+          "features": "Features",
+          "pricing": "Pricing",
+          "updates": "Updates",
+          "api": "API"
+        },
+        "company": {
+          "about": "About",
+          "blog": "Blog",
+          "careers": "Careers",
+          "press": "Press"
+        },
+        "support": {
+          "docs": "Documentation",
+          "help": "Help Center",
+          "community": "Community",
+          "contact": "Contact Us"
+        },
+        "legal": {
+          "privacy": "Privacy Policy",
+          "terms": "Terms of Service",
+          "cookies": "Cookie Policy",
+          "security": "Security"
+        }
+      },
+      "copyright": "All rights reserved.",
+      "status": "All systems operational"
+    }
+  },
+  "Auth": {
+    "common": {
+      "signin": "Sign In",
+      "signup": "Sign Up",
+      "google-continue": "Continue with Google",
+      "back-home": "Return to home",
+      "sub-welcome": "Manage your finances smarter — securely and efficiently."
+    },
+    "Login": {
+      "welcome": "Welcome back to EconoLink",
+      "have-account": "Don't have an account?",
+      "form": {
+        "password": "password",
+        "error": "Your information is incorrect"
+      }
+    },
+    "Register": {
+      "welcome": "Welcome to EconoLink",
+      "have-account": "Already have an account?",
+      "sub-register": "Create your account securely.",
+      "form": {
+        "password": "password",
+        "name": "Name",
+        "r-password": "Retape password"
+      }
+    },
+    "RightSide": {
+      "title": "Your finances, simplified.",
+      "sub-title": "Track, save, and grow your money effortlessly with EconoLink."
+    }
+  },
+  "Dashboard": {
+    "common": {
+      "welcome": " Welcome back",
+      "desc": "Here's what's happening with your finances today",
+      "budget-total": "Total Budget",
+      "category-all": " Across all categories",
+      "spent-total": "Total Spent",
+      "reminders": "Reminders",
+      "urgent": "urgent",
+      "budget-alert": "Budget Alerts",
+      "exceeded": "exceeded",
+      "overview": "Overview",
+      "transactions": "Transactions",
+      "budgets": "Budgets",
+      "reminders-upcoming": "Upcoming Reminders",
+      "total": "total",
+      "transactions-recent": "Recent Transactions",
+      "budget-overview": "Budget Overview",
+      "categories": "categories",
+      "transaction-details": "Transaction Details",
+      "budget-analytics": "Budget Analytics",
+      "last-updated": "Last updated"
+    },
+    "SideBar": {
+      "home": "Return Home",
+      "Route": {
+        "home-space": {
+          "title": "Home space",
+          "dashboard": "dashboard",
+          "profile": "My profile"
+        },
+        "account-space": {
+          "title": "Account space",
+          "accounts": "Accounts",
+          "add": "Add Account"
+        },
+        "category-space": {
+          "title": "Category space",
+          "categories": "Categories",
+          "add": "Add Category"
+        },
+        "transaction-space": {
+          "title": "Transaction space",
+          "transactions": "Transactions",
+          "add": "Add Transaction"
+        },
+        "budgets-space": {
+          "title": "Budgets space",
+          "budgets": "Budgets",
+          "stats": "Stats",
+          "alerts": "Alerts"
+        },
+        "goals-space": {
+          "title": "Goals space",
+          "goals": "Goals"
+        },
+        "reminders-space": {
+          "title": "Reminders space",
+          "reminders": "Reminders"
+        }
+      }
+    }
+  },
+  "Settings": {
+    "Profile": {
+      "title": "My Profile",
+      "desc": "Manage your personal information",
+      "loading": "Loading profile...",
+      "Form": {
+        "email": "Email",
+        "name": "Name",
+        "avatar": "Avatar",
+        "currency": "Currency",
+        "create-on": "Created on",
+        "maj": "Updated on",
+        "placeholder": {
+          "avatar": "Choose an avatar",
+          "currency": "Select a currency"
+        },
+        "messages": {
+          "no-update": "No changes detected",
+          "failed-update": "Update failed",
+          "error-maj": "Error during update",
+          "success": "Profile successfully updated"
+        },
+        "button": {
+          "recording": "Recording...",
+          "save": "Save updates"
+        }
+      }
+    }
+  },
+  "Accounts": {
+    "title": "Accounts",
+    "add-account": "Add Account",
+    "search": "Search accounts...",
+    "list": {
+      "balance": "Balance",
+      "active": "Active",
+      "inactive": "Inactive",
+      "name": "Name",
+      "name-acc": "Account name",
+      "type": "Type",
+      "color": "Color"
+    },
+    "dialog": {
+      "add-title": "Add New Account",
+      "edit-title": "Edit Account",
+      "name-placeholder": "Enter account name",
+      "type-placeholder": "Select account type",
+      "icon-placeholder": "Choose an icon",
+      "color-placeholder": "Choose a color",
+      "delete-title": "Delete this Account?",
+      "delete-desc": "Are you sure you want to delete this account? This action cannot be undone.",
+      "delete-desc-high": "Are you absolutely sure you want to delete this account? All transactions associated with it will be deleted. This action is irreversible.",
+      "icon-preview": "Account Preview",
+      "icon-preview-placeholder": "Account Name",
+      "button": {
+        "delete": "Delete Account",
+        "create": "Create",
+        "create-loading": "Creating...",
+        "save": "Save Changes",
+        "cancel": "Cancel"
+      }
+    },
+    "iconLabel": {
+      "bank": "Bank",
+      "cash": "Cash",
+      "mobile-money": "Mobile Money",
+      "credit-card": "Credit Card",
+      "investment": "Investment",
+      "savings": "Savings",
+      "other": "Other"
+    },
+    "colorLabel": {
+      "red": "Red",
+      "green": "Green",
+      "blue": "Blue",
+      "yellow": "Yellow",
+      "purple": "Purple",
+      "gray": "Gray",
+      "black": "Black"
+    },
+    "messages": {
+      "fetch-error": "Failed to load accounts",
+      "add-success": "Account added successfully",
+      "name-required": "Name is required",
+      "name-required-acc": "Account name is required",
+      "edit-success": "Account updated successfully",
+      "delete-success": "Account deleted successfully",
+      "operation-failed": "Operation failed",
+      "offline-queued": "You are offline. The operation has been queued and will be processed once you are back online.",
+      "offline-fetch": "You are offline. Displaying locally stored accounts.",
+      "foreign-key-error": "Cannot delete this account as it is referenced by other data."
+    }
+  },
+  "Category": {
+    "title": "Categories",
+    "add-account": "Add category",
+    "search": "Search categories...",
+    "filter": {
+      "by-type": "Filter by type"
+    },
+    "type": {
+      "income": "Income",
+      "expense": "Expense",
+      "transfer": "Transfer"
+    },
+    "list": {
+      "balance": "Balance",
+      "active": "Active",
+      "inactive": "Inactive",
+      "name": "Name",
+      "type": "Type",
+      "color": "Color",
+      "transactions": "Transactions",
+      "description": "Description",
+      "icon": "Icon"
+    },
+    "dialog": {
+      "add-title": "Create New Category",
+      "edit-title": "Edit Category",
+      "description-placeholder": "Enter category description",
+      "name-placeholder": "Enter category name",
+      "type-placeholder": "Select category type",
+      "icon-placeholder": "Choose an icon",
+      "color-placeholder": "Choose a color",
+      "delete-title": "Delete this Category?",
+      "delete-desc": "Are you sure you want to delete this category? This action cannot be undone.",
+      "delete-desc-high": "Are you absolutely sure you want to delete this category? All transactions associated with it will be deleted. This action is irreversible.",
+      "icon-preview": "Category Preview",
+      "icon-preview-placeholder": "Category Name",
+      "button": {
+        "delete": "Delete Category",
+        "create": "Create Category",
+        "create-simple": "Create",
+        "save": "Save Changes",
+        "cancel": "Cancel",
+        "create-loading": "Creating..."
+      }
+    },
+    "colorLabel": {
+      "red": "Red",
+      "green": "Green",
+      "blue": "Blue",
+      "yellow": "Yellow",
+      "purple": "Purple",
+      "gray": "Gray",
+      "black": "Black"
+    },
+    "messages": {
+      "fetch-error": "Failed to load categories",
+      "no-categories": "No categories available",
+      "add-success": "Category added successfully",
+      "name-required": "Category name is required",
+      "edit-success": "Category updated successfully",
+      "delete-success": "Category deleted successfully",
+      "operation-failed": "Operation failed",
+      "offline-queued": "You are offline. The operation has been queued and will be processed once you are back online.",
+      "offline-fetch": "You are offline. Displaying locally stored categories.",
+      "foreign-key-error": "Cannot delete this category as it is referenced by other data."
+    },
+    "translation": {
+      "expense": {
+        "food": "Food & Groceries",
+        "food_desc": "Daily meals and groceries.",
+        "transportation": "Transportation",
+        "transportation_desc": "Fuel, taxi, or public transport.",
+        "housing": "Housing",
+        "housing_desc": "Rent, maintenance, and bills.",
+        "utilities": "Utilities",
+        "utilities_desc": "Electricity, water, gas, or internet.",
+        "entertainment": "Entertainment",
+        "entertainment_desc": "Movies, games, and streaming.",
+        "health": "Health",
+        "health_desc": "Medicine, insurance, or doctors.",
+        "education": "Education",
+        "education_desc": "Books, courses, or training.",
+        "clothing": "Clothing",
+        "clothing_desc": "Clothes and accessories.",
+        "travel": "Travel",
+        "travel_desc": "Trips and vacations.",
+        "subscriptions": "Subscriptions",
+        "subscriptions_desc": "Netflix, Spotify, etc.",
+        "personal_care": "Personal Care",
+        "personal_care_desc": "Beauty, haircuts, or gym.",
+        "gifts": "Gifts & Donations",
+        "gifts_desc": "Charity or presents.",
+        "taxes": "Taxes",
+        "taxes_desc": "Income or property taxes.",
+        "other": "Other Expenses",
+        "other_desc": "Miscellaneous expenses."
+      },
+
+      "income": {
+        "salary": "Salary",
+        "salary_desc": "Monthly salary or wages.",
+        "bonus": "Bonus",
+        "bonus_desc": "Performance or work bonus.",
+        "freelance": "Freelance",
+        "freelance_desc": "Income from freelance or side jobs.",
+        "investments": "Investments",
+        "investments_desc": "Dividends, stocks, etc.",
+        "rental": "Rental Income",
+        "rental_desc": "Rent payments received.",
+        "refunds": "Refunds",
+        "refunds_desc": "Tax or product refunds.",
+        "gift": "Gift",
+        "gift_desc": "Money received as a gift.",
+        "other": "Other Income",
+        "other_desc": "Any other income source."
+      },
+
+      "transfer": {
+        "bank": "Bank Transfer",
+        "bank_desc": "Between bank accounts.",
+        "savings": "Savings",
+        "savings_desc": "Money moved to savings.",
+        "credit_card": "Credit Card Payment",
+        "credit_card_desc": "Paying off a credit card.",
+        "loan": "Loan Payment",
+        "loan_desc": "Paying back a loan.",
+        "investment": "Investment Transfer",
+        "investment_desc": "Moving money to investments."
+      }
+    }
+  },
+  "Transaction": {
+    "desc": "Manage your financial transactions",
+    "add-button": "Add Transaction",
+    "edit": "Edit Transaction",
+    "update": "Update transaction details",
+    "to-account": "To Account *",
+    "info": "Transaction Information",
+    "created": "Created:",
+    "last-update": "Last Updated:",
+    "type": {
+      "income": "income",
+      "expense": "expense",
+      "transfer": "transfer"
+    },
+    "List": {
+      "showing": "Showing",
+      "no-found": "No transactions found",
+      "next-page": "Next",
+      "previous-page": "Previous"
+    },
+    "Statistics": {
+      "offline-desc": "Basic statistics - connect for advanced analytics",
+      "total-income": "Total Income",
+      "total-expense": "Total Income",
+      "total-transfer": "Total Transfers",
+      "amount-transfer": "Amount Transferred",
+      "net": "Net Cash Flow",
+      "transfert-desc": "Internal Transfers",
+      "top-categories": "Top Categories"
+    },
+    "Filter": {
+      "search-placeholder": "Search transactions...",
+      "search": "Search",
+      "type": {
+        "all": "All Types",
+        "income": "Income",
+        "expense": "Expense",
+        "transfer": "Transfer"
+      },
+      "sort": {
+        "newest": "Date: Newest First",
+        "oldest": "Date: Oldest First",
+        "hight-low": "Amount: High to Low",
+        "low-hight": "Amount: Low to High"
+      },
+      "range": "Date Range",
+      "apply": "Apply",
+      "clear": "Clear"
+    },
+    "dialog": {
+      "delete-title": "Delete Transaction?",
+      "delete-desc": "Are you sure you want to delete this transaction? This action cannot be undone.",
+      "delete-desc-high": "Are you absolutely sure you want to delete this category? All transactions associated with it will be deleted. This action is irreversible.",
+      "button": {
+        "delete": "Delete Transaction",
+        "delete-simple": "Delete",
+        "create": "Create Transaction",
+        "create-simple": "Create",
+        "create-loading": "Creating...",
+        "save": "Save Changes",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "update": "Update Transaction",
+        "updating": "Updating..."
+      }
+    },
+    "form": {
+      "create-title": "Create Transaction",
+      "add-financial": "Add a new financial transaction",
+      "amount": "Amount *",
+      "select-account-placeholder": "Select an account...",
+      "select-destination-placeholder": "Select destination account...",
+      "select-category-placeholder": "Select a category...",
+      "location-placeholder": "Transaction location",
+      "notes-placeholder": "Additional notes",
+      "category-desc": "Category automatically selected based on transaction type",
+      "location": "Location"
+    },
+    "messages": {
+      "select-account": "Please select an account",
+      "select-destination": "Please select a destination account for transfer",
+      "same-transfer-error": "Cannot transfer to the same account",
+      "not-found": "Transaction not found",
+      "not-found-local": "Transaction not found in local database",
+      "loaded-cache": "Transaction loaded from cache",
+      "back": "Back to Transactions",
+      "delete-failed": "Failed to delete transaction",
+      "delete-offline": "Transaction deleted offline and queued for sync",
+      "delete-success": "Transaction deleted successfully",
+      "create-failed": "Failed to create transaction",
+      "create-offline": "Transaction created offline and queued for sync",
+      "create-success": "Transaction created successfully",
+      "update-failed": "Failed to update transaction",
+      "update-offline": "Transaction updated offline and queued for sync",
+      "update-success": "Transaction updated successfully"
+    }
+  },
+  "Budgets": {
+    "title": "Budgets",
+    "showing": "Showing",
+    "desc": "Manage your spending and track your budgets",
+    "view-all": "View All Budgets",
+    "stats": {
+      "title": "Budget Statistics",
+      "desc": "Insights and analytics for your budgets",
+      "total": "Total Budget",
+      "total-spent": "Total Spent",
+      "across": "Across",
+      "remaining": "remaining",
+      "attention": "Budgets needing attention",
+      "exceeded": "Exceeded",
+      "limit": "Over budget limits",
+      "attention-need": "Attention Needed",
+      "require": "Budgets that require your immediate attention",
+      "alert": "Alert Budgets",
+      "spend-limit": "Approaching spending limits",
+      "exceeded-budget": "Exceeded Budgets",
+      "over-spend-limit": "Over spending limits",
+      "all-alerts": "View All Alerts",
+      "charts": {
+        "budget-vs-spent": "Budget vs Spent",
+        "desc": "Comparison of budgeted amounts vs actual spending",
+        "no-budget": "No budget data available",
+        "status": "Budget Status",
+        "status-desc": "Distribution of budget statuses",
+        "no-status": "No status data available"
+      },
+      "overview": {
+        "total": "Total Budget",
+        "usage": "Overall Usage",
+        "active": "Active Budgets",
+        "attention": "need attention"
+      },
+      "periods": {
+        "title": "Budget Periods",
+        "desc": "Distribution by budget period",
+        "config": {
+          "monthly-label": "Monthly",
+          "monthly-desc": "Resets every month",
+          "weekly-label": "Weekly",
+          "weekly-desc": "Resets every week",
+          "yearly-label": "Yearly",
+          "yearly-desc": "Resets every year",
+          "daily-label": "Daily",
+          "daily-desc": "Resets every day"
+        }
+      },
+      "top": {
+        "title": "Top Budgets by Usage",
+        "desc": "Budgets with highest spending percentage",
+        "no-budget": "No budget data available"
+      }
+    },
+    "alerts": {
+      "title": "Budget Alerts",
+      "limits": "Great! All your budgets are within their limits.",
+      "at": "Alert at"
+    },
+    "filters": {
+      "title": "Filters",
+      "t-b": "",
+      "desc": "Refine your budget list using the filters below.",
+      "all": "All periods",
+      "status": "Status",
+      "select": {
+        "all": "All statuses",
+        "normal": "Normal",
+        "alert": "Alert",
+        "exceeded": "Exceeded",
+        "monthly": "Monthly",
+        "weekly": "Weekly",
+        "yearly": "Yearly",
+        "daily": "Daily"
+      },
+      "period": "Period",
+      "use-percentage": "Usage Percentage",
+      "date-create": "Date Created",
+      "order": "Order",
+      "ascending": "Ascending",
+      "descending": "Descending",
+      "item-per-page": "Items per page"
+    },
+    "form": {
+      "name": "Name",
+      "name-budget": "Budget Name",
+      "name-placeholder": "Enter budget name",
+      "amount": "Amount",
+      "period": "Period",
+      "alert": "Alert Threshold",
+      "start-date": "Start Date",
+      "pick-date": "Pick a date",
+      "end-date": "End Date",
+      "category": "Category",
+      "category-placeholder": "Category",
+      "name-required": "Name is required",
+      "amount-required": "Amount is required",
+      "amount-greater": "Amount must be greater than 0",
+      "alert-between": "Alert must be between 0 and 100",
+      "category-required": "Category is required"
+    },
+    "dialog": {
+      "delete-title": "Delete Budget?",
+      "delete-desc": "Are you sure you want to delete this Budget? This action cannot be undone.",
+      "delete-desc-high": "Are you absolutely sure you want to delete this Budget? All transactions associated with it will be deleted. This action is irreversible.",
+      "button": {
+        "delete": "Delete Budget",
+        "delete-simple": "Delete Budget",
+        "create": "Create Budget",
+        "create-new": "Create new Budget",
+        "create-simple": "Create",
+        "save": "Save Changes",
+        "save-loading": "Saving...",
+        "cancel": "Cancel",
+        "create-loading": "Creating...",
+        "edit": "Edit Budget",
+        "udapte": "Update Budget",
+        "edit-simple": "Edit Budget",
+        "reset": "Reset",
+        "apply": "Apply",
+        "previous": "Previous",
+        "next": "Next"
+      }
+    },
+    "messages": {
+      "failed-load": "Failed to load budgets",
+      "failed-load-alert": "Failed to load budgets",
+      "create-success": "Budget created successfully",
+      "create-failed": "Failed to create budget",
+      "updated-success": "Budget created successfully",
+      "updated-failed": "Failed to create budget",
+      "deleted-success": "Budget deleted successfully",
+      "deleted-failed": "Failed to deleted budget",
+      "retry": "retry",
+      "no-found": "No budget found",
+      "no-found-alert": "No budget found",
+      "statistic-failed": "Failed to load statistics"
+    }
+  },
+  "Goals": {
+    "title": "My Goals",
+    "title-simple": "goals",
+    "common": {
+      "obj": "Goal",
+      "collect": "Collected",
+      "du-date": "Due date"
+    },
+
+    "desc": "Track and manage your financial goals",
+    "stats": {
+      "obj-tot": "Total Goals",
+      "finish": "Completed",
+      "colect-total": "Total Collected",
+      "progress-global": "Overall Progress"
+    },
+    "colors": {
+      "emerald": "Emerald",
+      "blue": "Blue",
+      "purple": "Purple",
+      "red": "Red",
+      "amber": "Amber",
+      "pink": "Pink"
+    },
+
+    "icons": {
+      "target": "Target",
+      "money": "Money",
+      "house": "House",
+      "car": "Car",
+      "travel": "Travel",
+      "education": "Education",
+      "jewelry": "Jewelry",
+      "phone": "Phone"
+    },
+    "dialog": {
+      "delete": "Delete goal",
+      "new": "New goal",
+      "new-progress": "New progress",
+      "new-total": "New total",
+      "rest": "Remaining to collect",
+      "delete-ireversible": "This action is irreversible",
+      "delete-desc": "Are you sure you want to delete the goal?",
+      "delete-desc-high": "All data associated with this goal will be permanently deleted. This action cannot be undone.",
+      "progress": "Progress",
+      "no-icon": "No icon found.",
+      "no-color": "No color found.",
+      "progress-now": "Current progress",
+      "obj-tot": "Total goals",
+      "collected": "Collected",
+      "congrats": "Congratulations! This goal will be completed after this addition.",
+      "quick-amount": "Quick amounts",
+      "amount-to-add": "Amount to add",
+      "until": "Until",
+      "it-rest": "It remains",
+      "to-collect": "To collect to reach the goal",
+      "no-objectif-found": "No objective found",
+      "no-objectif": "No objective",
+      "no-objectif-search": "No objectives match your search.",
+      "start-to-create": "Start by creating your first financial objective.",
+      "display-of": "Display of",
+      "button": {
+        "create": "Create a goal",
+        "create-progress": "Create progress",
+        "delete": "Delete the goal",
+        "delete-simple": "Delete...",
+        "create-new": "Create a new goal",
+        "create-simple": "Create",
+        "save": "Save changes",
+        "save-loading": "Save...",
+        "cancel": "Cancel",
+        "create-loading": "Creating...",
+        "edit": "Edit the goal",
+        "edit-loading": "Modifying...",
+        "update": "Update goal",
+        "edit-simple": "Edit",
+        "reset": "Reset",
+        "apply": "Apply",
+        "previous": "Previous",
+        "next": "Next"
+      }
+    },
+    "form": {
+      "name": "Goal Name *",
+      "desc": "Description",
+      "name-placeholder": "Example: Car Purchase",
+      "desc-placeholder": "Describe your goal...",
+      "search-placeholder": "Search for a goal...",
+      "amount-target": "Target Amount *",
+      "date-limit": "Deadline Date",
+      "select-date": "Select a Date",
+      "filter-status": "Filter by Status",
+      "obj-all": "All Goals",
+      "in-progress": "In Progress",
+      "finish": "Completed",
+      "new-obj": "New objective",
+      "name-required": "Name is required",
+      "amount-positive": "Amount must be positive"
+    }
+  },
+  "Reminders": {
+    "title": "My Reminders",
+    "desc": "Manage your reminders and never miss anything important",
+    "common": {
+      "select": "selected",
+      "reactive": "Reactivate",
+      "recurent": "Recurring",
+      "ended": "Completed",
+      "ended-mini": "completed",
+      "late": "Overdue",
+      "to": "To",
+      "show-of": "Showing",
+      "appeals": "reminders",
+      "waiting": "pending",
+      "from": "From"
+    },
+    "stats": {
+      "total": "Total",
+      "today": "Today",
+      "today-desc": "Due today",
+      "upcoming": "Upcoming",
+      "upcoming-desc": "Due tomorrow",
+      "completed": "Completed",
+      "completed-desc": "of total",
+      "late": "Overdue",
+      "late-desc": "Needs attention",
+      "recurring": "Recurring",
+      "recurring-desc": "of total"
+    },
+    "bulk": {
+      "mark-complete": "Mark as completed",
+      "mark-waiting": "Mark as pending",
+      "mark-done": "Mark as done",
+      "define-rec": "Set as recurring",
+      "define-no-rec": "Set as non-recurring"
+    },
+    "filter": {
+      "all-status": "All statuses",
+      "waiting": "Pending",
+      "completed": "Completed",
+      "all-type": "All types",
+      "recurring": "Recurring",
+      "non-recurring": "Non-recurring",
+      "filter-active": "Active filters:",
+      "search": "Search:",
+      "status": "Status:",
+      "type": "Type:",
+      "period": "Period:",
+      "all-appeals": "All reminders",
+      "today": "Today",
+      "upcoming": "Upcoming",
+      "all-selected": "All selected",
+      "clear": "Clear selection",
+      "no-appeals": "No reminders found"
+    },
+    "form": {
+      "today": "Today",
+      "description": "Description",
+      "desc-placeholder": "Additional details...",
+      "title-placeholder": "Ex: Team meeting",
+      "select-date": "Select a date",
+      "select-time": "Choose a future time",
+      "appel-programme": "Reminder scheduled for:",
+      "at": "at",
+      "search-placeholder": "Search for a reminder...",
+      "appeall-rec": "Recurring reminder",
+      "message": {
+        "title-required": "Title is required",
+        "title-error": "Title must not exceed 200 characters",
+        "date-required": "Date is required",
+        "time-past-error": "The selected time has already passed for today. Please choose a future time.",
+        "date-time-past": "The selected date and time have already passed.",
+        "create-impossible": "Cannot create a reminder in the past.",
+        "date-time-valide": "✓ Valid date/time",
+        "appeall-repeat-auto": "This reminder will repeat automatically"
+      }
+    },
+    "dialog": {
+      "edit": "Edit the details of your reminder.",
+      "create": "Create a new reminder so you don't forget anything.",
+      "detete": "Are you sure you want to delete the reminder",
+      "button": {
+        "create-simple": "Create",
+        "create": "New reminder",
+        "delete-simple": "Delete",
+        "edit-simple": "Edit",
+        "edit": "Edit reminder",
+        "cancel": "Cancel",
+        "editing": "Saving changes...",
+        "creating": "Creating...",
+        "delete-all-simple": "Clear all"
+      }
+    },
+    "message": {
+      "create": "New reminder",
+      "create-success": "Your reminder has been successfully created.",
+      "create-failed": "Failed to create the reminder.",
+      "edit-success": "Your reminder has been successfully updated.",
+      "edit-failed": "Failed to update the reminder.",
+      "delete-success": "Your reminder has been successfully deleted.",
+      "delete-failed": "Failed to delete the reminder.",
+      "appeall-complete": "The reminder has been marked as completed.",
+      "appeall-reactive": "The reminder has been reactivated.",
+      "appeall-failed": "Failed to change the reminder status.",
+      "bulk-update-success": "The selected reminders have been updated.",
+      "bulk-update-failed": "Failed to update the selected reminders.",
+      "bulk-delete-success": "The selected reminders have been deleted.",
+      "bulk-delete-failed": "Failed to delete the selected reminders."
+    }
+  }
+}

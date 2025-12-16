@@ -1,0 +1,40 @@
+{
+  // 🧹 Formate automatiquement à la sauvegarde
+  "editor.formatOnSave": true,
+
+  // ⚙️ Corrige automatiquement les erreurs ESLint à chaque sauvegarde
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // ✨ Utilise Prettier comme formateur principal
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // 🎯 Désactive le formatage Prettier pour laisser ESLint gérer certaines règles
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vccode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // 👀 Validation ESLint
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
+  // 🚀 Exécute ESLint plus rapidement
+  "eslint.run": "onType",
+
+  // 🔧 Force l'utilisation d'ESLint même si Prettier est installé
+  "eslint.format.enable": false
+}
