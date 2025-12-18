@@ -50,8 +50,8 @@ export class AuthController {
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie("access_token", {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: process.env.COOKIE_SECURE === "true", // prod = true, local = false
+      sameSite: process.env.COOKIE_SECURE === "true" ? "none" : "lax",
     });
 
     return { message: "Logged out successfully" };
