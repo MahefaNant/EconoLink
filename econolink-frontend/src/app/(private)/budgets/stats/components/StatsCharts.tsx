@@ -120,7 +120,7 @@ export function StatsCharts({ loading, budgets }: IStatsChartsProps) {
                 />
                 <YAxis fontSize={12} />
                 <Tooltip
-                  formatter={(value: number) => [
+                  formatter={(value: number | undefined) => [
                     `${fmtCurrency(
                       String(value || "0"),
                       user?.currency,
@@ -181,7 +181,9 @@ export function StatsCharts({ loading, budgets }: IStatsChartsProps) {
                     />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: number) => [value, "Count"]} />
+                <Tooltip
+                  formatter={(value: number | undefined) => [value, "Count"]}
+                />
               </PieChart>
             </ResponsiveContainer>
           )}
