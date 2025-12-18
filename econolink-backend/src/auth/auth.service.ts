@@ -86,8 +86,8 @@ export class AuthService {
   }) {
     res.cookie("access_token", access_token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: process.env.COOKIE_SECURE === "true", // prod = true, local = false
+      sameSite: process.env.COOKIE_SECURE === "true" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7days
       path: "/",
     });
