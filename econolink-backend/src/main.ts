@@ -3,6 +3,11 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
 import cookieParser from "cookie-parser";
+import {
+  CorsOptions,
+  CorsOptionsDelegate,
+} from "@nestjs/common/interfaces/external/cors-options.interface";
+import { Request } from "express";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,12 +22,33 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:3001",
-    credentials: true,
-    methods: ["GET", "PATCH", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "Set-Cookie"],
-  });
+  const allowedOrigins =
+    process.env.CORS_ORIGIN?.split(",").map((o) => o.trim()) ?? [];
+
+  const corsOptions: CorsOptionsDelegate<Request> = (req, callback) => {
+    const origin = req.get("Origin");
+
+    const options: CorsOptions = {
+      origin: false,
+      methods: ["GET", "PATCH", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization", "Cookie", "Set-Cookie"],
+      credentials: true,
+    };
+
+    if (!origin) {
+      options.origin = true;
+      return callback(null, options);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      options.origin = true;
+      return callback(null, options);
+    }
+
+    return callback(new Error(`CORS blocked for origin: ${origin}`), options);
+  };
+
+  app.enableCors(corsOptions);
 
   await app.listen(process.env.PORT ?? 3000);
 }
