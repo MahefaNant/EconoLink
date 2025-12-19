@@ -8,7 +8,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Eye, EyeOff, Loader2, Mail, Lock, LogIn } from "lucide-react";
+import { Eye, EyeOff, Loader2, Mail, Lock, LogIn, Info } from "lucide-react";
 import GoogleButton from "./GoogleButton";
 import { FormEvent, useState } from "react";
 import { useLogin } from "../hooks/useLogin";
@@ -17,13 +17,19 @@ import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const t = useTranslations("Auth");
+  const tB = useTranslations("Beta");
   const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorShake, setErrorShake] = useState(false);
 
   const { login, loading, errorMessage } = useLogin();
+
+  const isBeta = process.env.NEXT_PUBLIC_BETA_MODE === "true";
+  const betaEmail = process.env.NEXT_PUBLIC_BETA_TEST_EMAIL;
+  const betaPassword = process.env.NEXT_PUBLIC_BETA_TEST_PASSWORD;
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -42,7 +48,6 @@ export default function LoginForm() {
       }`}
     >
       <CardHeader className="text-center space-y-2">
-        {/* Logo */}
         <div className="flex justify-center mb-3">
           <Image
             src="/icons/econolink-logo.png"
@@ -52,11 +57,27 @@ export default function LoginForm() {
             className="rounded-md"
           />
         </div>
+
         <CardTitle className="text-2xl font-bold text-econolink-dark">
           {t("Login.welcome")}
         </CardTitle>
         <p className="text-sm text-gray-500">{t("common.sub-welcome")}</p>
       </CardHeader>
+
+      {/* Discrete Beta Info */}
+      {isBeta && betaEmail && betaPassword && (
+        <div className="mx-6 mb-4 rounded-lg bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-700">
+          <div className="flex items-center gap-2 font-medium mb-1">
+            <Info className="h-4 w-4" />
+            {tB("title")}
+          </div>
+          <p className="text-xs">
+            {tB("email")} <span className="font-mono">{betaEmail}</span>
+            <br />
+            {tB("password")} <span className="font-mono">{betaPassword}</span>
+          </p>
+        </div>
+      )}
 
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -70,9 +91,7 @@ export default function LoginForm() {
                 value={email}
                 disabled={loading}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`pl-9 ${
-                  loading ? "opacity-70 cursor-not-allowed" : ""
-                }`}
+                className="pl-9"
                 required
               />
             </div>
@@ -90,15 +109,13 @@ export default function LoginForm() {
                 value={password}
                 disabled={loading}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`pl-9 pr-10 ${
-                  loading ? "opacity-70 cursor-not-allowed" : ""
-                }`}
+                className="pl-9 pr-10"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-3.5 text-gray-400"
               >
                 {showPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -133,7 +150,6 @@ export default function LoginForm() {
           </p>
         )}
 
-        {/* Google Button */}
         <GoogleButton />
       </CardContent>
 
@@ -141,7 +157,7 @@ export default function LoginForm() {
         {t("Login.have-account")}
         <button
           onClick={() => router.push("/register")}
-          className="text-emerald-600 underline hover:text-emerald-700 cursor-pointer"
+          className="text-emerald-600 underline ml-1"
         >
           {t("common.signup")}
         </button>
@@ -150,7 +166,7 @@ export default function LoginForm() {
       <CardFooter className="flex justify-center text-sm text-gray-500">
         <button
           onClick={() => router.push("/")}
-          className="text-emerald-600 underline hover:text-emerald-700 cursor-pointer"
+          className="text-emerald-600 underline"
         >
           {t("common.back-home")}
         </button>
