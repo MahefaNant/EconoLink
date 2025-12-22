@@ -10,12 +10,24 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Eye, EyeOff, Loader2, Mail, Lock, LogIn, User } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Loader2,
+  Mail,
+  Lock,
+  LogIn,
+  User,
+  Beaker,
+  AlertTriangle,
+} from "lucide-react";
 import GoogleButton from "../../login/components/GoogleButton";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
+  const isBeta = process.env.NEXT_PUBLIC_BETA_MODE === "true";
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,9 +38,12 @@ export default function RegisterForm() {
   const { register, loading, errorMessage } = useRegister();
   const router = useRouter();
   const t = useTranslations("Auth");
+  const tB = useTranslations("Beta");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (isBeta) return;
     try {
       await register(name, email, password, retapePassword);
     } catch {
@@ -44,6 +59,22 @@ export default function RegisterForm() {
       }`}
     >
       <CardHeader className="text-center space-y-2">
+        {isBeta && (
+          <div className="mx-4 mb-4 rounded-xl border border-orange-300 bg-orange-50 p-4 text-center animate-fade-in">
+            <div className="flex items-center justify-center gap-2 text-orange-600 font-semibold">
+              <Beaker className="h-5 w-5" />
+              {tB("title")}
+            </div>
+
+            <p className="mt-2 text-sm text-orange-700">{tB("description")}</p>
+
+            <div className="mt-3 flex items-center justify-center gap-2 text-xs text-orange-600">
+              <AlertTriangle className="h-4 w-4" />
+              {tB("note")}
+            </div>
+          </div>
+        )}
+
         {/* Logo */}
         <div className="flex justify-center mb-3">
           <Image
@@ -76,7 +107,7 @@ export default function RegisterForm() {
                 type="text"
                 placeholder="your_name"
                 value={name}
-                disabled={loading}
+                disabled={loading || isBeta}
                 onChange={(e) => setName(e.target.value)}
                 className={`pl-9 ${
                   loading ? "opacity-70 cursor-not-allowed" : ""
@@ -94,7 +125,7 @@ export default function RegisterForm() {
                 type="email"
                 placeholder="you@example.com"
                 value={email}
-                disabled={loading}
+                disabled={loading || isBeta}
                 onChange={(e) => setEmail(e.target.value)}
                 className={`pl-9 ${
                   loading ? "opacity-70 cursor-not-allowed" : ""
@@ -114,7 +145,7 @@ export default function RegisterForm() {
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 value={password}
-                disabled={loading}
+                disabled={loading || isBeta}
                 onChange={(e) => setPassword(e.target.value)}
                 className={`pl-9 pr-10 ${
                   loading ? "opacity-70 cursor-not-allowed" : ""
@@ -145,7 +176,7 @@ export default function RegisterForm() {
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 value={retapePassword}
-                disabled={loading}
+                disabled={loading || isBeta}
                 onChange={(e) => setRetapePassword(e.target.value)}
                 className={`pl-9 pr-10 ${
                   loading ? "opacity-70 cursor-not-allowed" : ""
@@ -168,10 +199,17 @@ export default function RegisterForm() {
 
           <Button
             type="submit"
-            disabled={loading}
-            className="w-full btn-econolink font-medium"
+            disabled={loading || isBeta}
+            className={`w-full font-medium ${
+              isBeta ? "bg-gray-300 cursor-not-allowed" : "btn-econolink"
+            }`}
           >
-            {loading ? (
+            {isBeta ? (
+              <>
+                <Beaker className="h-4 w-4 mr-2" />
+                {tB("cta")}
+              </>
+            ) : loading ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                 Signing in...

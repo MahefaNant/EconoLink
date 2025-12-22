@@ -1,4 +1,12 @@
 {
+  "Beta": {
+    "title": "Version Bêta",
+    "description": "Les inscriptions ne sont pas encore ouvertes. L’accès est réservé aux testeurs.",
+    "note": "Merci de votre intérêt pour EconoLink",
+    "cta": "Inscription bientôt disponible",
+    "email": "Email:",
+    "password": "Mot de passe:"
+  },
   "install": {
     "description": "Gérez vos finances personnelles où que vous soyez — même sans connexion Internet.",
     "head": "Installer l’application",
